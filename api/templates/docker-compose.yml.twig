@@ -1,0 +1,26 @@
+version: {{ version }}
+
+services:
+    {% for service in services %}
+    {{ service.name }}:
+        build:
+            context: {{ service.context }}
+        {% if service.environments is defined %}
+        enviornment:
+        {% for environment in service.environment %}
+            - {{ environment.name }}={{ environment.value }}
+        {% endfor %}
+        {% endif %}
+        {% if service.ports is defined %}
+        ports:
+        {% for port in service.ports %}
+            - {{ port.inside }}:{{ port:outside }}
+        {% endfor %}
+        {% endif %}
+        {% if service.volumes is defined %}
+        volumes:
+        {% for volume in service.volumes %}
+            - {{ volume.from }}:{{ volume.to }}
+        {% endfor %}
+        {% endif %}
+        {% endfor %}

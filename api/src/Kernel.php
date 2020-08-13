@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\DependencyInjection\DockerfileCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -35,6 +36,7 @@ class Kernel extends BaseKernel
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
         $container->setParameter('container.dumper.inline_class_loader', \PHP_VERSION_ID < 70400 || !ini_get('opcache.preload'));
         $container->setParameter('container.dumper.inline_factories', true);
+        $container->addCompilerPass(new DockerfileCompilerPass());
         $confDir = $this->getProjectDir().'/config';
 
         $loader->load($confDir.'/{packages}/*'.self::CONFIG_EXTS, 'glob');

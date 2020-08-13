@@ -2,6 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\DTO\Request;
+use App\Entity\DTO\RequestImageVersion;
+use App\Service\DockerfileFactory;
 use Twig\Environment;
 
 class DockerfileGenerator
@@ -9,21 +12,29 @@ class DockerfileGenerator
     /** @var Environment */
     private $twig;
 
+    /** @var DockerfileFactory */
+    private $dockerfileFactory;
+
     /**
+     * DockerfileGenerator constructor.
      * @param Environment $twig
+     * @param DockerfileFactory $dockerfileFactory
      */
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, DockerfileFactory $dockerfileFactory)
     {
         $this->twig = $twig;
+        $this->dockerfileFactory = $dockerfileFactory;
     }
 
     /**
-     * @param string $twigTemplate
-     * @param array $data
-     * @return string
+     * @param Request $request
      */
-    public function generate($twigTemplate, $data) : string
+    public function generate(Request $request) : void
     {
-        return $this->twig->render($twigTemplate, $data);
+        /** @var RequestImageVersion $imageVersion */
+        foreach ($request->getImageVersions() as $imageVersion) {
+            $dockerfileText = $this->dockerfileFactory->generate($imageVersion);
+            $imageVersion->setDockerfileText($dockerfileText);
+        }
     }
 }

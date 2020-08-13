@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\DTO\Request;
 use Twig\Environment;
 
 class DockerComposeGenerator
@@ -18,11 +19,14 @@ class DockerComposeGenerator
     }
 
     /**
-     * @param array $data
-     * @return string
+     * @param Request $requestObject
+     * @return Request
      */
-    public function generate($data): string
+    public function generate(Request $requestObject): Request
     {
-        return $this->twig->render('docker-compose.yml.twig', $data);
+        $dockerComposeText =  $this->twig->render('docker-compose.yml.twig', $requestObject->toArray());
+        $requestObject->setDockerComposeText($dockerComposeText);
+
+        return $requestObject;
     }
 }

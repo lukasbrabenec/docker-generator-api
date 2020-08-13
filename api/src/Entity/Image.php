@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,21 +38,11 @@ class Image
     private $group;
 
     /**
-     * @var ArrayCollection
+     * @var string
      *
-     * @ORM\ManyToMany(targetEntity="DockerInstall")
-     * @ORM\JoinTable(name="image_install_dependency",
-     *     joinColumns={@ORM\JoinColumn(name="image_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="docker_install_id", referencedColumnName="id")}
-     *     )
+     * @ORM\Column(name="dockerfile_location", type="string", length=128, nullable=false)
      */
-    private $dockerInstall;
-
-    public function __construct()
-    {
-        $this->dockerInstall = new ArrayCollection();
-    }
-
+    private $dockerfileLocation;
 
     /**
      * @return int
@@ -100,32 +91,18 @@ class Image
     }
 
     /**
-     * @param DockerInstall $dockerInstall
-     * @return $this
+     * @return string
      */
-    public function addDockerInstall(DockerInstall $dockerInstall): self
+    public function getDockerfileLocation(): string
     {
-        $this->dockerInstall->add($dockerInstall);
-
-        return $this;
+        return $this->dockerfileLocation;
     }
 
     /**
-     * @return ArrayCollection
+     * @param string $dockerfileLocation
      */
-    public function getDockerInstall(): ArrayCollection
+    public function setDockerfileLocation(string $dockerfileLocation): void
     {
-        return $this->dockerInstall;
-    }
-
-    /**
-     * @param ArrayCollection $dockerInstall
-     * @return Image
-     */
-    public function setDockerInstall(ArrayCollection $dockerInstall): self
-    {
-        $this->dockerInstall = $dockerInstall;
-
-        return $this;
+        $this->dockerfileLocation = $dockerfileLocation;
     }
 }

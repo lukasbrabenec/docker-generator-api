@@ -1,24 +1,27 @@
 <?php
 
-
 namespace App\Form;
 
-
-use App\Entity\DTO\Request;
+use App\Entity\DTO\RequestImageVersion;
+use App\Validator\Constraints\ImageVersion;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RequestFormType extends AbstractType
+class RequestImageVersionFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dockerVersion', IntegerType::class)
-            ->add('imageVersions', CollectionType::class, [
-                'entry_type' => RequestImageVersionFormType::class,
+            ->add('imageVersionId', IntegerType::class)
+            ->add('environments', CollectionType::class, [
+                'entry_type' => RequestEnvironmentFormType::class,
+                'allow_add' => true
+            ])
+            ->add('installExtensions', CollectionType::class, [
+                'entry_type' => IntegerType::class,
                 'allow_add' => true
             ])
             ;
@@ -27,12 +30,12 @@ class RequestFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Request::class
+            'data_class' => RequestImageVersion::class
         ]);
     }
 
     public function getBlockPrefix()
     {
-        return 'request';
+        return 'imageVersions';
     }
 }

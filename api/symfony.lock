@@ -102,6 +102,12 @@
             "ref": "cad41ef93d6150067ae2bb3c7fd729492dff6f0a"
         }
     },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.2.1"
+    },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.0.4"
     },
@@ -124,9 +130,6 @@
         "version": "1.0.1"
     },
     "psr/container": {
-        "version": "1.0.0"
-    },
-    "psr/event-dispatcher": {
         "version": "1.0.0"
     },
     "psr/log": {
@@ -165,6 +168,9 @@
             "bin/console",
             "config/bootstrap.php"
         ]
+    },
+    "symfony/debug": {
+        "version": "v4.4.11"
     },
     "symfony/debug-bundle": {
         "version": "4.1",

@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="image_environment")
+ * @ORM\Table(name="image_volume")
  */
-class ImageEnvironment
+class ImageVolume
 {
     /**
      * @var int
@@ -23,16 +23,16 @@ class ImageEnvironment
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=128, nullable=false)
+     * @ORM\Column(name="host_path", type="string", length=255, nullable=false)
      */
-    private $code;
+    private $hostPath;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="default_value", type="string", length=256, nullable=true)
+     * @ORM\Column(name="container_path", type="string", length=255, nullable=false)
      */
-    private $defaultValue;
+    private $containerPath;
 
     /**
      * @var ImageVersion
@@ -41,13 +41,6 @@ class ImageEnvironment
      * @ORM\JoinColumn(name="image_version_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $imageVersion;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="required", type="boolean")
-     */
-    private $required;
 
     /**
      * @return int
@@ -60,35 +53,41 @@ class ImageEnvironment
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getHostPath(): string
     {
-        return $this->code;
+        return $this->hostPath;
     }
 
     /**
-     * @param string $code
-     * @return self
+     * @param string $hostPath
+     *
+     * @return ImageVolume
      */
-    public function setCode(string $code): self
+    public function setHostPath(string $hostPath): self
     {
-        $this->code = $code;
+        $this->hostPath = $hostPath;
+
         return $this;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getDefaultValue(): ?string
+    public function getContainerPath(): string
     {
-        return $this->defaultValue;
+        return $this->containerPath;
     }
 
     /**
-     * @param string|null $defaultValue
+     * @param string $containerPath
+     *
+     * @return ImageVolume
      */
-    public function setDefaultValue(?string $defaultValue): void
+    public function setContainerPath(string $containerPath): self
     {
-        $this->defaultValue = $defaultValue;
+        $this->containerPath = $containerPath;
+
+        return $this;
     }
 
     /**
@@ -109,21 +108,5 @@ class ImageEnvironment
         $this->imageVersion = $imageVersion;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRequired(): bool
-    {
-        return $this->required;
-    }
-
-    /**
-     * @param bool $required
-     */
-    public function setRequired(bool $required): void
-    {
-        $this->required = $required;
     }
 }

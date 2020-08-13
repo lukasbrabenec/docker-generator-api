@@ -3,30 +3,31 @@
 namespace App\Controller\Rest;
 
 use App\Form\RequestFormType;
+use App\Repository\EnvironmentRepository;
+use App\Repository\ImageVersionExtensionRepository;
+use App\Repository\ImageVersionRepository;
 use App\Service\DockerfileGenerator;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
+use App\Service\GeneratorService;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class GenerateController extends AbstractFOSRestController
+class GenerateController extends BaseController
 {
-    /** @var DockerfileGenerator */
-    private $dockerfileGenerator;
+    /** @var GeneratorService */
+    private $generatorService;
 
     /**
-     * @param DockerfileGenerator $dockerfileGenerator
+     * @param ImageVersionRepository $imageVersionRepository
+     * @param ImageVersionExtensionRepository $imageVersionExtensionRepository
+     * @param EnvironmentRepository $environmentRepository
+     * @param GeneratorService $generatorService
      */
-    public function __construct(DockerfileGenerator $dockerfileGenerator)
+    public function __construct(ImageVersionRepository $imageVersionRepository, ImageVersionExtensionRepository $imageVersionExtensionRepository, EnvironmentRepository $environmentRepository, GeneratorService $generatorService)
     {
-        $this->dockerfileGenerator = $dockerfileGenerator;
+        $this->generatorService = $generatorService;
+        parent::__construct($imageVersionRepository, $imageVersionExtensionRepository, $environmentRepository);
     }
-
 
     /**
      * @Rest\Post("/generate")
@@ -36,17 +37,10 @@ class GenerateController extends AbstractFOSRestController
      */
     public function generate(Request $request, DockerfileGenerator $dockerfileGenerator)
     {
-        $form = $this->createForm(RequestFormType::class);
-        $form->submit($request->request->get($form->getName()));
-        if ($form->isSubmitted() && $form->isValid()) {
-            dump($form->getData());
-        } else {
-            dump($form->getErrors());
-        }
-        die;
+        /** @var \App\Entity\DTO\Request $requestObject */
+        $requestObject = $this->processForm($request, RequestFormType::class);
+        $this->generatorService->generate($requestObject);
 
-        //$fileContent = $dockerfileGenerator->generate();
-
-        return (new BinaryFileResponse('../../../files/test.zip'));
+        return (new BinaryFileResponse('../files/test.zip'))->deleteFileAfterSend(true);
     }
 }

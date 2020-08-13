@@ -35,12 +35,12 @@ class ImagePort
     private $outward;
 
     /**
-     * @var Image
+     * @var ImageVersion
      *
-     * @ORM\ManyToOne(targetEntity="Image", cascade={"all"})
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="ImageVersion", cascade={"all"})
+     * @ORM\JoinColumn(name="image_version_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $image;
+    private $imageVersion;
 
     /**
      * @return int
@@ -85,21 +85,21 @@ class ImagePort
     }
 
     /**
-     * @return Image
+     * @return ImageVersion
      */
-    public function getImage(): Image
+    public function getImageVersion(): ImageVersion
     {
-        return $this->image;
+        return $this->imageVersion;
     }
 
     /**
-     * @param Image $image
+     * @param ImageVersion $imageVersion
      *
      * @return self
      */
-    public function setImage(Image $image): self
+    public function setImageVersion(ImageVersion $imageVersion): self
     {
-        $this->image = $image;
+        $this->imageVersion = $imageVersion;
 
         return $this;
     }

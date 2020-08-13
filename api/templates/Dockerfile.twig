@@ -1,5 +1,0 @@
-FROM {{ image.name }}
-
-RUN docker-php-ext-install {% for dockerInstall in image.dockerInstall %} {{ dockerInstall }} \ {% endfor %}
-
-EXPOSE {{ image.port }}

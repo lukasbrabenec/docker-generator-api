@@ -1,26 +1,26 @@
-version: {{ version }}
+version: {{ dockerVersion }}
 
 services:
-    {% for service in services %}
-    {{ service.name }}:
+{% for imageVersion in imageVersions %}
+    {{ imageVersion.imageName }}:
         build:
-            context: {{ service.context }}
-        {% if service.environments is defined %}
+            context: {{ imageVersion.dockerfileLocation }}
+{% if imageVersion.environments is defined and imageVersion.environments is not empty %}
         enviornment:
-        {% for environment in service.environment %}
+{% for environment in imageVersion.environments %}
             - {{ environment.name }}={{ environment.value }}
-        {% endfor %}
-        {% endif %}
-        {% if service.ports is defined %}
+{% endfor %}
+{% endif %}
+{% if imageVersion.ports is defined and imageVersion.ports is not empty %}
         ports:
-        {% for port in service.ports %}
-            - {{ port.inside }}:{{ port:outside }}
-        {% endfor %}
-        {% endif %}
-        {% if service.volumes is defined %}
+{% for port in imageVersion.ports %}
+            - {{ port.inward }}:{{ port.outward }}
+{% endfor %}
+{% endif %}
+{% if imageVersion.volumes is defined and imageVersion.volumes is not empty %}
         volumes:
-        {% for volume in service.volumes %}
-            - {{ volume.from }}:{{ volume.to }}
-        {% endfor %}
-        {% endif %}
-        {% endfor %}
+{% for volume in imageVersion.volumes %}
+            - {{ volume.hostPath }}:{{ volume.containerPath }}
+{% endfor %}
+{% endif %}
+{% endfor %}

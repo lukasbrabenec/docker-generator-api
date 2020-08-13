@@ -1,0 +1,22 @@
+FROM {{ imageName }}:{{ version }}
+
+RUN apt-get update
+
+{% if extensions is defined and extensions is not empty %}
+{% if extensions.system is defined and extensions.system is not empty %}
+RUN apt-get install -y {% for systemExtension in extensions.system %}{{ systemExtension.name }} {% endfor %}
+{% endif %}
+{% if extensions.php is defined and extensions.php is not empty %}
+{% if extensions.php.withoutConfig is defined %}
+RUN docker-php-ext-install{% for phpExtensionWithoutConfig in extensions.php.withoutConfig %} {{ phpExtensionWithoutConfig.name }} {% endfor %}
+{% endif %}
+{% if extensions.php.withConfig is defined %}
+{% for phpExtensionWithConfig in extensions.php.withConfig %}
+RUN docker-php-ext-configure {{ phpExtensionWithConfig.name }} {{ phpExtensionWithConfig.config }}
+RUN docker-php-ext-install {{ phpExtensionWithConfig.name }}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endif %}
+
+EXPOSE {% if ports is defined and ports is not empty %}{% for port in ports %}{{ port.outward }} {% endfor %}{% endif %}

@@ -2,21 +2,26 @@
 
 namespace App\Service;
 
+use App\Entity\DTO\Request;
+use App\Entity\DTO\RequestImageVersion;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ZipGenerator
 {
-    public function generateArchive($files)
+    /**
+     * @param Request $requestObject
+     */
+    public function generateArchive(Request $requestObject)
     {
-        $fileContent = $files['php'];
-
-        $filesystem = new Filesystem();
-        $filesystem->dumpFile('../../files/Dockerfile', $fileContent);
-
         $zip = new \ZipArchive();
+        $zip->open('../files/test.zip', \ZipArchive::CREATE);
+        $zip->addFromString('docker-compose.yml', $requestObject->getDockerComposeText());
 
-        $zip->open('../../../files/test.zip', \ZipArchive::CREATE);
-        $zip->addFile('../../../files/Dockerfile', 'Dockerfile');
+        /** @var RequestImageVersion $imageVersion */
+        foreach ($requestObject->getImageVersions() as $imageVersion) {
+            $zip->addFromString($imageVersion->getDockerfileLocation() . 'Dockerfile', $imageVersion->getDockerfileText());
+        }
         $zip->close();
+        return $zip;
     }
 }

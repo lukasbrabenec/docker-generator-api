@@ -2,29 +2,162 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\DockerInstall;
+use App\Entity\Extension;
 use App\Entity\Group;
 use App\Entity\Image;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
+use App\Entity\ImageVersionExtension;
+use App\Entity\ImageVolume;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class PhpFixtures extends Fixture
 {
-    const PHP_VERSIONS = [
-        '5.6-fpm',
-        '7-fpm',
-        '7.1-fpm',
-        '7.2-fpm',
-        '7.3-fpm',
-        '7.4-fpm',
+    const PHP_VERSIONS_EXTENSION_EXCLUDE_MAP = [
+        '5.6-apache' => [
+            'apcu_bc',
+            'cmark',
+            'decimal',
+            'ffi',
+            'opencensus',
+            'parallel',
+            'pcov',
+            'pdo_sqlsrv',
+            'snuffleupagus',
+            'sqlsrv',
+            'tdlib',
+            ''
+        ],
+        '7-apache' => [
+            'ffi',
+            'mongo',
+            'mssql',
+            'mysql',
+            'parallel',
+            'sybase_ct'
+        ],
+        '7.1-apache' => [
+            'ffi',
+            'mongo',
+            'mssql',
+            'mysql',
+            'pthreads',
+            'sybase_ct'
+        ],
+        '7.2-apache' => [
+            'ffi',
+            'mongo',
+            'mssql',
+            'mysql',
+            'pthreads',
+            'sybase_ct'
+        ],
+        '7.3-apache' => [
+            'ffi',
+            'mongo',
+            'mssql',
+            'mysql',
+            'pthreads',
+            'sybase_ct'
+        ],
+        '7.4-apache' => [
+            'interbase',
+            'mongo',
+            'mssql',
+            'mysql',
+            'pthreads',
+            'recode',
+            'sybase_ct',
+            'wddx'
+        ],
     ];
 
-    const PHP_EXTENSIONS = [
-        'MySQL',
-        'PostgreSQL',
-        'SQLite',
+    const PHP_EXTENSIONS_CONFIG_MAP = [
+        'amqp' => '',
+        'apcu' => '',
+        'apcu_bc' => '',
+        'bcmath' => '',
+        'bz2' => '',
+        'calendar' => '',
+        'cmark' => '',
+        'dba' => '',
+        'decimal' => '',
+        'enchant' => '',
+        'exif' => '',
+        'ffi' => '',
+        'gd' => '',
+        'gettext' => '',
+        'gmagick' => '',
+        'gmp' => '',
+        'grpc' => '',
+        'http' => '',
+        'igbinary' => '',
+        'imagick' => '',
+        'imap' => '',
+        'interbase' => '',
+        'intl' => '',
+        'ldap' => '',
+        'mailparse' => '',
+        'mcrypt' => '',
+        'memcache' => '',
+        'memcached' => '',
+        'mongo' => '',
+        'mongodb' => '',
+        'msgpack' => '',
+        'mssql' => '',
+        'mysql' => '',
+        'mysqli' => '',
+        'oauth' => '',
+        'odbc' => '',
+        'opcache' => '',
+        'opencensus' => '',
+        'parallel' => '',
+        'pcntl' => '',
+        'pcov' => '',
+        'pdo_dblib' => '',
+        'pdo_firebird' => '',
+        'pdo_mysql' => '',
+        'pdo_odbc' => '',
+        'pdo_pgsql' => '',
+        'pdo_sqlsrv' => '',
+        'pgsql' => '',
+        'propro' => '',
+        'protobuf' => '',
+        'pspell' => '',
+        'pthreads' => '',
+        'raphf' => '',
+        'rdkafka' => '',
+        'recode' => '',
+        'redis' => '',
+        'shmop' => '',
+        'snmp' => '',
+        'snuffleupagus' => '',
+        'sockets' => '',
+        'solr' => '',
+        'sqlsrv' => '',
+        'ssh2' => '',
+        'sybase_ct' => '',
+        'sysvmsg' => '',
+        'sysvsem' => '',
+        'sysvshm' => '',
+        'tdlib' => '',
+        'tidy' => '',
+        'timezonedb' => '',
+        'uopz' => '',
+        'uuid' => '',
+        'wddx' => '',
+        'xdebug' => '',
+        'xhprof' => '',
+        'xmlrpc' => '',
+        'xsl' => '',
+        'yaml' => '',
+        'zip' => '',
+        'zookeeper' => '',
+    ];
+
+    const VOLUMES = [
+        './src' => '/var/www/html'
     ];
 
     public function load(ObjectManager $manager)
@@ -36,26 +169,52 @@ class PhpFixtures extends Fixture
         $image = new Image();
         $image->setGroup($group);
         $image->setName('php');
+        $image->setDockerfileLocation('./src/build/');
         $manager->persist($image);
 
-        foreach (self::PHP_VERSIONS as $version) {
+        foreach (self::PHP_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
+            $extension = new Extension();
+            $extension->setName($extensionName);
+            $extension->setPhpExtension(true);
+            $manager->persist($extension);
+        }
+        $manager->flush();
+
+        foreach (self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP as $version => $extensionExclude) {
             $imageVersion = new ImageVersion();
             $imageVersion->setVersion($version);
             $imageVersion->setImage($image);
+
+            foreach (self::PHP_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
+                if (!in_array($extensionName, $extensionExclude)) {
+                    /** @var Extension $extension */
+                    $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $extensionName]);
+                    if (is_object($extension)) {
+                        $imageVersionExtension = new ImageVersionExtension();
+                        $imageVersionExtension->setImageVersion($imageVersion);
+                        $imageVersionExtension->setExtension($extension);
+                        $imageVersionExtension->setConfig($extensionConfig);
+                        $manager->persist($imageVersionExtension);
+                    } else {
+                        throw new \Exception("extension doesnt exist");
+                    }
+                }
+            }
             $manager->persist($imageVersion);
-        }
 
-        $imagePort = new ImagePort();
-        $imagePort->setImage($image);
-        $imagePort->setInward(80);
-        $imagePort->setOutward(80);
-        $manager->persist($imagePort);
+            $imagePort = new ImagePort();
+            $imagePort->setImageVersion($imageVersion);
+            $imagePort->setInward(80);
+            $imagePort->setOutward(80);
+            $manager->persist($imagePort);
 
-        foreach (self::PHP_EXTENSIONS as $extensionName) {
-            $extension = new DockerInstall();
-            $extension->setImage($image);
-            $extension->setName($extensionName);
-            $manager->persist($extension);
+            foreach (self::VOLUMES as $hostPath => $containerPath) {
+                $imageVolume = new ImageVolume();
+                $imageVolume->setImageVersion($imageVersion);
+                $imageVolume->setHostPath($hostPath);
+                $imageVolume->setContainerPath($containerPath);
+                $manager->persist($imageVolume);
+            }
         }
         $manager->flush();
     }

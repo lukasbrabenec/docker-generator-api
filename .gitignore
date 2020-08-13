@@ -1,0 +1,13 @@
+
+### API
+/api/.env.local
+/api/.env.local.php
+/api/.env.*.local
+/api/.idea/
+/api/public/bundles/
+/api/var/
+/api/vendor/
+### Docker
+/docker/log.txt
+/docker/logs/
+/docker/database/data

@@ -6,6 +6,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
@@ -19,6 +20,7 @@ class ImageVersion
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="integer")
+     * @Groups({"default"})
      */
     private $id;
 
@@ -26,6 +28,7 @@ class ImageVersion
      * @var string
      *
      * @ORM\Column(name="version", type="string", length=128, nullable=false)
+     * @Groups({"default"})
      */
     private $version;
 
@@ -41,6 +44,7 @@ class ImageVersion
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="ImageVersionExtension", mappedBy="imageVersion", cascade={"all"})
+     * @Groups({"default"})
      */
     private $extensions;
 
@@ -48,6 +52,7 @@ class ImageVersion
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="ImageEnvironment", mappedBy="imageVersion", cascade={"all"})
+     * @Groups({"default"})
      */
     private $environments;
 

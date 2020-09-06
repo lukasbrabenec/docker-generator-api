@@ -18,11 +18,17 @@ class ExceptionListener
     private $normalizerFactory;
 
     /**
+     * @var boolean
+     */
+    private $isDebug;
+
+    /**
      * @param NormalizerFactory $normalizerFactory
      */
     public function __construct(NormalizerFactory $normalizerFactory)
     {
         $this->normalizerFactory = $normalizerFactory;
+        $this->isDebug = getenv('APP_ENV') === 'dev';
     }
 
     /**
@@ -49,11 +55,15 @@ class ExceptionListener
         $statusCode = $throwable instanceof HttpExceptionInterface ? $throwable->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 
         try {
-            $errors = $normalizer ? $normalizer->normalize($throwable) : [];
+            if ($this->isDebug) {
+                $errors = $normalizer ? $normalizer->normalize($throwable) : [];
+            } else {
+                $errors = [$throwable->getMessage()];
+            }
         } catch (ExceptionInterface $e) {
             $errors = [];
         }
 
-        return new ApiResponse($throwable->getMessage(), null, $errors, $statusCode);
+        return new ApiResponse(null, $errors, $statusCode);
     }
 }

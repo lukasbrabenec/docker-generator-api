@@ -1,10 +1,12 @@
 <?php
 
+
 namespace App\Service\Dockerfile;
+
 
 use App\Entity\DTO\RequestImageVersion;
 
-class DockerfileMySQL extends AbstractDockerfile
+class DockerfileMailCatcher extends AbstractDockerfile
 {
     /**
      * @param RequestImageVersion $requestImageVersion
@@ -23,6 +25,6 @@ class DockerfileMySQL extends AbstractDockerfile
      */
     public function getTemplate(): string
     {
-        return 'Dockerfile/mysql.twig';
+        return 'Dockerfile/mailcatcher.twig';
     }
 }

@@ -169,6 +169,7 @@ class PhpFixtures extends Fixture
         $image = new Image();
         $image->setGroup($group);
         $image->setName('php');
+        $image->setCode('php');
         $image->setDockerfileLocation('./src/build/');
         $manager->persist($image);
 

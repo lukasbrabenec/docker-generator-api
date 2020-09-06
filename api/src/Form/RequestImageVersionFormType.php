@@ -20,6 +20,10 @@ class RequestImageVersionFormType extends AbstractType
                 'entry_type' => RequestEnvironmentFormType::class,
                 'allow_add' => true
             ])
+            ->add('ports', CollectionType::class, [
+                'entry_type' => RequestPortFormType::class,
+                'allow_add' => true
+            ])
             ->add('installExtensions', CollectionType::class, [
                 'entry_type' => IntegerType::class,
                 'allow_add' => true

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
@@ -32,6 +33,7 @@ class ImageVersionExtension
      *
      * @ORM\ManyToOne(targetEntity="Extension")
      * @ORM\JoinColumn(name="extension_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @Groups({"default"})
      *
      */
     private $extension;

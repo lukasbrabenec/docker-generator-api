@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
@@ -17,6 +18,7 @@ class Extension
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="integer")
+     * @Groups({"default"})
      */
     private $id;
 
@@ -24,6 +26,7 @@ class Extension
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=32, nullable=false)
+     * @Groups({"default"})
      */
     private $name;
 

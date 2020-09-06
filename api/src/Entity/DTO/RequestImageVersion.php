@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
+/**
+ * @ImageVersion
+ */
 class RequestImageVersion
 {
     /**
@@ -24,6 +27,11 @@ class RequestImageVersion
      * @var string
      */
     private $imageName;
+
+    /**
+     * @var string
+     */
+    private $imageCode;
 
     /**
      * @var string
@@ -99,7 +107,7 @@ class RequestImageVersion
     /**
      * @return string
      */
-    public function getVersion(): string
+    public function getVersion(): ?string
     {
         return $this->version;
     }
@@ -115,7 +123,7 @@ class RequestImageVersion
     /**
      * @return string
      */
-    public function getImageName(): string
+    public function getImageName(): ?string
     {
         return $this->imageName;
     }
@@ -131,7 +139,23 @@ class RequestImageVersion
     /**
      * @return string
      */
-    public function getDockerfileLocation(): string
+    public function getImageCode(): string
+    {
+        return $this->imageCode;
+    }
+
+    /**
+     * @param string $imageCode
+     */
+    public function setImageCode(string $imageCode): void
+    {
+        $this->imageCode = $imageCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDockerfileLocation(): ?string
     {
         return $this->dockerfileLocation;
     }
@@ -139,7 +163,7 @@ class RequestImageVersion
     /**
      * @param string $dockerfileLocation
      */
-    public function setDockerfileLocation(string $dockerfileLocation): void
+    public function setDockerfileLocation(?string $dockerfileLocation): void
     {
         $this->dockerfileLocation = $dockerfileLocation;
     }
@@ -147,7 +171,7 @@ class RequestImageVersion
     /**
      * @return string
      */
-    public function getDockerfileText(): string
+    public function getDockerfileText(): ?string
     {
         return $this->dockerfileText;
     }
@@ -179,7 +203,7 @@ class RequestImageVersion
     /**
      * @return array
      */
-    public function getVolumes(): array
+    public function getVolumes(): ?array
     {
         return $this->volumes;
     }
@@ -195,7 +219,7 @@ class RequestImageVersion
     /**
      * @return array
      */
-    public function getPorts(): array
+    public function getPorts(): ?array
     {
         return $this->ports;
     }
@@ -217,6 +241,7 @@ class RequestImageVersion
             'id' => $this->imageVersionId,
             'version' => $this->version,
             'imageName' => $this->imageName,
+            'imageCode' => $this->imageCode,
             'dockerfileLocation' => $this->dockerfileLocation
         ];
 
@@ -248,13 +273,5 @@ class RequestImageVersion
         }
 
         return $array;
-    }
-
-    /**
-     * @param ClassMetadata $metadata
-     */
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addConstraint(new ImageVersion());
     }
 }

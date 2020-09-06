@@ -33,8 +33,11 @@ class DockerfileGenerator
     {
         /** @var RequestImageVersion $imageVersion */
         foreach ($request->getImageVersions() as $imageVersion) {
-            $dockerfileText = $this->dockerfileFactory->generate($imageVersion);
-            $imageVersion->setDockerfileText($dockerfileText);
+            // image doesn't have dockerfile if location isn't set
+            if ($imageVersion->getDockerfileLocation()) {
+                $dockerfileText = $this->dockerfileFactory->generate($imageVersion);
+                $imageVersion->setDockerfileText($dockerfileText);
+            }
         }
     }
 }

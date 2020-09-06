@@ -19,7 +19,9 @@ class ZipGenerator
 
         /** @var RequestImageVersion $imageVersion */
         foreach ($requestObject->getImageVersions() as $imageVersion) {
-            $zip->addFromString($imageVersion->getDockerfileLocation() . 'Dockerfile', $imageVersion->getDockerfileText());
+            if ($imageVersion->getDockerfileLocation()) {
+                $zip->addFromString($imageVersion->getDockerfileLocation() . 'Dockerfile', $imageVersion->getDockerfileText());
+            }
         }
         $zip->close();
         return $zip;

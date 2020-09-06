@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
@@ -17,6 +18,7 @@ class ImageEnvironment
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="integer")
+     * @Groups({"default"})
      */
     private $id;
 
@@ -24,6 +26,7 @@ class ImageEnvironment
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=128, nullable=false)
+     * @Groups({"default"})
      */
     private $code;
 
@@ -31,6 +34,7 @@ class ImageEnvironment
      * @var string|null
      *
      * @ORM\Column(name="default_value", type="string", length=256, nullable=true)
+     * @Groups({"default"})
      */
     private $defaultValue;
 
@@ -45,9 +49,18 @@ class ImageEnvironment
     /**
      * @var boolean
      *
-     * @ORM\Column(name="required", type="boolean")
+     * @ORM\Column(name="required", type="boolean", nullable=false, options={"default": false})
+     * @Groups({"default"})
      */
     private $required;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="hidden", type="boolean", nullable=false, options={"default": false})
+     * @Groups({"default"})
+     */
+    private $hidden;
 
     /**
      * @return int
@@ -125,5 +138,21 @@ class ImageEnvironment
     public function setRequired(bool $required): void
     {
         $this->required = $required;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHidden(): bool
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * @param bool $hidden
+     */
+    public function setHidden(bool $hidden): void
+    {
+        $this->hidden = $hidden;
     }
 }

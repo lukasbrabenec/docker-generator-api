@@ -79,7 +79,7 @@ class Request
     /**
      * @return string
      */
-    public function getDockerComposeText(): string
+    public function getDockerComposeText(): ?string
     {
         return $this->dockerComposeText;
     }

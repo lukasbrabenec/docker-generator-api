@@ -7,57 +7,27 @@ use App\Entity\Image;
 use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
-use App\Entity\ImageVolume;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class MysqlFixtures extends Fixture implements DependentFixtureInterface
+class ElasticSearchFixtures extends Fixture implements DependentFixtureInterface
 {
     const VERSIONS = [
-        '5.7',
-        '8.0'
+        '7.9.0'
     ];
 
     const ENVIRONMENT_MAP = [
-        'MYSQL_ROOT_PASSWORD' => [
-            'default' => 'test',
+        'discovery.type' => [
+            'default' => 'single-node',
             'required' => true,
-            'hidden' => false
-        ],
-        'MYSQL_DATABASE' => [
-            'default' => 'docker',
-            'required' => false,
-            'hidden' => false
-        ],
-        'MYSQL_USER' => [
-            'default' => null,
-            'required' => false,
-            'hidden' => false
-        ],
-        'MYSQL_PASSWORD' => [
-            'default' => null,
-            'required' => false,
-            'hidden' => false
-        ],
-        'MYSQL_ALLOW_EMPTY_PASSWORD' => [
-            'default' => null,
-            'required' => false,
-            'hidden' => false
-        ],
-        'MYSQL_ONETIME_PASSWORD' => [
-            'default' => null,
-            'required' => false,
-            'hidden' => false
+            'hidden' => true
         ]
     ];
 
     const PORTS = [
-        3306 => 3306
-    ];
-
-    const VOLUMES = [
-        './mysql/data' => '/var/lib/mysql'
+        9200 => 9200,
+        9300 => 9300
     ];
 
     public function load(ObjectManager $manager)
@@ -67,9 +37,9 @@ class MysqlFixtures extends Fixture implements DependentFixtureInterface
 
         $image = new Image();
         $image->setGroup($group);
-        $image->setName('mysql');
-        $image->setCode('mysql');
-        $image->setDockerfileLocation('./mysql/build/');
+        $image->setName('elasticsearch');
+        $image->setCode('elasticsearch');
+        $image->setDockerfileLocation(null);
         $manager->persist($image);
 
         foreach (self::VERSIONS as $version) {
@@ -94,14 +64,6 @@ class MysqlFixtures extends Fixture implements DependentFixtureInterface
                 $imagePort->setInward($inwardPort);
                 $imagePort->setOutward($outwardPort);
                 $manager->persist($imagePort);
-            }
-
-            foreach (self::VOLUMES as $hostPath => $containerPath) {
-                $imageVolume = new ImageVolume();
-                $imageVolume->setImageVersion($imageVersion);
-                $imageVolume->setHostPath($hostPath);
-                $imageVolume->setContainerPath($containerPath);
-                $manager->persist($imageVolume);
             }
         }
         $manager->flush();

@@ -37,9 +37,9 @@ class RequestImageVersion
     private ?string $dockerfileLocation;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $dockerfileText;
+    private ?string $dockerfileText = null;
 
     /**
      * @var array
@@ -167,7 +167,7 @@ class RequestImageVersion
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDockerfileText(): ?string
     {
@@ -175,9 +175,9 @@ class RequestImageVersion
     }
 
     /**
-     * @param string $dockerfileText
+     * @param string|null $dockerfileText
      */
-    public function setDockerfileText(string $dockerfileText): void
+    public function setDockerfileText(?string $dockerfileText): void
     {
         $this->dockerfileText = $dockerfileText;
     }

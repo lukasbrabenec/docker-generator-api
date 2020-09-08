@@ -72,9 +72,9 @@ class GenerateController extends BaseController
     {
         /** @var \App\Entity\DTO\Request $requestObject */
         $requestObject = $this->_processForm($request, RequestFormType::class);
-        $generatorService->generate($requestObject);
+        $zipFilePath = $generatorService->generate($requestObject);
 
-        $response = new BinaryFileResponse('../files/test.zip');
+        $response = new BinaryFileResponse($zipFilePath);
 
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,

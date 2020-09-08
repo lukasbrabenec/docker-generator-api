@@ -8,14 +8,18 @@ use ZipArchive;
 
 class ZipGenerator
 {
+    const MAX_RANDOM_NAME_ATTEMPTS = 10;
+
     /**
      * @param Request $requestObject
-     * @return ZipArchive
+     * @return string
      */
     public function generateArchive(Request $requestObject)
     {
+        $zipFilePath = stream_get_meta_data(tmpfile())['uri'];
+
         $zip = new ZipArchive();
-        $zip->open('../files/test.zip', ZipArchive::CREATE);
+        $zip->open($zipFilePath, ZipArchive::CREATE);
         $zip->addFromString('docker-compose.yml', $requestObject->getDockerComposeText());
 
         /** @var RequestImageVersion $imageVersion */
@@ -25,6 +29,6 @@ class ZipGenerator
             }
         }
         $zip->close();
-        return $zip;
+        return $zipFilePath;
     }
 }

@@ -34,7 +34,7 @@ class GeneratorService
 
     /**
      * @param Request $requestObject
-     * @return ZipArchive
+     * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

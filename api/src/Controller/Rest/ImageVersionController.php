@@ -15,7 +15,7 @@ class ImageVersionController extends BaseController
     /**
      * @var ImageVersionRepository
      */
-    private $imageVersionRepository;
+    private ImageVersionRepository $imageVersionRepository;
 
     /**
      * @param ImageVersionRepository $imageVersionRepository
@@ -35,7 +35,7 @@ class ImageVersionController extends BaseController
      * @param int $imageVersionID
      * @return ApiResponse
      */
-    public function get($imageVersionID)
+    public function getImageVersions($imageVersionID)
     {
         $data = $this->normalize($this->getEntityById($this->imageVersionRepository, $imageVersionID));
         return new ApiResponse($data);

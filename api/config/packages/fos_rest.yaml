@@ -5,8 +5,7 @@ fos_rest:
     format_listener:
         rules:
             - { path: '^/api', prefer_extension: true, fallback_format: json, priorities: [ json ] }
-    routing_loader:
-        enabled: false
+    routing_loader: false
     view:
         view_response_listener: 'force'
         formats:

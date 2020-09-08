@@ -176,7 +176,7 @@ class PhpFixtures extends Fixture
         foreach (self::PHP_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
             $extension = new Extension();
             $extension->setName($extensionName);
-            $extension->setPhpExtension(true);
+            $extension->setSpecial(true);
             $manager->persist($extension);
         }
         $manager->flush();

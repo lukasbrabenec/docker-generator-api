@@ -248,19 +248,16 @@ class RequestImageVersion
         }
         /** @var RequestInstallExtension $extension */
         foreach ($this->installExtensions as $extension) {
-            if ($extension->isPhpExtension()) {
-                if ($extension->getConfig()) {
-                    $array['extensions']['php'][]['withConfig']['name'] = $extension->getName();
-                    $array['extensions']['php'][]['withConfig']['config'] = $extension->getConfig();
-                } else {
-                    $array['extensions']['php'][]['withoutConfig']['name'] = $extension->getName();
-                    $array['extensions']['php'][]['withoutConfig']['config'] = $extension->getConfig();
-                }
+            if ($extension->isSpecial()) {
+                $array['extensions']['special'][] = [
+                    'name' => $extension->getName(),
+                    'config' => $extension->getConfig()
+                ];
             } else {
-                $array['extensions']['system'] = $extension;
-                if ($extension->getConfig()) {
-                    $array['extensions']['system'][]['config'] = $extension->getConfig();
-                }
+                $array['extensions']['system'][] = [
+                    'name' => $extension->getName(),
+                    'config' => $extension->getConfig()
+                ];
             }
         }
         foreach ($this->volumes as $volume) {

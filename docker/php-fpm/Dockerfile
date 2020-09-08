@@ -4,7 +4,12 @@ COPY wait-for-it.sh /usr/bin/wait-for-it
 
 RUN chmod +x /usr/bin/wait-for-it
 
-RUN apk --update --no-cache add git zip libzip-dev && docker-php-ext-install zip pdo_mysql
+RUN apk --update --no-cache add git zip
+
+ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions zip pdo_mysql intl
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 

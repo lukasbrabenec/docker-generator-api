@@ -11,7 +11,7 @@ services:
 {% endif %}
         container_name: {{ imageVersion.imageName }}
 {% if imageVersion.environments is defined and imageVersion.environments is not empty %}
-        enviornment:
+        environment:
 {% for environment in imageVersion.environments %}
             - {{ environment.name }}={{ environment.value }}
 {% endfor %}

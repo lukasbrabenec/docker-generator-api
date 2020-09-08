@@ -33,9 +33,9 @@ class Extension
     /**
      * @var bool
      *
-     * @ORM\Column(name="php_extension", type="boolean", nullable=true, options={"default": false})
+     * @ORM\Column(name="special", type="boolean", nullable=true, options={"default": false})
      */
-    private bool $phpExtension;
+    private bool $special;
 
     /**
      * @return int
@@ -66,18 +66,18 @@ class Extension
     /**
      * @return bool
      */
-    public function isPhpExtension(): bool
+    public function isSpecial(): bool
     {
-        return $this->phpExtension;
+        return $this->special;
     }
 
     /**
-     * @param bool $phpExtension
+     * @param bool $special
      * @return Extension
      */
-    public function setPhpExtension(bool $phpExtension): self
+    public function setSpecial(bool $special): self
     {
-        $this->phpExtension = $phpExtension;
+        $this->special = $special;
 
         return $this;
     }

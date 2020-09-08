@@ -6,16 +6,11 @@ RUN apt-get update
 {% if extensions.system is defined and extensions.system is not empty %}
 RUN apt-get install -y {% for systemExtension in extensions.system %}{{ systemExtension.name }} {% endfor %}
 {% endif %}
-{% if extensions.php is defined and extensions.php is not empty %}
-{% if extensions.php.withoutConfig is defined %}
-RUN docker-php-ext-install{% for phpExtensionWithoutConfig in extensions.php.withoutConfig %} {{ phpExtensionWithoutConfig.name }} {% endfor %}
-{% endif %}
-{% if extensions.php.withConfig is defined %}
-{% for phpExtensionWithConfig in extensions.php.withConfig %}
-RUN docker-php-ext-configure {{ phpExtensionWithConfig.name }} {{ phpExtensionWithConfig.config }}
-RUN docker-php-ext-install {{ phpExtensionWithConfig.name }}
-{% endfor %}
-{% endif %}
+{% if extensions.special is defined and extensions.special is not empty %}
+ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions {% for specialExtension in extensions.special %}{{ specialExtension.name }} {% endfor %}
 {% endif %}
 {% endif %}
 

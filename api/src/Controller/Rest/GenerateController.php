@@ -191,7 +191,7 @@ class GenerateController extends BaseController
             );
             $extensionDTO->setName($imageVersionExtension->getExtension()->getName());
             $extensionDTO->setConfig($imageVersionExtension->getConfig());
-            $extensionDTO->setPhpExtension($imageVersionExtension->getExtension()->isPhpExtension());
+            $extensionDTO->setSpecial($imageVersionExtension->getExtension()->isSpecial());
         }
     }
 

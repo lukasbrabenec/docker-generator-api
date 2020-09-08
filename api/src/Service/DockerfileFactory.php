@@ -13,7 +13,8 @@ class DockerfileFactory
 {
     const MISSING_DOCKERFILE_SERVICE_FOR_IMAGE = 'Missing service for type: %s';
     const MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE = 'Missing twig template for type: %s';
-    const UNKNOWN_ERROR = 'Unknown error for type: %s';
+    const RUNTIME_ERROR = 'Runtime error for type: %s';
+    const SYNTAX_ERROR = 'Syntax error for type: %s';
 
     /**
      * @var DockerfileServiceChain
@@ -43,9 +44,9 @@ class DockerfileFactory
         } catch (LoaderError $e) {
             throw new Exception(sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $requestImageVersion->getImageName()));
         } catch (RuntimeError $e) {
-            throw new Exception(sprintf(self::UNKNOWN_ERROR, $requestImageVersion->getImageName()));
+            throw new Exception(sprintf(self::RUNTIME_ERROR, $requestImageVersion->getImageName()));
         } catch (SyntaxError $e) {
-            throw new Exception(sprintf(self::UNKNOWN_ERROR, $requestImageVersion->getImageName()));
+            throw new Exception(sprintf(self::SYNTAX_ERROR, $requestImageVersion->getImageName()));
         }
     }
 }

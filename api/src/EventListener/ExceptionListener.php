@@ -19,17 +19,18 @@ class ExceptionListener
     private NormalizerCollection $normalizerFactory;
 
     /**
-     * @var boolean
+     * @var string
      */
-    private bool $isDebug;
+    private string $environment;
 
     /**
      * @param NormalizerCollection $normalizerFactory
+     * @param string $environment
      */
-    public function __construct(NormalizerCollection $normalizerFactory)
+    public function __construct(NormalizerCollection $normalizerFactory, string $environment)
     {
         $this->normalizerFactory = $normalizerFactory;
-        $this->isDebug = getenv('APP_ENV') === 'dev';
+        $this->environment = $environment;
     }
 
     /**
@@ -52,7 +53,7 @@ class ExceptionListener
         $statusCode = $throwable instanceof HttpExceptionInterface ? $throwable->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 
         try {
-            if ($this->isDebug) {
+            if ($this->environment === 'dev') {
                 $errors = $normalizer ? $normalizer->normalize($throwable) : [];
             } else {
                 $errors = [$throwable->getMessage()];

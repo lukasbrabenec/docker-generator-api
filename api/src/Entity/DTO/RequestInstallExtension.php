@@ -25,7 +25,7 @@ class RequestInstallExtension
     /**
      * @var boolean
      */
-    private bool $phpExtension;
+    private bool $special;
 
     /**
      * @return int
@@ -78,17 +78,17 @@ class RequestInstallExtension
     /**
      * @return bool
      */
-    public function isPhpExtension(): ?bool
+    public function isSpecial(): ?bool
     {
-        return $this->phpExtension;
+        return $this->special;
     }
 
     /**
-     * @param bool $phpExtension
+     * @param bool $special
      */
-    public function setPhpExtension(bool $phpExtension): void
+    public function setSpecial(bool $special): void
     {
-        $this->phpExtension = $phpExtension;
+        $this->special = $special;
     }
 
     /**
@@ -99,7 +99,7 @@ class RequestInstallExtension
         return [
             'name' => $this->name,
             'config' => $this->config,
-            'phpExtension' => $this->phpExtension
+            'special' => $this->special
         ];
     }
 }

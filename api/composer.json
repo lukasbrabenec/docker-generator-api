@@ -8,6 +8,7 @@
         "ext-zip": "*",
         "doctrine/annotations": "^1.10",
         "friendsofsymfony/rest-bundle": "^2.7",
+        "nelmio/cors-bundle": "^2.1",
         "sensio/framework-extra-bundle": "^5.5",
         "symfony/console": "4.4.*",
         "symfony/dotenv": "4.4.*",

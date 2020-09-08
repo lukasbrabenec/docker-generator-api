@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.4.8",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-zip": "*",
@@ -32,7 +32,10 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "7.4.8"
+        }
     },
     "autoload": {
         "psr-4": {

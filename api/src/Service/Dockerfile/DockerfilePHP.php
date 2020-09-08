@@ -3,15 +3,18 @@
 namespace App\Service\Dockerfile;
 
 use App\Entity\DTO\RequestImageVersion;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class DockerfilePHP extends AbstractDockerfile
 {
     /**
      * @param RequestImageVersion $requestImageVersion
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function generateDockerfile(RequestImageVersion $requestImageVersion): string
     {

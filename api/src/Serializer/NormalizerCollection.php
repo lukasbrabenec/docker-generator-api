@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Factory;
+namespace App\Serializer;
 
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Traversable;
 
-class NormalizerFactory
+class NormalizerCollection
 {
     /**
      * @var NormalizerInterface[]
      */
-    private $normalizers;
+    private array $normalizers;
 
     /**
-     * @param NormalizerInterface[] $normalizers
+     * @param Traversable $normalizers
      */
-    public function __construct($normalizers)
+    public function __construct(iterable $normalizers)
     {
-        $this->normalizers = $normalizers;
+        $this->normalizers = iterator_to_array($normalizers);
     }
 
     /**

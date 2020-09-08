@@ -18,14 +18,14 @@ class Group
      * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=32, nullable=false)
      */
-    private $name;
+    private string $name;
 
     /**
      * @return int

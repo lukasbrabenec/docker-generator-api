@@ -15,7 +15,7 @@ class BaseController extends AbstractFOSRestController
     /**
      * @var SerializerInterface
      */
-    private $serializer;
+    private SerializerInterface $serializer;
 
     /**
      * @param SerializerInterface $serializer
@@ -39,7 +39,7 @@ class BaseController extends AbstractFOSRestController
      * @param int $id
      * @return object
      */
-    protected function getEntityById(ServiceEntityRepository $repository, $id): object
+    protected function getEntityById(ServiceEntityRepository $repository, int $id): object
     {
         $entity = $repository->find($id);
         if (!is_object($entity)) {

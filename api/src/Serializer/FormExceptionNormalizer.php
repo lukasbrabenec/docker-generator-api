@@ -3,23 +3,20 @@
 namespace App\Serializer;
 
 use App\Exception\FormException;
+use ArrayObject;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class FormExceptionNormalizer implements NormalizerInterface
 {
     /**
-     * @param FormException $exception
-     * @param null $format
+     * @param mixed $exception
+     * @param string|null $format
      * @param array $context
      *
-     * @return array|\ArrayObject|bool|float|int|string|void|null
+     * @return array|ArrayObject|bool|float|int|string|void|null
      */
-    public function normalize($exception, $format = null, array $context = [])
+    public function normalize($exception, string $format = null, array $context = [])
     {
         return $this->getErrorsFromForm($exception->getForm());
     }
@@ -46,11 +43,11 @@ class FormExceptionNormalizer implements NormalizerInterface
 
     /**
      * @param mixed $data
-     * @param null $format
+     * @param string|null $format
      *
      * @return bool
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, ?string $format = null)
     {
         return $data instanceof FormException;
     }

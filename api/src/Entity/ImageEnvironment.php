@@ -20,7 +20,7 @@ class ImageEnvironment
      * @ORM\Column(name="id", type="integer")
      * @Groups({"default"})
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
@@ -28,7 +28,7 @@ class ImageEnvironment
      * @ORM\Column(name="code", type="string", length=128, nullable=false)
      * @Groups({"default"})
      */
-    private $code;
+    private string $code;
 
     /**
      * @var string|null
@@ -36,7 +36,7 @@ class ImageEnvironment
      * @ORM\Column(name="default_value", type="string", length=256, nullable=true)
      * @Groups({"default"})
      */
-    private $defaultValue;
+    private ?string $defaultValue;
 
     /**
      * @var ImageVersion
@@ -44,7 +44,7 @@ class ImageEnvironment
      * @ORM\ManyToOne(targetEntity="ImageVersion", cascade={"all"})
      * @ORM\JoinColumn(name="image_version_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $imageVersion;
+    private ImageVersion $imageVersion;
 
     /**
      * @var boolean
@@ -52,7 +52,7 @@ class ImageEnvironment
      * @ORM\Column(name="required", type="boolean", nullable=false, options={"default": false})
      * @Groups({"default"})
      */
-    private $required;
+    private bool $required;
 
     /**
      * @var boolean
@@ -60,7 +60,7 @@ class ImageEnvironment
      * @ORM\Column(name="hidden", type="boolean", nullable=false, options={"default": false})
      * @Groups({"default"})
      */
-    private $hidden;
+    private bool $hidden;
 
     /**
      * @return int

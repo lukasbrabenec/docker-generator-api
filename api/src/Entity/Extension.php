@@ -20,7 +20,7 @@ class Extension
      * @ORM\Column(name="id", type="integer")
      * @Groups({"default"})
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
@@ -28,14 +28,14 @@ class Extension
      * @ORM\Column(name="name", type="string", length=32, nullable=false)
      * @Groups({"default"})
      */
-    private $name;
+    private string $name;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="php_extension", type="boolean", nullable=true, options={"default": false})
      */
-    private $phpExtension;
+    private bool $phpExtension;
 
     /**
      * @return int

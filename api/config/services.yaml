@@ -37,11 +37,11 @@ services:
     App\Serializer\FormExceptionNormalizer:
         tags: ['serializer.normalizer']
 
-    App\Factory\NormalizerFactory:
+    App\Serializer\NormalizerCollection:
         arguments: [!tagged serializer.normalizer]
         public: true
 
-    App\Dockerfile\DockerfileChain: ~
+    App\Dockerfile\DockerfileServiceChain: ~
 
     App\Service\Dockerfile\DockerfilePHP:
         arguments:
@@ -54,3 +54,9 @@ services:
             - '@twig'
         tags:
             - { name: 'app.dockerfile', imageName: 'mysql' }
+
+    App\Service\Dockerfile\DockerfileMailCatcher:
+        arguments:
+            - '@twig'
+        tags:
+            - { name: 'app.dockerfile', imageName: 'mailcatcher' }

@@ -18,21 +18,21 @@ class ImagePort
      * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="inward", type="integer", nullable=false)
      */
-    private $inward;
+    private int $inward;
 
     /**
      * @var int
      *
      * @ORM\Column(name="outward", type="integer", nullable=false)
      */
-    private $outward;
+    private int $outward;
 
     /**
      * @var ImageVersion
@@ -40,7 +40,7 @@ class ImagePort
      * @ORM\ManyToOne(targetEntity="ImageVersion", cascade={"all"})
      * @ORM\JoinColumn(name="image_version_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $imageVersion;
+    private ImageVersion $imageVersion;
 
     /**
      * @return int

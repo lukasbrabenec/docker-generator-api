@@ -2,8 +2,6 @@
 
 namespace App\Entity\DTO;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Request
@@ -12,28 +10,28 @@ class Request
      * @var int
      * @Assert\NotBlank()
      */
-    private $dockerVersion;
+    private int $dockerVersion;
 
     /**
      *
-     * @var ArrayCollection
+     * @var array
      *
      * @Assert\Valid()
      *
      */
-    private $imageVersions;
+    private array $imageVersions;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $dockerComposeText;
+    private ?string $dockerComposeText = null;
 
     /**
      * Request constructor.
      */
     public function __construct()
     {
-        $this->imageVersions = new ArrayCollection();
+        $this->imageVersions = [];
     }
 
     /**
@@ -47,13 +45,13 @@ class Request
     /**
      * @param int $dockerVersion
      */
-    public function setDockerVersion($dockerVersion)
+    public function setDockerVersion(int $dockerVersion)
     {
         $this->dockerVersion = $dockerVersion;
     }
 
     /**
-     * @return Collection
+     * @return array
      */
     public function getImageVersions()
     {
@@ -61,9 +59,9 @@ class Request
     }
 
     /**
-     * @param Collection $imageVersions
+     * @param array $imageVersions
      */
-    public function setImageVersions($imageVersions)
+    public function setImageVersions(array $imageVersions)
     {
         $this->imageVersions = $imageVersions;
     }
@@ -71,9 +69,9 @@ class Request
     /**
      * @param RequestImageVersion $image
      */
-    public function addImage($image)
+    public function addImage(RequestImageVersion $image)
     {
-        $this->imageVersions->add($image);
+        $this->imageVersions[] = $image;
     }
 
     /**
@@ -85,9 +83,9 @@ class Request
     }
 
     /**
-     * @param string $dockerComposeText
+     * @param string|null $dockerComposeText
      */
-    public function setDockerComposeText(string $dockerComposeText): void
+    public function setDockerComposeText(?string $dockerComposeText): void
     {
         $this->dockerComposeText = $dockerComposeText;
     }

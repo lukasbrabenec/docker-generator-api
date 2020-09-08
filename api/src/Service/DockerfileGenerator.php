@@ -4,19 +4,18 @@ namespace App\Service;
 
 use App\Entity\DTO\Request;
 use App\Entity\DTO\RequestImageVersion;
-use App\Service\DockerfileFactory;
+use Exception;
 use Twig\Environment;
 
 class DockerfileGenerator
 {
     /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
     /** @var DockerfileFactory */
-    private $dockerfileFactory;
+    private DockerfileFactory $dockerfileFactory;
 
     /**
-     * DockerfileGenerator constructor.
      * @param Environment $twig
      * @param DockerfileFactory $dockerfileFactory
      */
@@ -28,6 +27,7 @@ class DockerfileGenerator
 
     /**
      * @param Request $request
+     * @throws Exception
      */
     public function generate(Request $request) : void
     {

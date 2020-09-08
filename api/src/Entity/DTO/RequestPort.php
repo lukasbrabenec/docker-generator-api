@@ -11,13 +11,13 @@ class RequestPort
      * @var int
      * @Assert\NotBlank()
      */
-    private $id;
+    private int $id;
 
     /**
      * @var int
      * @Assert\NotBlank()
      */
-    private $inward;
+    private int $inward;
 
     /**
      * @return int
@@ -30,7 +30,7 @@ class RequestPort
     /**
      * @param int $id
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
@@ -46,7 +46,7 @@ class RequestPort
     /**
      * @param int $inward
      */
-    public function setInward($inward)
+    public function setInward(int $inward)
     {
         $this->inward = $inward;
     }

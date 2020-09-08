@@ -1,11 +1,8 @@
 <?php
 
-
 namespace App\Controller\Rest;
 
-
 use App\Http\ApiResponse;
-use App\Repository\ImageRepository;
 use App\Repository\ImageVersionRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -35,7 +32,7 @@ class ImageVersionController extends BaseController
      * @param int $imageVersionID
      * @return ApiResponse
      */
-    public function getImageVersions($imageVersionID)
+    public function getImageVersions(int $imageVersionID)
     {
         $data = $this->normalize($this->getEntityById($this->imageVersionRepository, $imageVersionID));
         return new ApiResponse($data);

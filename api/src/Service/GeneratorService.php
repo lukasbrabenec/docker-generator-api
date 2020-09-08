@@ -3,17 +3,22 @@
 namespace App\Service;
 
 use App\Entity\DTO\Request;
+use Exception;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use ZipArchive;
 
 class GeneratorService
 {
     /** @var DockerComposeGenerator */
-    private $dockerComposeGenerator;
+    private DockerComposeGenerator $dockerComposeGenerator;
 
     /** @var DockerfileGenerator */
-    private $dockerfileGenerator;
+    private DockerfileGenerator $dockerfileGenerator;
 
     /** @var ZipGenerator */
-    private $zipGenerator;
+    private ZipGenerator $zipGenerator;
 
     /**
      * @param DockerComposeGenerator $dockerComposeGenerator
@@ -27,7 +32,14 @@ class GeneratorService
         $this->zipGenerator = $zipGenerator;
     }
 
-
+    /**
+     * @param Request $requestObject
+     * @return ZipArchive
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
     public function generate(Request $requestObject)
     {
         $this->getDockerComposeGenerator()->generate($requestObject);

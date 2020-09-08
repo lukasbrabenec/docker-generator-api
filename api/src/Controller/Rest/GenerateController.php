@@ -14,68 +14,76 @@ use App\Form\RequestFormType;
 use App\Repository\EnvironmentRepository;
 use App\Repository\ImageVersionExtensionRepository;
 use App\Repository\ImageVersionRepository;
-use App\Service\DockerfileGenerator;
 use App\Service\GeneratorService;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class GenerateController extends BaseController
 {
     /**
      * @var ImageVersionRepository
      */
-    private $imageVersionRepository;
+    private ImageVersionRepository $imageVersionRepository;
 
     /**
      * @var ImageVersionExtensionRepository
      */
-    private $imageVersionExtensionRepository;
+    private ImageVersionExtensionRepository $imageVersionExtensionRepository;
 
     /**
      * @var EnvironmentRepository
      */
-    private $environmentRepository;
-
-    /** @var GeneratorService */
-    private $generatorService;
+    private EnvironmentRepository $environmentRepository;
 
     /**
      * @param ImageVersionRepository $imageVersionRepository
      * @param ImageVersionExtensionRepository $imageVersionExtensionRepository
      * @param EnvironmentRepository $environmentRepository
-     * @param GeneratorService $generatorService
      * @param SerializerInterface $serializer
      */
     public function __construct(
         ImageVersionRepository $imageVersionRepository,
         ImageVersionExtensionRepository $imageVersionExtensionRepository,
         EnvironmentRepository $environmentRepository,
-        GeneratorService $generatorService,
         SerializerInterface $serializer
     ) {
         $this->imageVersionRepository = $imageVersionRepository;
         $this->imageVersionExtensionRepository = $imageVersionExtensionRepository;
         $this->environmentRepository = $environmentRepository;
-        $this->generatorService = $generatorService;
         parent::__construct($serializer);
     }
 
     /**
      * @Rest\Post("/generate")
      * @param Request $request
-     * @param DockerfileGenerator $dockerfileGenerator
+     * @param GeneratorService $generatorService
      * @return BinaryFileResponse
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function generate(Request $request, DockerfileGenerator $dockerfileGenerator)
+    public function postGenerate(Request $request, GeneratorService $generatorService)
     {
         /** @var \App\Entity\DTO\Request $requestObject */
         $requestObject = $this->_processForm($request, RequestFormType::class);
-        $this->generatorService->generate($requestObject);
+        $generatorService->generate($requestObject);
 
-        return (new BinaryFileResponse('../files/test.zip'))->deleteFileAfterSend(true);
+        $response = new BinaryFileResponse('../files/test.zip');
+
+        $disposition = HeaderUtils::makeDisposition(
+            HeaderUtils::DISPOSITION_ATTACHMENT,
+            'test.zip'
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->deleteFileAfterSend(true);
+
+        return $response;
     }
 
     /**
@@ -108,7 +116,7 @@ class GenerateController extends BaseController
             $this->_mergePorts($imageVersion, $imageVersionDTO);
             $this->_mergeVolumes($imageVersion, $imageVersionDTO);
             $this->_mergeExtensions($imageVersion, $imageVersionDTO);
-            $this->_mergeEnvironments($imageVersion, $imageVersionDTO);
+            $this->_mergeEnvironments($imageVersionDTO);
         }
         return $requestDTO;
     }
@@ -188,10 +196,9 @@ class GenerateController extends BaseController
     }
 
     /**
-     * @param ImageVersion $imageVersion
      * @param RequestImageVersion $imageVersionDTO
      */
-    private function _mergeEnvironments(ImageVersion $imageVersion, RequestImageVersion $imageVersionDTO): void
+    private function _mergeEnvironments(RequestImageVersion $imageVersionDTO): void
     {
         /** @var RequestEnvironment $environmentDTO */
         foreach ($imageVersionDTO->getEnvironments() as $environmentDTO) {

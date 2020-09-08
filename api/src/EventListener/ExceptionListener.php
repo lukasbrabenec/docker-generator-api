@@ -2,30 +2,31 @@
 
 namespace App\EventListener;
 
-use App\Factory\NormalizerFactory;
+use App\Serializer\NormalizerCollection;
 use App\Http\ApiResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 
 class ExceptionListener
 {
     /**
-     * @var NormalizerFactory
+     * @var NormalizerCollection
      */
-    private $normalizerFactory;
+    private NormalizerCollection $normalizerFactory;
 
     /**
      * @var boolean
      */
-    private $isDebug;
+    private bool $isDebug;
 
     /**
-     * @param NormalizerFactory $normalizerFactory
+     * @param NormalizerCollection $normalizerFactory
      */
-    public function __construct(NormalizerFactory $normalizerFactory)
+    public function __construct(NormalizerCollection $normalizerFactory)
     {
         $this->normalizerFactory = $normalizerFactory;
         $this->isDebug = getenv('APP_ENV') === 'dev';
@@ -37,12 +38,8 @@ class ExceptionListener
     public function onKernelException(ExceptionEvent $event)
     {
         $throwable = $event->getThrowable();
-        $request = $event->getRequest();
-
-        if (in_array('application/json', $request->getAcceptableContentTypes())) {
-            $response = $this->createApiResponse($throwable);
-            $event->setResponse($response);
-        }
+        $response = $this->createApiResponse($throwable);
+        $event->setResponse($response);
     }
 
     /**

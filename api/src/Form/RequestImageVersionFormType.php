@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\DTO\RequestImageVersion;
-use App\Validator\Constraints\ImageVersion;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -25,7 +24,7 @@ class RequestImageVersionFormType extends AbstractType
                 'allow_add' => true
             ])
             ->add('installExtensions', CollectionType::class, [
-                'entry_type' => IntegerType::class,
+                'entry_type' => RequestInstallExtensionFormType::class,
                 'allow_add' => true
             ])
             ;

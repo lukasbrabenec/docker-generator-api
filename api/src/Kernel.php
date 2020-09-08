@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\DependencyInjection\DockerfileCompilerPass;
+use App\DependencyInjection\Compiler\DockerfileCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

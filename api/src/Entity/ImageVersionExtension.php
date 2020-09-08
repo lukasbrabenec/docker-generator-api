@@ -18,7 +18,7 @@ class ImageVersionExtension
      * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var ImageVersion
@@ -26,7 +26,7 @@ class ImageVersionExtension
      * @ORM\ManyToOne(targetEntity="ImageVersion", inversedBy="extensions")
      * @ORM\JoinColumn(name="image_version_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $imageVersion;
+    private ImageVersion $imageVersion;
 
     /**
      * @var Extension
@@ -36,14 +36,14 @@ class ImageVersionExtension
      * @Groups({"default"})
      *
      */
-    private $extension;
+    private Extension $extension;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="config", type="string", length=128, nullable=true)
      */
-    private $config;
+    private ?string $config;
 
     /**
      * @return int
@@ -94,17 +94,17 @@ class ImageVersionExtension
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getConfig(): string
+    public function getConfig(): ?string
     {
         return $this->config;
     }
 
     /**
-     * @param string $config
+     * @param string|null $config
      */
-    public function setConfig(string $config): void
+    public function setConfig(?string $config): void
     {
         $this->config = $config;
     }

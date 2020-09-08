@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller\Rest;
-
 
 use App\Http\ApiResponse;
 use App\Repository\ImageRepository;
@@ -14,7 +12,7 @@ class ImageController extends BaseController
     /**
      * @var ImageRepository
      */
-    private $imageRepository;
+    private ImageRepository $imageRepository;
 
     /**
      * @param ImageRepository $imageRepository

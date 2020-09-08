@@ -4,12 +4,12 @@ namespace App\Dockerfile;
 
 use App\Service\Dockerfile\AbstractDockerfile;
 
-class DockerfileChain
+class DockerfileServiceChain
 {
     /**
      * @var array
      */
-    private $dockerfileServices;
+    private array $dockerfileServices;
 
     public function __construct()
     {
@@ -25,7 +25,7 @@ class DockerfileChain
      * @param string $imageName
      * @return AbstractDockerfile|void
      */
-    public function getDockerfileService($imageName) :? AbstractDockerfile
+    public function getDockerfileService(string $imageName) :? AbstractDockerfile
     {
         if (array_key_exists($imageName, $this->dockerfileServices)) {
             return $this->dockerfileServices[$imageName];
@@ -36,8 +36,16 @@ class DockerfileChain
      * @param string $imageName
      * @return bool
      */
-    public function hasDockerfileService($imageName) : bool
+    public function hasDockerfileService(string $imageName) : bool
     {
         return array_key_exists($imageName, $this->dockerfileServices);
+    }
+
+    /**
+     * @return AbstractDockerfile
+     */
+    public function getDefaultDockerfileService() : AbstractDockerfile
+    {
+        return $this->dockerfileServices['default'];
     }
 }

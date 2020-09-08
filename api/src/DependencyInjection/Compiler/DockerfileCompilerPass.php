@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DependencyInjection;
+namespace App\DependencyInjection\Compiler;
 
-use App\Dockerfile\DockerfileChain;
+use App\Dockerfile\DockerfileServiceChain;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -11,11 +11,11 @@ class DockerfileCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has(DockerfileChain::class)) {
+        if (!$container->has(DockerfileServiceChain::class)) {
             return;
         }
 
-        $definition = $container->findDefinition(DockerfileChain::class);
+        $definition = $container->findDefinition(DockerfileServiceChain::class);
 
         $taggedServices = $container->findTaggedServiceIds('app.dockerfile');
 

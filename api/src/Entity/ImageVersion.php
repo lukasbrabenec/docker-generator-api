@@ -22,7 +22,7 @@ class ImageVersion
      * @ORM\Column(name="id", type="integer")
      * @Groups({"default"})
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
@@ -30,7 +30,7 @@ class ImageVersion
      * @ORM\Column(name="version", type="string", length=128, nullable=false)
      * @Groups({"default"})
      */
-    private $version;
+    private string $version;
 
     /**
      * @var Image
@@ -38,7 +38,7 @@ class ImageVersion
      * @ORM\ManyToOne(targetEntity="Image", cascade={"all"})
      * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $image;
+    private Image $image;
 
     /**
      * @var Collection
@@ -46,7 +46,7 @@ class ImageVersion
      * @ORM\OneToMany(targetEntity="ImageVersionExtension", mappedBy="imageVersion", cascade={"all"})
      * @Groups({"default"})
      */
-    private $extensions;
+    private Collection $extensions;
 
     /**
      * @var Collection
@@ -54,21 +54,21 @@ class ImageVersion
      * @ORM\OneToMany(targetEntity="ImageEnvironment", mappedBy="imageVersion", cascade={"all"})
      * @Groups({"default"})
      */
-    private $environments;
+    private Collection $environments;
 
     /**
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="ImageVolume", mappedBy="imageVersion", cascade={"all"})
      */
-    private $volumes;
+    private Collection $volumes;
 
     /**
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="ImagePort", mappedBy="imageVersion", cascade={"all"})
      */
-    private $ports;
+    private Collection $ports;
 
     /**
      * ImageVersion constructor.

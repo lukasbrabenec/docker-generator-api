@@ -4,11 +4,14 @@ namespace App\Service;
 
 use App\Entity\DTO\Request;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class DockerComposeGenerator
 {
     /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
     /**
      * @param Environment $twig
@@ -21,6 +24,9 @@ class DockerComposeGenerator
     /**
      * @param Request $requestObject
      * @return Request
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function generate(Request $requestObject): Request
     {

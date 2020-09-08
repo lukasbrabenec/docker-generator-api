@@ -3,7 +3,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,7 +21,7 @@ class Image
      * @ORM\Column(name="id", type="integer")
      * @Groups({"default"})
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
@@ -30,7 +29,7 @@ class Image
      * @ORM\Column(name="name", type="string", length=128, nullable=false)
      * @Groups({"default"})
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string
@@ -38,7 +37,7 @@ class Image
      * @ORM\Column(name="code", type="string", length=256, nullable=false)
      * @Groups({"default"})
      */
-    private $code;
+    private string $code;
 
     /**
      * @var Group
@@ -46,14 +45,14 @@ class Image
      * @ORM\ManyToOne(targetEntity="Group", cascade={"all"})
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $group;
+    private Group $group;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="dockerfile_location", type="string", length=128, nullable=true)
      */
-    private $dockerfileLocation;
+    private ?string $dockerfileLocation;
 
     /**
      * @var Collection
@@ -61,7 +60,7 @@ class Image
      * @ORM\OneToMany(targetEntity="ImageVersion", mappedBy="image")
      * @Groups({"default"})
      */
-    private $imageVersions;
+    private Collection $imageVersions;
 
     /**
      * @return int
@@ -134,7 +133,7 @@ class Image
     }
 
     /**
-     * @param string $dockerfileLocation
+     * @param string|null $dockerfileLocation
      */
     public function setDockerfileLocation(?string $dockerfileLocation): void
     {

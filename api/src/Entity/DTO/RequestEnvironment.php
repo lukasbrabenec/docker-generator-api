@@ -12,18 +12,18 @@ class RequestEnvironment
      * @var int
      * @Assert\NotBlank()
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      */
-    private $code;
+    private string $code;
 
     /**
      * @var string
      * @Assert\NotBlank()
      */
-    private $value;
+    private string $value;
 
     /**
      * @return int
@@ -52,7 +52,7 @@ class RequestEnvironment
     /**
      * @param string $code
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->code = $code;
     }
@@ -68,7 +68,7 @@ class RequestEnvironment
     /**
      * @param string $value
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
         $this->value = $value;
     }

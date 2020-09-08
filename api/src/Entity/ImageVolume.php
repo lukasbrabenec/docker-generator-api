@@ -18,21 +18,21 @@ class ImageVolume
      * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="host_path", type="string", length=255, nullable=false)
      */
-    private $hostPath;
+    private string $hostPath;
 
     /**
      * @var string
      *
      * @ORM\Column(name="container_path", type="string", length=255, nullable=false)
      */
-    private $containerPath;
+    private string $containerPath;
 
     /**
      * @var ImageVersion
@@ -40,7 +40,7 @@ class ImageVolume
      * @ORM\ManyToOne(targetEntity="ImageVersion", cascade={"all"})
      * @ORM\JoinColumn(name="image_version_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $imageVersion;
+    private ImageVersion $imageVersion;
 
     /**
      * @return int

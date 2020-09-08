@@ -3,9 +3,7 @@
 namespace App\Entity\DTO;
 
 use App\Validator\Constraints\ImageVersion;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ImageVersion
@@ -16,53 +14,53 @@ class RequestImageVersion
      * @var int
      * @Assert\NotBlank()
      */
-    private $imageVersionId;
+    private int $imageVersionId;
 
     /**
      * @var string
      */
-    private $version;
+    private string $version;
 
     /**
      * @var string
      */
-    private $imageName;
+    private string $imageName;
 
     /**
      * @var string
      */
-    private $imageCode;
+    private string $imageCode;
+
+    /**
+     * @var string|null
+     */
+    private ?string $dockerfileLocation;
 
     /**
      * @var string
      */
-    private $dockerfileLocation;
-
-    /**
-     * @var string
-     */
-    private $dockerfileText;
+    private string $dockerfileText;
 
     /**
      * @var array
      */
-    private $installExtensions;
+    private array $installExtensions;
 
     /**
      *
      * @var array
      */
-    private $environments;
+    private array $environments;
 
     /**
      * @var array
      */
-    private $volumes;
+    private array $volumes;
 
     /**
      * @var array
      */
-    private $ports;
+    private array $ports;
 
     /**
      * @return int
@@ -75,7 +73,7 @@ class RequestImageVersion
     /**
      * @param int $imageVersionId
      */
-    public function setImageVersionId($imageVersionId)
+    public function setImageVersionId(int $imageVersionId)
     {
         $this->imageVersionId = $imageVersionId;
     }
@@ -91,7 +89,7 @@ class RequestImageVersion
     /**
      * @param array $environments
      */
-    public function setEnvironments($environments)
+    public function setEnvironments(array $environments)
     {
         $this->environments = $environments;
     }
@@ -139,7 +137,7 @@ class RequestImageVersion
     /**
      * @return string
      */
-    public function getImageCode(): string
+    public function getImageCode(): ?string
     {
         return $this->imageCode;
     }
@@ -161,7 +159,7 @@ class RequestImageVersion
     }
 
     /**
-     * @param string $dockerfileLocation
+     * @param string|null $dockerfileLocation
      */
     public function setDockerfileLocation(?string $dockerfileLocation): void
     {
@@ -195,7 +193,7 @@ class RequestImageVersion
     /**
      * @param array $installExtensions
      */
-    public function setInstallExtensions($installExtensions)
+    public function setInstallExtensions(array $installExtensions)
     {
         $this->installExtensions = $installExtensions;
     }

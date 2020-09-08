@@ -3,26 +3,23 @@
 namespace App\Validator\Constraints;
 
 use App\Entity\DTO\RequestEnvironment;
-use App\Entity\DTO\RequestImageVersion;
+use App\Entity\DTO\RequestInstallExtension;
 use App\Entity\DTO\RequestPort;
-use App\Entity\ImageDockerInstall;
 use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersionExtension;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
-use Symfony\Component\VarDumper\VarDumper;
 
 class ImageVersionValidator extends ConstraintValidator
 {
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     /**
      * @param EntityManagerInterface $entityManager
@@ -34,7 +31,7 @@ class ImageVersionValidator extends ConstraintValidator
 
 
     /**
-     * @param RequestImageVersion $requestImageVersion
+     * @param mixed $requestImageVersion
      * @param Constraint $constraint
      */
     public function validate($requestImageVersion, Constraint $constraint)
@@ -60,11 +57,12 @@ class ImageVersionValidator extends ConstraintValidator
         }
 
         // extensions
-        foreach ($requestImageVersion->getInstallExtensions() as $installExtensionId) {
-            $imageDockerInstall = $this->entityManager->getRepository(ImageVersionExtension::class)->findOneBy(['extension' => $installExtensionId, 'imageVersion' => $imageVersionId]);
+        /** @var RequestInstallExtension $installExtensionDTO */
+        foreach ($requestImageVersion->getInstallExtensions() as $installExtensionDTO) {
+            $imageDockerInstall = $this->entityManager->getRepository(ImageVersionExtension::class)->findOneBy(['extension' => $installExtensionDTO->getId(), 'imageVersion' => $imageVersionId]);
             if (!is_object($imageDockerInstall)) {
                 $this->context->buildViolation($constraint->badExtension)
-                    ->setParameter('{{ extensionId }}', $installExtensionId)
+                    ->setParameter('{{ extensionId }}', $installExtensionDTO->getId())
                     ->setParameter('{{ imageVersionId }}', $imageVersionId)
                     ->addViolation();
             }

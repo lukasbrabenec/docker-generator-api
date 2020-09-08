@@ -16,7 +16,6 @@ class RequestInstallExtensionFormType extends AbstractType
         $builder
             ->add('id', IntegerType::class)
             ->add('name', TextType::class)
-            ->add('value', TextType::class)
         ;
     }
 

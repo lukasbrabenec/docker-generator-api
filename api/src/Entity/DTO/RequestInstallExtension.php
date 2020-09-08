@@ -10,27 +10,27 @@ class RequestInstallExtension
      * @var int
      * @Assert\NotBlank()
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string
      */
-    private $config;
+    private string $config;
 
     /**
      * @var boolean
      */
-    private $phpExtension;
+    private bool $phpExtension;
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -46,7 +46,7 @@ class RequestInstallExtension
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -62,7 +62,7 @@ class RequestInstallExtension
     /**
      * @return string
      */
-    public function getConfig(): string
+    public function getConfig(): ?string
     {
         return $this->config;
     }
@@ -78,7 +78,7 @@ class RequestInstallExtension
     /**
      * @return bool
      */
-    public function isPhpExtension(): bool
+    public function isPhpExtension(): ?bool
     {
         return $this->phpExtension;
     }

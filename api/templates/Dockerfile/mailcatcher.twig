@@ -2,6 +2,4 @@ FROM ruby:2.5
 
 RUN gem install mailcatcher -v {{ version }}
 
-EXPOSE 1025 1080
-
 CMD ["mailcatcher", "--no-quit", "--foreground", "--ip=0.0.0.0"]

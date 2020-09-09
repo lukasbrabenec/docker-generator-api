@@ -21,6 +21,10 @@ services:
 {% for port in imageVersion.ports %}
             - {{ port.inward }}:{{ port.outward }}
 {% endfor %}
+        expose:
+{% for port in imageVersion.ports %}
+            - {{ port.outward }}
+{% endfor %}
 {% endif %}
 {% if imageVersion.volumes is defined and imageVersion.volumes is not empty %}
         volumes:

@@ -13,5 +13,3 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
     install-php-extensions {% for specialExtension in extensions.special %}{{ specialExtension.name }} {% endfor %}
 {% endif %}
 {% endif %}
-
-EXPOSE {% if ports is defined and ports is not empty %}{% for port in ports %}{{ port.outward }} {% endfor %}{% endif %}

@@ -1,5 +1,3 @@
 FROM {{ imageCode }}:{{ version }}
 
 CMD ["mysqld"]
-
-EXPOSE {% if ports is defined and ports is not empty %}{% for port in ports %}{{ port.outward }} {% endfor %}{% endif %}

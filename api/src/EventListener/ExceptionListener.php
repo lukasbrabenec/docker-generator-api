@@ -50,13 +50,18 @@ class ExceptionListener
     private function createApiResponse(Throwable $throwable)
     {
         $normalizer = $this->normalizerFactory->getNormalizer($throwable);
-        $statusCode = $throwable instanceof HttpExceptionInterface ? $throwable->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
+        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
 
         try {
-            if ($this->environment === 'dev') {
+            if ($throwable instanceof HttpExceptionInterface) {
+                $statusCode = $throwable->getStatusCode();
                 $errors = $normalizer ? $normalizer->normalize($throwable) : [];
             } else {
-                $errors = [$throwable->getMessage()];
+                if ($this->environment === 'dev') {
+                    $errors = $normalizer ? $normalizer->normalize($throwable) : [];
+                } else {
+                    $errors = [$throwable->getMessage()];
+                }
             }
         } catch (ExceptionInterface $e) {
             $errors = [];

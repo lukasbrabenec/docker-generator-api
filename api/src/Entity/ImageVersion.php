@@ -60,6 +60,7 @@ class ImageVersion
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="ImageVolume", mappedBy="imageVersion", cascade={"all"})
+     * @Groups({"default"})
      */
     private Collection $volumes;
 
@@ -67,6 +68,7 @@ class ImageVersion
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="ImagePort", mappedBy="imageVersion", cascade={"all"})
+     * @Groups({"default"})
      */
     private Collection $ports;
 

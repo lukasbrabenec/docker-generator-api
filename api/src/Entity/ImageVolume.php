@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
@@ -17,6 +18,7 @@ class ImageVolume
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="integer")
+     * @Groups({"default"})
      */
     private int $id;
 
@@ -24,6 +26,7 @@ class ImageVolume
      * @var string
      *
      * @ORM\Column(name="host_path", type="string", length=255, nullable=false)
+     * @Groups({"default"})
      */
     private string $hostPath;
 

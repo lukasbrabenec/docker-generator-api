@@ -34,6 +34,7 @@ class Extension
      * @var bool
      *
      * @ORM\Column(name="special", type="boolean", nullable=true, options={"default": false})
+     * @Groups({"default"})
      */
     private bool $special;
 

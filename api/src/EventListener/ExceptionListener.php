@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 
 class ExceptionListener

@@ -40,6 +40,9 @@ services:
     App\Serializer\FormExceptionNormalizer:
         tags: ['serializer.normalizer']
 
+    App\Serializer\GeneralExceptionNormalizer:
+        tags: ['serializer.normalizer']
+
     App\Serializer\NormalizerCollection:
         arguments: [!tagged serializer.normalizer]
         public: true

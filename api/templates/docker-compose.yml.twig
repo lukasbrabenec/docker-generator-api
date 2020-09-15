@@ -17,10 +17,12 @@ services:
 {% endfor %}
 {% endif %}
 {% if imageVersion.ports is defined and imageVersion.ports is not empty %}
+{% if imageVersion.exposeToHost == true %}
         ports:
 {% for port in imageVersion.ports %}
             - {{ port.inward }}:{{ port.outward }}
 {% endfor %}
+{% endif %}
         expose:
 {% for port in imageVersion.ports %}
             - {{ port.outward }}

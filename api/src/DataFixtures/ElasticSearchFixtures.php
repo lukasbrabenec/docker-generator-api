@@ -37,7 +37,7 @@ class ElasticSearchFixtures extends Fixture implements DependentFixtureInterface
 
         $image = new Image();
         $image->setGroup($group);
-        $image->setName('elasticsearch');
+        $image->setName('ElasticSearch');
         $image->setCode('elasticsearch');
         $image->setDockerfileLocation(null);
         $manager->persist($image);

@@ -113,6 +113,10 @@ class ImageVersionValidator extends ConstraintValidator
                     ->setParameter('{{ imageVersionId }}', $imageVersionId)
                     ->addViolation();
             }
+            if ($portDTO->isExposeToHost() && !$portDTO->getInward()) {
+                $this->context->buildViolation($constraint->missingInwardPort)
+                    ->addViolation();
+            }
         }
     }
 }

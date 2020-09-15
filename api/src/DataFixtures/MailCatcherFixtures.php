@@ -29,7 +29,7 @@ class MailCatcherFixtures extends Fixture implements DependentFixtureInterface
 
         $image = new Image();
         $image->setGroup($group);
-        $image->setName('mailcatcher');
+        $image->setName('MailCatcher');
         $image->setCode('mailcatcher');
         $image->setDockerfileLocation('./mailcatcher/build/');
         $manager->persist($image);

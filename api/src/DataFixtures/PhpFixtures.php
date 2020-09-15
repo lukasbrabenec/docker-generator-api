@@ -156,6 +156,10 @@ class PhpFixtures extends Fixture
         'zookeeper' => '',
     ];
 
+    const GENERAL_EXTENSIONS_CONFIG_MAP = [
+        'git' => ''
+    ];
+
     const VOLUMES = [
         './src' => '/var/www/html'
     ];
@@ -168,7 +172,7 @@ class PhpFixtures extends Fixture
 
         $image = new Image();
         $image->setGroup($group);
-        $image->setName('php');
+        $image->setName('PHP');
         $image->setCode('php');
         $image->setDockerfileLocation('./src/build/');
         $manager->persist($image);
@@ -177,6 +181,12 @@ class PhpFixtures extends Fixture
             $extension = new Extension();
             $extension->setName($extensionName);
             $extension->setSpecial(true);
+            $manager->persist($extension);
+        }
+        foreach (self::GENERAL_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
+            $extension = new Extension();
+            $extension->setName($extensionName);
+            $extension->setSpecial(false);
             $manager->persist($extension);
         }
         $manager->flush();
@@ -201,6 +211,22 @@ class PhpFixtures extends Fixture
                     }
                 }
             }
+            foreach (self::GENERAL_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
+                if (!in_array($extensionName, $extensionExclude)) {
+                    /** @var Extension $extension */
+                    $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $extensionName]);
+                    if (is_object($extension)) {
+                        $imageVersionExtension = new ImageVersionExtension();
+                        $imageVersionExtension->setImageVersion($imageVersion);
+                        $imageVersionExtension->setExtension($extension);
+                        $imageVersionExtension->setConfig($extensionConfig);
+                        $manager->persist($imageVersionExtension);
+                    } else {
+                        throw new \Exception("extension doesnt exist");
+                    }
+                }
+            }
+
             $manager->persist($imageVersion);
 
             $imagePort = new ImagePort();

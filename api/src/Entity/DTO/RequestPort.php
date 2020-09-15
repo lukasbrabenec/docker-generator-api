@@ -15,9 +15,19 @@ class RequestPort
 
     /**
      * @var int
-     * @Assert\NotBlank()
      */
     private int $inward;
+
+    /**
+     * @var int
+     * @Assert\NotBlank()
+     */
+    private int $outward;
+
+    /**
+     * @var bool
+     */
+    private bool $exposeToHost = false;
 
     /**
      * @return int
@@ -49,5 +59,37 @@ class RequestPort
     public function setInward(int $inward)
     {
         $this->inward = $inward;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOutward(): int
+    {
+        return $this->outward;
+    }
+
+    /**
+     * @param int $outward
+     */
+    public function setOutward(int $outward): void
+    {
+        $this->outward = $outward;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExposeToHost(): bool
+    {
+        return $this->exposeToHost;
+    }
+
+    /**
+     * @param bool $exposeToHost
+     */
+    public function setExposeToHost(bool $exposeToHost): void
+    {
+        $this->exposeToHost = $exposeToHost;
     }
 }

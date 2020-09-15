@@ -63,6 +63,11 @@ class RequestImageVersion
     private array $ports;
 
     /**
+     * @var bool
+     */
+    private bool $exposePort = false;
+
+    /**
      * @return int
      */
     public function getImageVersionId()
@@ -231,6 +236,22 @@ class RequestImageVersion
     }
 
     /**
+     * @return bool
+     */
+    public function isExposePort(): bool
+    {
+        return $this->exposePort;
+    }
+
+    /**
+     * @param bool $exposePort
+     */
+    public function setExposePort(bool $exposePort): void
+    {
+        $this->exposePort = $exposePort;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -264,8 +285,12 @@ class RequestImageVersion
             $array['volumes'][] = $volume;
         }
         foreach ($this->ports as $port) {
+            if (isset($port['exposeToHost']) && $port['exposeToHost']) {
+                $this->setExposePort(true);
+            }
             $array['ports'][] = $port;
         }
+        $array['exposeToHost'] = $this->isExposePort();
 
         return $array;
     }

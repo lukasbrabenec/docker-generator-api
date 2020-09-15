@@ -22,23 +22,23 @@ class DockerfileServiceChain
     }
 
     /**
-     * @param string $imageName
+     * @param string $imageCode
      * @return AbstractDockerfile|void
      */
-    public function getDockerfileService(string $imageName) :? AbstractDockerfile
+    public function getDockerfileService(string $imageCode) :? AbstractDockerfile
     {
-        if (array_key_exists($imageName, $this->dockerfileServices)) {
-            return $this->dockerfileServices[$imageName];
+        if (array_key_exists($imageCode, $this->dockerfileServices)) {
+            return $this->dockerfileServices[$imageCode];
         }
     }
 
     /**
-     * @param string $imageName
+     * @param string $imageCode
      * @return bool
      */
-    public function hasDockerfileService(string $imageName) : bool
+    public function hasDockerfileService(string $imageCode) : bool
     {
-        return array_key_exists($imageName, $this->dockerfileServices);
+        return array_key_exists($imageCode, $this->dockerfileServices);
     }
 
     /**

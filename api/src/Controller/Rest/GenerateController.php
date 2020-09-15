@@ -151,7 +151,9 @@ class GenerateController extends BaseController
         // change specific port when user requested
         /** @var RequestPort $portDTO */
         foreach ($imageVersionDTO->getPorts() as $portDTO) {
-            $portsDTO[$portDTO->getId()]['inward'] = $portDTO->getInward();
+            $portsDTO[$portDTO->getId()]['inward'] = $portDTO->isExposeToHost() ? $portDTO->getInward() : $portsDTO[$portDTO->getId()]['inward'];
+            $portsDTO[$portDTO->getId()]['outward'] = $portDTO->getOutward();
+            $portsDTO[$portDTO->getId()]['exposeToHost'] = $portDTO->isExposeToHost();
         }
         $imageVersionDTO->setPorts($portsDTO);
     }

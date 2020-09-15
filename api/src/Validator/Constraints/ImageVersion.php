@@ -14,6 +14,7 @@ class ImageVersion extends Constraint
     public string $badEnvironment = 'Environment {{ environmentId }} does not exist for ImageVersion {{ imageVersionId }}';
     public string $missingRequiredEnvironment = 'Required environment `{{ environmentCode }}`, ID {{ environmentId }} missing for ImageVersion {{ imageVersionId }}';
     public string $badPort = 'Port ID {{ portId }} does not exist for ImageVersion {{ imageVersionId }}';
+    public string $missingInwardPort = 'Inward port is required when expose to host is set';
 
     public function getTargets()
     {

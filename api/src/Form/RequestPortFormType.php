@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\DTO\RequestPort;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,6 +16,8 @@ class RequestPortFormType extends AbstractType
         $builder
             ->add('id', IntegerType::class)
             ->add('inward', IntegerType::class)
+            ->add('outward', IntegerType::class)
+            ->add('exposeToHost', CheckboxType::class)
             ;
     }
 

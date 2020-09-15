@@ -67,7 +67,7 @@ class MysqlFixtures extends Fixture implements DependentFixtureInterface
 
         $image = new Image();
         $image->setGroup($group);
-        $image->setName('mysql');
+        $image->setName('MySQL');
         $image->setCode('mysql');
         $image->setDockerfileLocation('./mysql/build/');
         $manager->persist($image);

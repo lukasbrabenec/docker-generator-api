@@ -6,6 +6,7 @@ use App\Exception\FormException;
 use ArrayObject;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\VarDumper\VarDumper;
 
 class FormExceptionNormalizer implements NormalizerInterface
 {

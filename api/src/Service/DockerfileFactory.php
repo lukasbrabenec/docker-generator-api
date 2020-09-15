@@ -36,17 +36,17 @@ class DockerfileFactory
      */
     public function generate(RequestImageVersion $requestImageVersion): string
     {
-        if (!$this->dockerfileServiceChain->hasDockerfileService($requestImageVersion->getImageName())) {
-            throw new Exception(sprintf(self::MISSING_DOCKERFILE_SERVICE_FOR_IMAGE, $requestImageVersion->getImageName()));
+        if (!$this->dockerfileServiceChain->hasDockerfileService($requestImageVersion->getImageCode())) {
+            throw new Exception(sprintf(self::MISSING_DOCKERFILE_SERVICE_FOR_IMAGE, $requestImageVersion->getImageCode()));
         }
         try {
-            return $this->dockerfileServiceChain->getDockerfileService($requestImageVersion->getImageName())->generateDockerfile($requestImageVersion);
+            return $this->dockerfileServiceChain->getDockerfileService($requestImageVersion->getImageCode())->generateDockerfile($requestImageVersion);
         } catch (LoaderError $e) {
-            throw new Exception(sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $requestImageVersion->getImageName()));
+            throw new Exception(sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $requestImageVersion->getImageCode()));
         } catch (RuntimeError $e) {
-            throw new Exception(sprintf(self::RUNTIME_ERROR, $requestImageVersion->getImageName()));
+            throw new Exception(sprintf(self::RUNTIME_ERROR, $requestImageVersion->getImageCode()));
         } catch (SyntaxError $e) {
-            throw new Exception(sprintf(self::SYNTAX_ERROR, $requestImageVersion->getImageName()));
+            throw new Exception(sprintf(self::SYNTAX_ERROR, $requestImageVersion->getImageCode()));
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Extension;
-use App\Entity\Group;
 use App\Entity\Image;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
@@ -166,12 +165,7 @@ class PhpFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $group = new Group();
-        $group->setName('PHP');
-        $manager->persist($group);
-
         $image = new Image();
-        $image->setGroup($group);
         $image->setName('PHP');
         $image->setCode('php');
         $image->setDockerfileLocation('./src/build/');

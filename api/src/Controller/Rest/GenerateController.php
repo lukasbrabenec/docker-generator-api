@@ -11,6 +11,7 @@ use App\Entity\ImageVersion;
 use App\Entity\ImageVolume;
 use App\Exception\FormException;
 use App\Form\RequestFormType;
+use App\Repository\ComposeFormatVersionRepository;
 use App\Repository\EnvironmentRepository;
 use App\Repository\ImageVersionExtensionRepository;
 use App\Repository\ImageVersionRepository;
@@ -27,6 +28,11 @@ use Twig\Error\SyntaxError;
 class GenerateController extends BaseController
 {
     /**
+     * @var ComposeFormatVersionRepository
+     */
+    private ComposeFormatVersionRepository $composeFormatVersionRepository;
+
+    /**
      * @var ImageVersionRepository
      */
     private ImageVersionRepository $imageVersionRepository;
@@ -42,17 +48,20 @@ class GenerateController extends BaseController
     private EnvironmentRepository $environmentRepository;
 
     /**
+     * @param ComposeFormatVersionRepository $composeFormatVersionRepository
      * @param ImageVersionRepository $imageVersionRepository
      * @param ImageVersionExtensionRepository $imageVersionExtensionRepository
      * @param EnvironmentRepository $environmentRepository
      * @param SerializerInterface $serializer
      */
     public function __construct(
+        ComposeFormatVersionRepository $composeFormatVersionRepository,
         ImageVersionRepository $imageVersionRepository,
         ImageVersionExtensionRepository $imageVersionExtensionRepository,
         EnvironmentRepository $environmentRepository,
         SerializerInterface $serializer
     ) {
+        $this->composeFormatVersionRepository = $composeFormatVersionRepository;
         $this->imageVersionRepository = $imageVersionRepository;
         $this->imageVersionExtensionRepository = $imageVersionExtensionRepository;
         $this->environmentRepository = $environmentRepository;
@@ -109,6 +118,9 @@ class GenerateController extends BaseController
      */
     private function _mergeDTOWithEntities(\App\Entity\DTO\Request $requestDTO): \App\Entity\DTO\Request
     {
+        $composeVersion = $this->composeFormatVersionRepository->find($requestDTO->getDockerVersionId());
+        $requestDTO->setDockerVersion($composeVersion->getComposeVersion());
+
         /** @var RequestImageVersion $imageVersionDTO */
         foreach ($requestDTO->getImageVersions() as $imageVersionDTO) {
             $imageVersion = $this->imageVersionRepository->find($imageVersionDTO->getImageVersionId());

@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Group;
 use App\Entity\Image;
 use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
@@ -32,11 +31,7 @@ class ElasticSearchFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        /** @var Group $group */
-        $group = $manager->getRepository(Group::class)->findOneBy(['name' => 'PHP']);
-
         $image = new Image();
-        $image->setGroup($group);
         $image->setName('ElasticSearch');
         $image->setCode('elasticsearch');
         $image->setDockerfileLocation(null);

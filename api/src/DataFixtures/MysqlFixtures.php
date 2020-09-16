@@ -2,17 +2,15 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Group;
 use App\Entity\Image;
 use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVolume;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class MysqlFixtures extends Fixture implements DependentFixtureInterface
+class MysqlFixtures extends Fixture
 {
     const VERSIONS = [
         '5.7',
@@ -62,11 +60,7 @@ class MysqlFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        /** @var Group $group */
-        $group = $manager->getRepository(Group::class)->findOneBy(['name' => 'PHP']);
-
         $image = new Image();
-        $image->setGroup($group);
         $image->setName('MySQL');
         $image->setCode('mysql');
         $image->setDockerfileLocation('./mysql/build/');
@@ -105,15 +99,5 @@ class MysqlFixtures extends Fixture implements DependentFixtureInterface
             }
         }
         $manager->flush();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getDependencies()
-    {
-        return [
-            PhpFixtures::class
-        ];
     }
 }

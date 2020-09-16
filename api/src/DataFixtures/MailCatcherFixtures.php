@@ -2,16 +2,13 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Group;
 use App\Entity\Image;
-use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class MailCatcherFixtures extends Fixture implements DependentFixtureInterface
+class MailCatcherFixtures extends Fixture
 {
     const VERSIONS = [
         '0.7.1'
@@ -24,11 +21,7 @@ class MailCatcherFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        /** @var Group $group */
-        $group = $manager->getRepository(Group::class)->findOneBy(['name' => 'PHP']);
-
         $image = new Image();
-        $image->setGroup($group);
         $image->setName('MailCatcher');
         $image->setCode('mailcatcher');
         $image->setDockerfileLocation('./mailcatcher/build/');
@@ -49,15 +42,5 @@ class MailCatcherFixtures extends Fixture implements DependentFixtureInterface
             }
         }
         $manager->flush();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getDependencies()
-    {
-        return [
-            PhpFixtures::class
-        ];
     }
 }

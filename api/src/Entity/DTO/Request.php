@@ -2,15 +2,21 @@
 
 namespace App\Entity\DTO;
 
+use App\Validator\Constraints\DockerComposeVersion;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Request
 {
     /**
      * @var int
-     * @Assert\NotBlank()
+     * @DockerComposeVersion()
      */
-    private int $dockerVersion;
+    private int $dockerVersionId;
+
+    /**
+     * @var float
+     */
+    private float $dockerVersion;
 
     /**
      *
@@ -37,15 +43,31 @@ class Request
     /**
      * @return int
      */
-    public function getDockerVersion()
+    public function getDockerVersionId()
+    {
+        return $this->dockerVersionId;
+    }
+
+    /**
+     * @param int $dockerVersionId
+     */
+    public function setDockerVersionId(int $dockerVersionId)
+    {
+        $this->dockerVersionId = $dockerVersionId;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDockerVersion(): float
     {
         return $this->dockerVersion;
     }
 
     /**
-     * @param int $dockerVersion
+     * @param float $dockerVersion
      */
-    public function setDockerVersion(int $dockerVersion)
+    public function setDockerVersion(float $dockerVersion): void
     {
         $this->dockerVersion = $dockerVersion;
     }

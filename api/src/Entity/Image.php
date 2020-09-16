@@ -40,14 +40,6 @@ class Image
     private string $code;
 
     /**
-     * @var Group
-     *
-     * @ORM\ManyToOne(targetEntity="Group", cascade={"all"})
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private Group $group;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="dockerfile_location", type="string", length=128, nullable=true)
@@ -102,26 +94,6 @@ class Image
     public function setCode(string $code): void
     {
         $this->code = $code;
-    }
-
-    /**
-     * @return Group
-     */
-    public function getGroup(): Group
-    {
-        return $this->group;
-    }
-
-    /**
-     * @param Group $group
-     *
-     * @return self
-     */
-    public function setGroup(Group $group): self
-    {
-        $this->group = $group;
-
-        return $this;
     }
 
     /**

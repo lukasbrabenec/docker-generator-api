@@ -2,9 +2,10 @@
 
 namespace App\Validator\Constraints;
 
-use App\Entity\DTO\RequestEnvironment;
-use App\Entity\DTO\RequestInstallExtension;
-use App\Entity\DTO\RequestPort;
+use App\Entity\DTO\GenerateEnvironmentDTO;
+use App\Entity\DTO\GenerateExtensionDTO;
+use App\Entity\DTO\GenerateImageVersionDTO;
+use App\Entity\DTO\GeneratePortDTO;
 use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersionExtension;
@@ -31,15 +32,15 @@ class ImageVersionValidator extends ConstraintValidator
 
 
     /**
-     * @param mixed $requestImageVersion
+     * @param mixed $generateImageVersionDTO
      * @param Constraint $constraint
      */
-    public function validate($requestImageVersion, Constraint $constraint)
+    public function validate($generateImageVersionDTO, Constraint $constraint)
     {
         if (!$constraint instanceof ImageVersion) {
             throw new UnexpectedTypeException($constraint, ImageVersion::class);
         }
-        $imageVersionId = $requestImageVersion->getImageVersionId();
+        $imageVersionId = $generateImageVersionDTO->getImageVersionId();
 
         if (null === $imageVersionId || '' === $imageVersionId) {
             return;
@@ -53,30 +54,33 @@ class ImageVersionValidator extends ConstraintValidator
         if (!is_object($imageVersion)) {
             $this->context->buildViolation($constraint->imageVersionMissing)
                 ->setParameter('{{ imageVersionId }}', $imageVersionId)
+                ->atPath('imageVersionId')
                 ->addViolation();
         }
 
         // extensions
-        /** @var RequestInstallExtension $installExtensionDTO */
-        foreach ($requestImageVersion->getInstallExtensions() as $installExtensionDTO) {
+        /** @var GenerateExtensionDTO $installExtensionDTO */
+        foreach ($generateImageVersionDTO->getExtensions() as $installExtensionDTO) {
             $imageDockerInstall = $this->entityManager->getRepository(ImageVersionExtension::class)->findOneBy(['extension' => $installExtensionDTO->getId(), 'imageVersion' => $imageVersionId]);
             if (!is_object($imageDockerInstall)) {
                 $this->context->buildViolation($constraint->badExtension)
                     ->setParameter('{{ extensionId }}', $installExtensionDTO->getId())
                     ->setParameter('{{ imageVersionId }}', $imageVersionId)
+                    ->atPath('extensions')
                     ->addViolation();
             }
         }
 
         // environments
-        /** @var RequestEnvironment $environmentDTO */
-        foreach ($requestImageVersion->getEnvironments() as $environmentDTO) {
+        /** @var GenerateEnvironmentDTO $environmentDTO */
+        foreach ($generateImageVersionDTO->getEnvironments() as $environmentDTO) {
             /** @var ImageEnvironment $environment */
             $environment = $this->entityManager->getRepository(ImageEnvironment::class)->find($environmentDTO->getId());
             if (!is_object($environment) || $environment->getImageVersion()->getId() !== $imageVersionId) {
                 $this->context->buildViolation($constraint->badEnvironment)
                     ->setParameter('{{ environmentId }}', $environmentDTO->getId())
                     ->setParameter('{{ imageVersionId }}', $imageVersionId)
+                    ->atPath('environments')
                     ->addViolation();
             }
         }
@@ -88,7 +92,7 @@ class ImageVersionValidator extends ConstraintValidator
         /** @var ImageEnvironment $requiredEnvironment */
         foreach ($requiredEnvironments as $requiredEnvironment) {
             $exist = false;
-            foreach ($requestImageVersion->getEnvironments() as $environmentDTO) {
+            foreach ($generateImageVersionDTO->getEnvironments() as $environmentDTO) {
                 if ($requiredEnvironment->getId() === $environmentDTO->getId()) {
                     $exist = true;
                 }
@@ -98,19 +102,21 @@ class ImageVersionValidator extends ConstraintValidator
                     ->setParameter('{{ environmentCode }}', $requiredEnvironment->getCode())
                     ->setParameter('{{ environmentId }}', $requiredEnvironment->getId())
                     ->setParameter('{{ imageVersionId }}', $imageVersionId)
+                    ->atPath('environments')
                     ->addViolation();
             }
         }
 
         // ports
-        /** @var RequestPort $portDTO */
-        foreach ($requestImageVersion->getPorts() as $portDTO) {
+        /** @var GeneratePortDTO $portDTO */
+        foreach ($generateImageVersionDTO->getPorts() as $portDTO) {
             /** @var ImagePort $port */
             $port = $this->entityManager->getRepository(ImagePort::class)->find($portDTO->getId());
             if (!is_object($port) || $port->getImageVersion()->getId() !== $imageVersionId) {
                 $this->context->buildViolation($constraint->badPort)
                     ->setParameter('{{ portId }}', $portDTO->getId())
                     ->setParameter('{{ imageVersionId }}', $imageVersionId)
+                    ->atPath('ports')
                     ->addViolation();
             }
             if ($portDTO->isExposeToHost() && !$portDTO->getInward()) {

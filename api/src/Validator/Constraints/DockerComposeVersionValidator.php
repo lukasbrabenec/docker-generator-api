@@ -23,24 +23,24 @@ class DockerComposeVersionValidator extends ConstraintValidator
     }
 
     /**
-     * @param mixed $dockerComposeVersionId
+     * @param mixed $dockerComposeVersionDTOId
      * @param Constraint $constraint
      */
-    public function validate($dockerComposeVersionId, Constraint $constraint)
+    public function validate($dockerComposeVersionDTOId, Constraint $constraint)
     {
-        if (null === $dockerComposeVersionId || '' === $dockerComposeVersionId) {
+        if (null === $dockerComposeVersionDTOId || '' === $dockerComposeVersionDTOId) {
             return;
         }
 
-        if (!is_integer($dockerComposeVersionId)) {
-            throw new UnexpectedValueException($dockerComposeVersionId, 'integer');
+        if (!is_integer($dockerComposeVersionDTOId)) {
+            throw new UnexpectedValueException($dockerComposeVersionDTOId, 'integer');
         }
 
-        $dockerComposeVersion = $this->getComposeFormatVersionRepository()->find($dockerComposeVersionId);
+        $dockerComposeVersion = $this->getComposeFormatVersionRepository()->find($dockerComposeVersionDTOId);
 
         if (!is_object($dockerComposeVersion)) {
             $this->context->buildViolation($constraint->dockerComposeVersionNotExist)
-                ->setParameter('{{ dockerComposeVersionId }}', $dockerComposeVersionId)
+                ->setParameter('{{ dockerComposeVersionId }}', $dockerComposeVersionDTOId)
                 ->addViolation();
         }
     }

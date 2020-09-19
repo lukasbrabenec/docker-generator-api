@@ -6,7 +6,7 @@ namespace App\Entity\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class RequestEnvironment
+class GenerateEnvironmentDTO
 {
     /**
      * @var int

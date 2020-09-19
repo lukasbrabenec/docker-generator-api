@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ImageVersion
  */
-class RequestImageVersion
+class GenerateImageVersionDTO
 {
     /**
      * @var int
@@ -17,19 +17,19 @@ class RequestImageVersion
     private int $imageVersionId;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $version;
+    private ?string $version;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $imageName;
+    private ?string $imageName;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $imageCode;
+    private ?string $imageCode;
 
     /**
      * @var string|null
@@ -44,10 +44,9 @@ class RequestImageVersion
     /**
      * @var array
      */
-    private array $installExtensions;
+    private array $extensions;
 
     /**
-     *
      * @var array
      */
     private array $environments;
@@ -100,9 +99,9 @@ class RequestImageVersion
     }
 
     /**
-     * @param RequestEnvironment $environment
+     * @param GenerateEnvironmentDTO $environment
      */
-    public function addEnvironment(RequestEnvironment $environment)
+    public function addEnvironment(GenerateEnvironmentDTO $environment)
     {
         $this->environments[] = $environment;
     }
@@ -116,9 +115,9 @@ class RequestImageVersion
     }
 
     /**
-     * @param string $version
+     * @param string|null $version
      */
-    public function setVersion(string $version): void
+    public function setVersion(?string $version): void
     {
         $this->version = $version;
     }
@@ -132,9 +131,9 @@ class RequestImageVersion
     }
 
     /**
-     * @param string $imageName
+     * @param string|null $imageName
      */
-    public function setImageName(string $imageName): void
+    public function setImageName(?string $imageName): void
     {
         $this->imageName = $imageName;
     }
@@ -148,9 +147,9 @@ class RequestImageVersion
     }
 
     /**
-     * @param string $imageCode
+     * @param string|null $imageCode
      */
-    public function setImageCode(string $imageCode): void
+    public function setImageCode(?string $imageCode): void
     {
         $this->imageCode = $imageCode;
     }
@@ -190,17 +189,17 @@ class RequestImageVersion
     /**
      * @return array
      */
-    public function getInstallExtensions()
+    public function getExtensions()
     {
-        return $this->installExtensions;
+        return $this->extensions;
     }
 
     /**
-     * @param array $installExtensions
+     * @param array $extensions
      */
-    public function setInstallExtensions(array $installExtensions)
+    public function setExtensions(array $extensions)
     {
-        $this->installExtensions = $installExtensions;
+        $this->extensions = $extensions;
     }
 
     /**
@@ -267,8 +266,8 @@ class RequestImageVersion
         foreach ($this->environments as $environment) {
             $array['environments'][] = $environment->toArray();
         }
-        /** @var RequestInstallExtension $extension */
-        foreach ($this->installExtensions as $extension) {
+        /** @var GenerateExtensionDTO $extension */
+        foreach ($this->extensions as $extension) {
             if ($extension->isSpecial()) {
                 $array['extensions']['special'][] = [
                     'name' => $extension->getName(),

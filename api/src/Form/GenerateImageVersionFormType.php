@@ -2,30 +2,33 @@
 
 namespace App\Form;
 
-use App\Entity\DTO\RequestImageVersion;
+use App\Entity\DTO\GenerateImageVersionDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RequestImageVersionFormType extends AbstractType
+class GenerateImageVersionFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('imageVersionId', IntegerType::class)
             ->add('environments', CollectionType::class, [
-                'entry_type' => RequestEnvironmentFormType::class,
-                'allow_add' => true
+                'entry_type' => GenerateEnvironmentFormType::class,
+                'allow_add' => true,
+                'error_bubbling' => false
             ])
             ->add('ports', CollectionType::class, [
-                'entry_type' => RequestPortFormType::class,
-                'allow_add' => true
+                'entry_type' => GeneratePortFormType::class,
+                'allow_add' => true,
+                'error_bubbling' => false
             ])
-            ->add('installExtensions', CollectionType::class, [
-                'entry_type' => RequestInstallExtensionFormType::class,
-                'allow_add' => true
+            ->add('extensions', CollectionType::class, [
+                'entry_type' => GenerateExtensionFormType::class,
+                'allow_add' => true,
+                'error_bubbling' => false
             ])
             ;
     }
@@ -33,7 +36,7 @@ class RequestImageVersionFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => RequestImageVersion::class
+            'data_class' => GenerateImageVersionDTO::class
         ]);
     }
 

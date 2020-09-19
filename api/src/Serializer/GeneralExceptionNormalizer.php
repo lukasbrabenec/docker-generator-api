@@ -32,6 +32,6 @@ class GeneralExceptionNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, ?string $format = null)
     {
-        return $data instanceof \Exception;
+        return $data instanceof \Throwable;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\DTO\Request;
+use App\Entity\DTO\GenerateDTO;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -22,13 +22,13 @@ class DockerComposeGenerator
     }
 
     /**
-     * @param Request $requestObject
-     * @return Request
+     * @param GenerateDTO $requestObject
+     * @return GenerateDTO
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function generate(Request $requestObject): Request
+    public function generate(GenerateDTO $requestObject): GenerateDTO
     {
         $dockerComposeText =  $this->twig->render('docker-compose.yml.twig', $requestObject->toArray());
         $requestObject->setDockerComposeText($dockerComposeText);

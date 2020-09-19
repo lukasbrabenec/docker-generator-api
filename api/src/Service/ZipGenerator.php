@@ -2,17 +2,17 @@
 
 namespace App\Service;
 
-use App\Entity\DTO\Request;
-use App\Entity\DTO\RequestImageVersion;
+use App\Entity\DTO\GenerateDTO;
+use App\Entity\DTO\GenerateImageVersionDTO;
 use ZipArchive;
 
 class ZipGenerator
 {
     /**
-     * @param Request $requestObject
+     * @param GenerateDTO $requestObject
      * @return string
      */
-    public function generateArchive(Request $requestObject)
+    public function generateArchive(GenerateDTO $requestObject)
     {
         $zipFilePath = stream_get_meta_data(tmpfile())['uri'];
 
@@ -20,7 +20,7 @@ class ZipGenerator
         $zip->open($zipFilePath, ZipArchive::CREATE);
         $zip->addFromString('docker-compose.yml', $requestObject->getDockerComposeText());
 
-        /** @var RequestImageVersion $imageVersion */
+        /** @var GenerateImageVersionDTO $imageVersion */
         foreach ($requestObject->getImageVersions() as $imageVersion) {
             if ($imageVersion->getDockerfileLocation()) {
                 $zip->addFromString($imageVersion->getDockerfileLocation() . 'Dockerfile', $imageVersion->getDockerfileText());

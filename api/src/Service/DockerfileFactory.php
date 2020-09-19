@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Dockerfile\DockerfileServiceChain;
-use App\Entity\DTO\RequestImageVersion;
+use App\Entity\DTO\GenerateImageVersionDTO;
 use Exception;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -30,11 +30,11 @@ class DockerfileFactory
     }
 
     /**
-     * @param RequestImageVersion $requestImageVersion
+     * @param GenerateImageVersionDTO $requestImageVersion
      * @return string
      * @throws Exception
      */
-    public function generate(RequestImageVersion $requestImageVersion): string
+    public function generate(GenerateImageVersionDTO $requestImageVersion): string
     {
         if (!$this->dockerfileServiceChain->hasDockerfileService($requestImageVersion->getImageCode())) {
             throw new Exception(sprintf(self::MISSING_DOCKERFILE_SERVICE_FOR_IMAGE, $requestImageVersion->getImageCode()));

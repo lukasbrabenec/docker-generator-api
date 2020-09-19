@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\DTO\Request;
+use App\Entity\DTO\GenerateDTO;
 use Exception;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -33,14 +33,14 @@ class GeneratorService
     }
 
     /**
-     * @param Request $requestObject
+     * @param GenerateDTO $requestObject
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws Exception
      */
-    public function generate(Request $requestObject)
+    public function generate(GenerateDTO $requestObject)
     {
         $this->getDockerComposeGenerator()->generate($requestObject);
         $this->getDockerfileGenerator()->generate($requestObject);

@@ -5,7 +5,7 @@ namespace App\Entity\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class RequestPort
+class GeneratePortDTO
 {
     /**
      * @var int

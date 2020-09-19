@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\DTO\Request;
-use App\Entity\DTO\RequestImageVersion;
+use App\Entity\DTO\GenerateDTO;
+use App\Entity\DTO\GenerateImageVersionDTO;
 use Exception;
 use Twig\Environment;
 
@@ -26,12 +26,12 @@ class DockerfileGenerator
     }
 
     /**
-     * @param Request $request
+     * @param GenerateDTO $request
      * @throws Exception
      */
-    public function generate(Request $request) : void
+    public function generate(GenerateDTO $request) : void
     {
-        /** @var RequestImageVersion $imageVersion */
+        /** @var GenerateImageVersionDTO $imageVersion */
         foreach ($request->getImageVersions() as $imageVersion) {
             // image doesn't have dockerfile if location isn't set
             if ($imageVersion->getDockerfileLocation()) {

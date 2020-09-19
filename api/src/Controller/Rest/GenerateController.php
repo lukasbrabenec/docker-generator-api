@@ -2,15 +2,16 @@
 
 namespace App\Controller\Rest;
 
-use App\Entity\DTO\RequestEnvironment;
-use App\Entity\DTO\RequestImageVersion;
-use App\Entity\DTO\RequestInstallExtension;
-use App\Entity\DTO\RequestPort;
+use App\Entity\DTO\GenerateDTO;
+use App\Entity\DTO\GenerateEnvironmentDTO;
+use App\Entity\DTO\GenerateImageVersionDTO;
+use App\Entity\DTO\GenerateExtensionDTO;
+use App\Entity\DTO\GeneratePortDTO;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVolume;
 use App\Exception\FormException;
-use App\Form\RequestFormType;
+use App\Form\GenerateFormType;
 use App\Repository\ComposeFormatVersionRepository;
 use App\Repository\EnvironmentRepository;
 use App\Repository\ImageVersionExtensionRepository;
@@ -80,8 +81,8 @@ class GenerateController extends BaseController
      */
     public function postGenerate(Request $request, GeneratorService $generatorService)
     {
-        /** @var \App\Entity\DTO\Request $requestObject */
-        $requestObject = $this->_processForm($request, RequestFormType::class);
+        /** @var GenerateDTO $requestObject */
+        $requestObject = $this->_processForm($request, GenerateFormType::class);
         $zipFilePath = $generatorService->generate($requestObject);
 
         $response = new BinaryFileResponse($zipFilePath);
@@ -101,7 +102,7 @@ class GenerateController extends BaseController
      * @param string $formClass
      * @return mixed
      */
-    protected function _processForm(Request $request, string $formClass): \App\Entity\DTO\Request
+    protected function _processForm(Request $request, string $formClass): GenerateDTO
     {
         $form = $this->createForm($formClass);
         $form->handleRequest($request);
@@ -114,15 +115,15 @@ class GenerateController extends BaseController
     }
 
     /**
-     * @param \App\Entity\DTO\Request $requestDTO
-     * @return \App\Entity\DTO\Request
+     * @param GenerateDTO $requestDTO
+     * @return GenerateDTO
      */
-    private function _mergeDTOWithEntities(\App\Entity\DTO\Request $requestDTO): \App\Entity\DTO\Request
+    private function _mergeDTOWithEntities(GenerateDTO $requestDTO): GenerateDTO
     {
         $composeVersion = $this->composeFormatVersionRepository->find($requestDTO->getDockerVersionId());
         $requestDTO->setDockerComposeVersion($composeVersion->getComposeVersion());
 
-        /** @var RequestImageVersion $imageVersionDTO */
+        /** @var GenerateImageVersionDTO $imageVersionDTO */
         foreach ($requestDTO->getImageVersions() as $imageVersionDTO) {
             $imageVersion = $this->imageVersionRepository->find($imageVersionDTO->getImageVersionId());
             $this->_mergeImageVersion($imageVersion, $imageVersionDTO);
@@ -136,9 +137,9 @@ class GenerateController extends BaseController
 
     /**
      * @param ImageVersion $imageVersion
-     * @param RequestImageVersion $imageVersionDTO
+     * @param GenerateImageVersionDTO $imageVersionDTO
      */
-    private function _mergeImageVersion(ImageVersion $imageVersion, RequestImageVersion $imageVersionDTO): void
+    private function _mergeImageVersion(ImageVersion $imageVersion, GenerateImageVersionDTO $imageVersionDTO): void
     {
         $imageVersionDTO->setVersion($imageVersion->getVersion());
         $imageVersionDTO->setImageName($imageVersion->getImage()->getName());
@@ -148,9 +149,9 @@ class GenerateController extends BaseController
 
     /**
      * @param ImageVersion $imageVersion
-     * @param RequestImageVersion $imageVersionDTO
+     * @param GenerateImageVersionDTO $imageVersionDTO
      */
-    private function _mergePorts(ImageVersion $imageVersion, RequestImageVersion $imageVersionDTO): void
+    private function _mergePorts(ImageVersion $imageVersion, GenerateImageVersionDTO $imageVersionDTO): void
     {
         $portsDTO = [];
         // set all ports for image version
@@ -162,7 +163,7 @@ class GenerateController extends BaseController
             ];
         }
         // change specific port when user requested
-        /** @var RequestPort $portDTO */
+        /** @var GeneratePortDTO $portDTO */
         foreach ($imageVersionDTO->getPorts() as $portDTO) {
             $portsDTO[$portDTO->getId()]['inward'] = $portDTO->isExposeToHost() ? $portDTO->getInward() : $portsDTO[$portDTO->getId()]['inward'];
             $portsDTO[$portDTO->getId()]['outward'] = $portDTO->getOutward();
@@ -173,9 +174,9 @@ class GenerateController extends BaseController
 
     /**
      * @param ImageVersion $imageVersion
-     * @param RequestImageVersion $imageVersionDTO
+     * @param GenerateImageVersionDTO $imageVersionDTO
      */
-    private function _mergeVolumes(ImageVersion $imageVersion, RequestImageVersion $imageVersionDTO)
+    private function _mergeVolumes(ImageVersion $imageVersion, GenerateImageVersionDTO $imageVersionDTO)
     {
         $volumesDTO = [];
         // set all volumes for image version
@@ -191,13 +192,13 @@ class GenerateController extends BaseController
 
     /**
      * @param ImageVersion $imageVersion
-     * @param RequestImageVersion $imageVersionDTO
+     * @param GenerateImageVersionDTO $imageVersionDTO
      */
-    private function _mergeExtensions(ImageVersion $imageVersion, RequestImageVersion $imageVersionDTO): void
+    private function _mergeExtensions(ImageVersion $imageVersion, GenerateImageVersionDTO $imageVersionDTO): void
     {
         // set all user requested extensions
-        /** @var RequestInstallExtension $extensionDTO */
-        foreach ($imageVersionDTO->getInstallExtensions() as $extensionDTO) {
+        /** @var GenerateExtensionDTO $extensionDTO */
+        foreach ($imageVersionDTO->getExtensions() as $extensionDTO) {
             $imageVersionExtension = $this->imageVersionExtensionRepository->findOneBy(
                 [
                     'extension' => $extensionDTO->getId(),
@@ -211,11 +212,11 @@ class GenerateController extends BaseController
     }
 
     /**
-     * @param RequestImageVersion $imageVersionDTO
+     * @param GenerateImageVersionDTO $imageVersionDTO
      */
-    private function _mergeEnvironments(RequestImageVersion $imageVersionDTO): void
+    private function _mergeEnvironments(GenerateImageVersionDTO $imageVersionDTO): void
     {
-        /** @var RequestEnvironment $environmentDTO */
+        /** @var GenerateEnvironmentDTO $environmentDTO */
         foreach ($imageVersionDTO->getEnvironments() as $environmentDTO) {
             $environment = $this->environmentRepository->find($environmentDTO->getId());
             $environmentDTO->setCode($environment->getCode());

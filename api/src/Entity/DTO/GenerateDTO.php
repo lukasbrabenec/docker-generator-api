@@ -5,7 +5,7 @@ namespace App\Entity\DTO;
 use App\Validator\Constraints\DockerComposeVersion;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Request
+class GenerateDTO
 {
     /**
      * @var string
@@ -16,6 +16,7 @@ class Request
     /**
      * @var int
      * @DockerComposeVersion()
+     * @Assert\NotBlank()
      */
     private int $dockerVersionId;
 
@@ -29,7 +30,6 @@ class Request
      * @var array
      *
      * @Assert\Valid()
-     *
      */
     private array $imageVersions;
 
@@ -38,9 +38,6 @@ class Request
      */
     private ?string $dockerComposeText = null;
 
-    /**
-     * Request constructor.
-     */
     public function __construct()
     {
         $this->imageVersions = [];
@@ -111,9 +108,9 @@ class Request
     }
 
     /**
-     * @param RequestImageVersion $image
+     * @param GenerateImageVersionDTO $image
      */
-    public function addImage(RequestImageVersion $image)
+    public function addImage(GenerateImageVersionDTO $image)
     {
         $this->imageVersions[] = $image;
     }

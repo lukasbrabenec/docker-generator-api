@@ -87,7 +87,7 @@ class GenerateController extends BaseController
 
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
-            'test.zip'
+            sprintf('%s.zip', $requestObject->getProjectName())
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->deleteFileAfterSend(true);
@@ -119,7 +119,7 @@ class GenerateController extends BaseController
     private function _mergeDTOWithEntities(\App\Entity\DTO\Request $requestDTO): \App\Entity\DTO\Request
     {
         $composeVersion = $this->composeFormatVersionRepository->find($requestDTO->getDockerVersionId());
-        $requestDTO->setDockerVersion($composeVersion->getComposeVersion());
+        $requestDTO->setDockerComposeVersion($composeVersion->getComposeVersion());
 
         /** @var RequestImageVersion $imageVersionDTO */
         foreach ($requestDTO->getImageVersions() as $imageVersionDTO) {

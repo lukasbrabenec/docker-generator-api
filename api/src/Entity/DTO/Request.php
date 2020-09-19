@@ -8,6 +8,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Request
 {
     /**
+     * @var string
+     * @Assert\NotBlank()
+     */
+    private string $projectName;
+
+    /**
      * @var int
      * @DockerComposeVersion()
      */
@@ -16,7 +22,7 @@ class Request
     /**
      * @var float
      */
-    private float $dockerVersion;
+    private float $dockerComposeVersion;
 
     /**
      *
@@ -41,6 +47,22 @@ class Request
     }
 
     /**
+     * @return string
+     */
+    public function getProjectName(): string
+    {
+        return $this->projectName;
+    }
+
+    /**
+     * @param string $projectName
+     */
+    public function setProjectName(string $projectName): void
+    {
+        $this->projectName = $projectName;
+    }
+
+    /**
      * @return int
      */
     public function getDockerVersionId()
@@ -59,17 +81,17 @@ class Request
     /**
      * @return float
      */
-    public function getDockerVersion(): float
+    public function getDockerComposeVersion(): float
     {
-        return $this->dockerVersion;
+        return $this->dockerComposeVersion;
     }
 
     /**
-     * @param float $dockerVersion
+     * @param float $dockerComposeVersion
      */
-    public function setDockerVersion(float $dockerVersion): void
+    public function setDockerComposeVersion(float $dockerComposeVersion): void
     {
-        $this->dockerVersion = $dockerVersion;
+        $this->dockerComposeVersion = $dockerComposeVersion;
     }
 
     /**
@@ -118,7 +140,7 @@ class Request
     public function toArray()
     {
         $array = [
-            'dockerVersion' => $this->dockerVersion,
+            'dockerVersion' => $this->dockerComposeVersion,
             'dockerComposeText' => $this->dockerComposeText
         ];
 

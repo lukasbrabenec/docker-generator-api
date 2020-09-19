@@ -8,8 +8,6 @@ use ZipArchive;
 
 class ZipGenerator
 {
-    const MAX_RANDOM_NAME_ATTEMPTS = 10;
-
     /**
      * @param Request $requestObject
      * @return string

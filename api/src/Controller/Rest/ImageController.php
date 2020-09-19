@@ -5,35 +5,22 @@ namespace App\Controller\Rest;
 use App\Http\ApiResponse;
 use App\Repository\ImageRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class ImageController extends BaseController
 {
     /**
-     * @var ImageRepository
-     */
-    private ImageRepository $imageRepository;
-
-    /**
-     * @param ImageRepository $imageRepository
-     * @param SerializerInterface $serializer
-     */
-    public function __construct(
-        ImageRepository $imageRepository,
-        SerializerInterface $serializer
-    ) {
-        $this->imageRepository = $imageRepository;
-        parent::__construct($serializer);
-    }
-
-    /**
-     * @Rest\Get("/images")
+     * @Rest\Route(
+     *     "/images",
+     *     methods={"GET"},
+     *     requirements={"version"="(v1)"}
+     * )
      *
+     * @param ImageRepository $imageRepository
      * @return ApiResponse
      */
-    public function list()
+    public function list(ImageRepository $imageRepository)
     {
-        $data = $this->normalize($this->imageRepository->findAll());
+        $data = $this->normalize($imageRepository->findAll());
         return new ApiResponse($data);
     }
 }

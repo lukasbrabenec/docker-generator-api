@@ -52,24 +52,25 @@ class GenerateController extends BaseController
      * @param ImageVersionRepository $imageVersionRepository
      * @param ImageVersionExtensionRepository $imageVersionExtensionRepository
      * @param EnvironmentRepository $environmentRepository
-     * @param SerializerInterface $serializer
      */
     public function __construct(
         ComposeFormatVersionRepository $composeFormatVersionRepository,
         ImageVersionRepository $imageVersionRepository,
         ImageVersionExtensionRepository $imageVersionExtensionRepository,
-        EnvironmentRepository $environmentRepository,
-        SerializerInterface $serializer
+        EnvironmentRepository $environmentRepository
     ) {
         $this->composeFormatVersionRepository = $composeFormatVersionRepository;
         $this->imageVersionRepository = $imageVersionRepository;
         $this->imageVersionExtensionRepository = $imageVersionExtensionRepository;
         $this->environmentRepository = $environmentRepository;
-        parent::__construct($serializer);
     }
 
     /**
-     * @Rest\Post("/generate")
+     * @Rest\Route(
+     *     "/generate",
+     *     methods={"POST"},
+     *     requirements={"version"="(v1)"}
+     * )
      * @param Request $request
      * @param GeneratorService $generatorService
      * @return BinaryFileResponse

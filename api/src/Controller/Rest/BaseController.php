@@ -18,20 +18,12 @@ class BaseController extends AbstractFOSRestController
     private SerializerInterface $serializer;
 
     /**
-     * @param SerializerInterface $serializer
-     */
-    public function __construct(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
-    /**
      * @param mixed $data
      * @return array
      */
     protected function normalize($data): array
     {
-        return $this->serializer->normalize($data, null, ['groups' => ['default']]);
+        return $this->_getSerializer()->normalize($data, null, ['groups' => ['default']]);
     }
 
     /**
@@ -46,5 +38,21 @@ class BaseController extends AbstractFOSRestController
             throw new HttpException(Response::HTTP_NOT_FOUND, sprintf('Entity %d not found.', $id));
         }
         return $entity;
+    }
+
+    /**
+     * @return SerializerInterface
+     */
+    protected function _getSerializer(): SerializerInterface
+    {
+        return $this->serializer;
+    }
+
+    /**
+     * @param SerializerInterface $serializer
+     */
+    public function setSerializer(SerializerInterface $serializer): void
+    {
+        $this->serializer = $serializer;
     }
 }

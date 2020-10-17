@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Dockerfile\DockerfileServiceChain;
 use App\Entity\DTO\GenerateImageVersionDTO;
-use Exception;
+use App\Exception\DockerfileException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -32,21 +32,21 @@ class DockerfileFactory
     /**
      * @param GenerateImageVersionDTO $requestImageVersion
      * @return string
-     * @throws Exception
+     * @throws DockerfileException
      */
     public function generate(GenerateImageVersionDTO $requestImageVersion): string
     {
         if (!$this->dockerfileServiceChain->hasDockerfileService($requestImageVersion->getImageCode())) {
-            throw new Exception(sprintf(self::MISSING_DOCKERFILE_SERVICE_FOR_IMAGE, $requestImageVersion->getImageCode()));
+            throw new DockerfileException(sprintf(self::MISSING_DOCKERFILE_SERVICE_FOR_IMAGE, $requestImageVersion->getImageCode()));
         }
         try {
             return $this->dockerfileServiceChain->getDockerfileService($requestImageVersion->getImageCode())->generateDockerfile($requestImageVersion);
         } catch (LoaderError $e) {
-            throw new Exception(sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $requestImageVersion->getImageCode()));
+            throw new DockerfileException(sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $requestImageVersion->getImageCode()));
         } catch (RuntimeError $e) {
-            throw new Exception(sprintf(self::RUNTIME_ERROR, $requestImageVersion->getImageCode()));
+            throw new DockerfileException(sprintf(self::RUNTIME_ERROR, $requestImageVersion->getImageCode()));
         } catch (SyntaxError $e) {
-            throw new Exception(sprintf(self::SYNTAX_ERROR, $requestImageVersion->getImageCode()));
+            throw new DockerfileException(sprintf(self::SYNTAX_ERROR, $requestImageVersion->getImageCode()));
         }
     }
 }

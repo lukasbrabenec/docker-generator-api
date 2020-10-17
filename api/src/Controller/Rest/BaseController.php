@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller\Rest;
-
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;

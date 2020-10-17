@@ -6,7 +6,6 @@ use App\Exception\FormException;
 use ArrayObject;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\VarDumper\VarDumper;
 
 class FormExceptionNormalizer implements NormalizerInterface
 {
@@ -33,10 +32,8 @@ class FormExceptionNormalizer implements NormalizerInterface
             $errors[] = $error->getMessage();
         }
         foreach ($form->all() as $childForm) {
-            if ($childForm instanceof FormInterface) {
-                if ($childErrors = $this->getErrorsFromForm($childForm)) {
-                    $errors[$childForm->getName()] = $childErrors;
-                }
+            if ($childForm instanceof FormInterface && $childErrors = $this->getErrorsFromForm($childForm)) {
+                $errors[$childForm->getName()] = $childErrors;
             }
         }
         return $errors;

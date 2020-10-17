@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\DTO\GenerateDTO;
 use App\Entity\DTO\GenerateImageVersionDTO;
-use Exception;
+use App\Exception\DockerfileException;
 use Twig\Environment;
 
 class DockerfileGenerator
@@ -27,7 +27,7 @@ class DockerfileGenerator
 
     /**
      * @param GenerateDTO $request
-     * @throws Exception
+     * @throws DockerfileException
      */
     public function generate(GenerateDTO $request) : void
     {

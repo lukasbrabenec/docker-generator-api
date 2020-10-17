@@ -3,11 +3,10 @@
 namespace App\Service;
 
 use App\Entity\DTO\GenerateDTO;
-use Exception;
+use App\Exception\DockerfileException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use ZipArchive;
 
 class GeneratorService
 {
@@ -38,7 +37,7 @@ class GeneratorService
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws Exception
+     * @throws DockerfileException
      */
     public function generate(GenerateDTO $requestObject)
     {

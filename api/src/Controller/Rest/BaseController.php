@@ -21,7 +21,7 @@ class BaseController extends AbstractFOSRestController
      */
     protected function normalize($data): array
     {
-        return $this->_getSerializer()->normalize($data, null, ['groups' => ['default']]);
+        return $this->_getSerializer()->normalize($data, 'json', ['groups' => ['default']]);
     }
 
     /**

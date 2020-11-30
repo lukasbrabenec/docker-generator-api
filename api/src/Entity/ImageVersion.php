@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * @ORM\Entity()
@@ -47,6 +48,18 @@ class ImageVersion
      * @Groups({"default"})
      */
     private Collection $extensions;
+
+//    /**
+//     * @var Collection
+//     *
+//     * @ORM\ManyToMany(targetEntity="App\Entity\Extension")
+//     * @ORM\JoinTable(name="image_version_extension",
+//     *     joinColumns={@ORM\JoinColumn(name="image_version_id", referencedColumnName="id")},
+//     *     inverseJoinColumns={@ORM\JoinColumn(name="extension_id", referencedColumnName="id")}
+//     * )
+//     * @Groups({"default"})
+//     */
+//    private Collection $extensions;
 
     /**
      * @var Collection

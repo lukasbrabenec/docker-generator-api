@@ -141,6 +141,12 @@
     "php": {
         "version": "7.4.8"
     },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.4.0"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -411,6 +417,9 @@
     },
     "webimpress/safe-writer": {
         "version": "2.1.0"
+    },
+    "webmozart/assert": {
+        "version": "1.9.1"
     },
     "willdurand/jsonp-callback-validator": {
         "version": "v1.1.0"

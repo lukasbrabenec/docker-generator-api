@@ -17,27 +17,23 @@ services:
 
   php-fpm:
     build:
-      context: ./php-fpm
+      context: ./api
     depends_on:
       - database
     environment:
       - DATABASE_URL=mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:3306/${DATABASE_NAME}?serverVersion=5.7
     volumes:
-      - ../api:/var/www
+      - ./api:/var/www
 
   nginx:
-    build:
-      context: ./nginx
+    image: openresty/openresty:alpine
     volumes:
-      - ../api:/var/www
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/sites/:/etc/nginx/sites-available
-      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./api:/var/www
+      - ./nginx/sites/default.conf:/etc/nginx/conf.d/default.conf
       - ./logs:/var/log
     depends_on:
       - php-fpm
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
 
 

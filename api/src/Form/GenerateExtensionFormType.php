@@ -22,7 +22,8 @@ class GenerateExtensionFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => GenerateExtensionDTO::class
+            'data_class' => GenerateExtensionDTO::class,
+            'allow_extra_fields' => true
         ]);
     }
 

@@ -57,14 +57,8 @@ services:
         tags:
             - { name: 'app.dockerfile', imageName: 'php' }
 
-    App\Service\Dockerfile\DockerfileMySQL:
+    App\Service\Dockerfile\DockerfileNode:
         arguments:
             - '@twig'
         tags:
-            - { name: 'app.dockerfile', imageName: 'mysql' }
-
-    App\Service\Dockerfile\DockerfileMailCatcher:
-        arguments:
-            - '@twig'
-        tags:
-            - { name: 'app.dockerfile', imageName: 'mailcatcher' }
+            - { name: 'app.dockerfile', imageName: 'node' }

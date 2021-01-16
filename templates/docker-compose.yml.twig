@@ -2,14 +2,14 @@ version: '{{ dockerVersion }}'
 
 services:
 {% for imageVersion in imageVersions %}
-    {{ imageVersion.imageCode }}:
+    {{ imageVersion.imageName|lower }}:
 {% if imageVersion.dockerfileLocation is not empty %}
         build:
             context: {{ imageVersion.dockerfileLocation }}
 {% else %}
         image: {{ imageVersion.imageCode }}:{{ imageVersion.version }}
 {% endif %}
-        container_name: {{ imageVersion.imageCode }}
+        container_name: {{ imageVersion.imageName|lower }}
 {% if imageVersion.environments is defined and imageVersion.environments is not empty %}
         environment:
 {% for environment in imageVersion.environments %}

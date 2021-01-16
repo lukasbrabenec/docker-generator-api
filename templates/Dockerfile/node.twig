@@ -1,14 +1,24 @@
 FROM {{ imageCode }}:{{ version }}
 
-RUN apt-get update
+USER node
 
 {% if extensions is defined and extensions is not empty %}
 {% if extensions.system is defined and extensions.system is not empty %}
 RUN apt-get install -y {% for systemExtension in extensions.system %}{{ systemExtension.name }} {% endfor %}
 {% endif %}
 {% if extensions.special is defined and extensions.special is not empty %}
-COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
+# create directory for global packages
+RUN mkdir /home/node/.npm-global && mkdir /home/node/.npm-global/lib
+ENV PATH=/home/node/.npm-global/bin:$PATH
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
-RUN install-php-extensions {% for specialExtension in extensions.special %}{{ specialExtension.name }} {% endfor %}
+RUN npm install --global {% for specialExtension in extensions.special %}{{ specialExtension.name }} {% endfor %}
 {% endif %}
 {% endif %}
+
+
+WORKDIR /home/node/app
+
+RUN npm install
+
+CMD ["npm", "start"]

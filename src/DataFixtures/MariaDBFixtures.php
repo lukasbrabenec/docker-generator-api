@@ -2,18 +2,24 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Image;
 use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVolume;
 use Doctrine\Persistence\ObjectManager;
 
-class MysqlFixtures extends BaseFixtures
+class MariaDBFixtures extends BaseFixtures
 {
     const VERSIONS = [
-        '5.6',
-        '5.7',
-        '8.0'
+        'latest',
+        '10',
+        '10.5',
+        '10.4',
+        '10.3',
+        '10.2',
+        '10.1',
+        '5.5'
     ];
 
     const ENVIRONMENT_MAP = [
@@ -54,12 +60,12 @@ class MysqlFixtures extends BaseFixtures
     ];
 
     const VOLUMES = [
-        './mysql/data' => '/var/lib/mysql'
+        './mariadb/data' => '/var/lib/mysql'
     ];
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->_getOrCreateImage($manager, 'MySQL', 'mysql');
+        $image = $this->_getOrCreateImage($manager, 'MariaDB', 'mariadb');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->_createImageVersion($manager, $image, $version);

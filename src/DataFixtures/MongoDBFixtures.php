@@ -8,58 +8,47 @@ use App\Entity\ImageVersion;
 use App\Entity\ImageVolume;
 use Doctrine\Persistence\ObjectManager;
 
-class MysqlFixtures extends BaseFixtures
+class MongoDBFixtures extends BaseFixtures
 {
     const VERSIONS = [
-        '5.6',
-        '5.7',
-        '8.0'
+        'latest',
+        '4',
+        '4.4',
+        '4.2',
+        '4.0',
+        '3',
+        '3.6',
     ];
 
     const ENVIRONMENT_MAP = [
-        'MYSQL_ROOT_PASSWORD' => [
-            'default' => 'test',
+        'MONGO_INITDB_ROOT_USERNAME' => [
+            'default' => null,
             'required' => true,
             'hidden' => false
         ],
-        'MYSQL_DATABASE' => [
-            'default' => 'docker',
-            'required' => false,
+        'MONGO_INITDB_ROOT_PASSWORD' => [
+            'default' => null,
+            'required' => true,
             'hidden' => false
         ],
-        'MYSQL_USER' => [
+        'MONGO_INITDB_DATABASE' => [
             'default' => null,
             'required' => false,
             'hidden' => false
         ],
-        'MYSQL_PASSWORD' => [
-            'default' => null,
-            'required' => false,
-            'hidden' => false
-        ],
-        'MYSQL_ALLOW_EMPTY_PASSWORD' => [
-            'default' => null,
-            'required' => false,
-            'hidden' => false
-        ],
-        'MYSQL_ONETIME_PASSWORD' => [
-            'default' => null,
-            'required' => false,
-            'hidden' => false
-        ]
     ];
 
     const PORTS = [
-        3306 => 3306
+        27017 => 27017
     ];
 
     const VOLUMES = [
-        './mysql/data' => '/var/lib/mysql'
+        './mongo/data' => '/data/db'
     ];
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->_getOrCreateImage($manager, 'MySQL', 'mysql');
+        $image = $this->_getOrCreateImage($manager, 'MongoDB', 'mongo');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->_createImageVersion($manager, $image, $version);

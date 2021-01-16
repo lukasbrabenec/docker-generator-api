@@ -2,15 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Image;
-use App\Entity\ImageEnvironment;
-use App\Entity\ImagePort;
-use App\Entity\ImageVersion;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ElasticSearchFixtures extends Fixture implements DependentFixtureInterface
+class ElasticSearchFixtures extends BaseFixtures implements DependentFixtureInterface
 {
     const VERSIONS = [
         '7.9.0'
@@ -31,34 +26,17 @@ class ElasticSearchFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $image = new Image();
-        $image->setName('ElasticSearch');
-        $image->setCode('elasticsearch');
-        $image->setDockerfileLocation(null);
-        $manager->persist($image);
+        $image = $this->_getOrCreateImage($manager, 'ElasticSearch', 'elasticsearch');
 
         foreach (self::VERSIONS as $version) {
-            $imageVersion = new ImageVersion();
-            $imageVersion->setVersion($version);
-            $imageVersion->setImage($image);
-            $manager->persist($imageVersion);
+            $imageVersion = $this->_createImageVersion($manager, $image, $version);
 
             foreach (self::ENVIRONMENT_MAP as $environmentCode => $options) {
-                $environment = new ImageEnvironment();
-                $environment->setImageVersion($imageVersion);
-                $environment->setCode($environmentCode);
-                $environment->setDefaultValue($options['default']);
-                $environment->setRequired($options['required']);
-                $environment->setHidden($options['hidden']);
-                $manager->persist($environment);
+                $this->_createImageEnvironment($manager, $imageVersion, $environmentCode, $options['default'], $options['hidden'], $options['required']);
             }
 
             foreach (self::PORTS as $inwardPort => $outwardPort) {
-                $imagePort = new ImagePort();
-                $imagePort->setImageVersion($imageVersion);
-                $imagePort->setInward($inwardPort);
-                $imagePort->setOutward($outwardPort);
-                $manager->persist($imagePort);
+                $this->_createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
             }
         }
         $manager->flush();
@@ -67,7 +45,7 @@ class ElasticSearchFixtures extends Fixture implements DependentFixtureInterface
     /**
      * @return string[]
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             PhpFixtures::class

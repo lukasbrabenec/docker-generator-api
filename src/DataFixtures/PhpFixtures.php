@@ -8,10 +8,9 @@ use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVersionExtension;
 use App\Entity\ImageVolume;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class PhpFixtures extends Fixture
+class PhpFixtures extends BaseFixtures
 {
     const PHP_VERSIONS_EXTENSION_EXCLUDE_MAP = [
         '5.6-apache' => [
@@ -26,7 +25,6 @@ class PhpFixtures extends Fixture
             'snuffleupagus',
             'sqlsrv',
             'tdlib',
-            ''
         ],
         '7-apache' => [
             'ffi',
@@ -72,169 +70,129 @@ class PhpFixtures extends Fixture
         ],
     ];
 
-    const PHP_EXTENSIONS_CONFIG_MAP = [
-        'amqp' => '',
-        'apcu' => '',
-        'apcu_bc' => '',
-        'bcmath' => '',
-        'bz2' => '',
-        'calendar' => '',
-        'cmark' => '',
-        'dba' => '',
-        'decimal' => '',
-        'enchant' => '',
-        'exif' => '',
-        'ffi' => '',
-        'gd' => '',
-        'gettext' => '',
-        'gmagick' => '',
-        'gmp' => '',
-        'grpc' => '',
-        'http' => '',
-        'igbinary' => '',
-        'imagick' => '',
-        'imap' => '',
-        'interbase' => '',
-        'intl' => '',
-        'ldap' => '',
-        'mailparse' => '',
-        'mcrypt' => '',
-        'memcache' => '',
-        'memcached' => '',
-        'mongo' => '',
-        'mongodb' => '',
-        'msgpack' => '',
-        'mssql' => '',
-        'mysql' => '',
-        'mysqli' => '',
-        'oauth' => '',
-        'odbc' => '',
-        'opcache' => '',
-        'opencensus' => '',
-        'parallel' => '',
-        'pcntl' => '',
-        'pcov' => '',
-        'pdo_dblib' => '',
-        'pdo_firebird' => '',
-        'pdo_mysql' => '',
-        'pdo_odbc' => '',
-        'pdo_pgsql' => '',
-        'pdo_sqlsrv' => '',
-        'pgsql' => '',
-        'propro' => '',
-        'protobuf' => '',
-        'pspell' => '',
-        'pthreads' => '',
-        'raphf' => '',
-        'rdkafka' => '',
-        'recode' => '',
-        'redis' => '',
-        'shmop' => '',
-        'snmp' => '',
-        'snuffleupagus' => '',
-        'sockets' => '',
-        'solr' => '',
-        'sqlsrv' => '',
-        'ssh2' => '',
-        'sybase_ct' => '',
-        'sysvmsg' => '',
-        'sysvsem' => '',
-        'sysvshm' => '',
-        'tdlib' => '',
-        'tidy' => '',
-        'timezonedb' => '',
-        'uopz' => '',
-        'uuid' => '',
-        'wddx' => '',
-        'xdebug' => '',
-        'xhprof' => '',
-        'xmlrpc' => '',
-        'xsl' => '',
-        'yaml' => '',
-        'zip' => '',
-        'zookeeper' => '',
+    const SPECIAL_EXTENSIONS_CONFIG_MAP = [
+        'amqp' => null,
+        'apcu' => null,
+        'apcu_bc' => null,
+        'bcmath' => null,
+        'bz2' => null,
+        'calendar' => null,
+        'cmark' => null,
+        'dba' => null,
+        'decimal' => null,
+        'enchant' => null,
+        'exif' => null,
+        'ffi' => null,
+        'gd' => null,
+        'gettext' => null,
+        'gmagick' => null,
+        'gmp' => null,
+        'grpc' => null,
+        'http' => null,
+        'igbinary' => null,
+        'imagick' => null,
+        'imap' => null,
+        'interbase' => null,
+        'intl' => null,
+        'ldap' => null,
+        'mailparse' => null,
+        'mcrypt' => null,
+        'memcache' => null,
+        'memcached' => null,
+        'mongo' => null,
+        'mongodb' => null,
+        'msgpack' => null,
+        'mssql' => null,
+        'mysql' => null,
+        'mysqli' => null,
+        'oauth' => null,
+        'odbc' => null,
+        'opcache' => null,
+        'opencensus' => null,
+        'parallel' => null,
+        'pcntl' => null,
+        'pcov' => null,
+        'pdo_dblib' => null,
+        'pdo_firebird' => null,
+        'pdo_mysql' => null,
+        'pdo_odbc' => null,
+        'pdo_pgsql' => null,
+        'pdo_sqlsrv' => null,
+        'pgsql' => null,
+        'propro' => null,
+        'protobuf' => null,
+        'pspell' => null,
+        'pthreads' => null,
+        'raphf' => null,
+        'rdkafka' => null,
+        'recode' => null,
+        'redis' => null,
+        'shmop' => null,
+        'snmp' => null,
+        'snuffleupagus' => null,
+        'sockets' => null,
+        'solr' => null,
+        'sqlsrv' => null,
+        'ssh2' => null,
+        'sybase_ct' => null,
+        'sysvmsg' => null,
+        'sysvsem' => null,
+        'sysvshm' => null,
+        'tdlib' => null,
+        'tidy' => null,
+        'timezonedb' => null,
+        'uopz' => null,
+        'uuid' => null,
+        'wddx' => null,
+        'xdebug' => null,
+        'xhprof' => null,
+        'xmlrpc' => null,
+        'xsl' => null,
+        'yaml' => null,
+        'zip' => null,
+        'zookeeper' => null,
     ];
 
     const GENERAL_EXTENSIONS_CONFIG_MAP = [
-        'git' => ''
+        'git' => null
+    ];
+
+    const PORTS = [
+        80 => 80
     ];
 
     const VOLUMES = [
-        './src' => '/var/www/html'
+        './php' => '/var/www/html'
     ];
 
     public function load(ObjectManager $manager)
     {
-        $image = new Image();
-        $image->setName('PHP');
-        $image->setCode('php');
-        $image->setDockerfileLocation('./src/build/');
-        $manager->persist($image);
+        $image = $this->_getOrCreateImage($manager, 'PHP', 'php', './php/');
 
-        foreach (self::PHP_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
-            $extension = new Extension();
-            $extension->setName($extensionName);
-            $extension->setSpecial(true);
-            $manager->persist($extension);
+        foreach (self::SPECIAL_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
+            $this->_createExtension($manager, $extensionName, true);
         }
         foreach (self::GENERAL_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
-            $extension = new Extension();
-            $extension->setName($extensionName);
-            $extension->setSpecial(false);
-            $manager->persist($extension);
+            $this->_createExtension($manager, $extensionName, false);
         }
         $manager->flush();
 
         foreach (self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP as $version => $extensionExclude) {
-            $imageVersion = new ImageVersion();
-            $imageVersion->setVersion($version);
-            $imageVersion->setImage($image);
+            $imageVersion = $this->_createImageVersion($manager, $image, $version);
 
-            foreach (self::PHP_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
+            foreach (array_merge(self::SPECIAL_EXTENSIONS_CONFIG_MAP, self::GENERAL_EXTENSIONS_CONFIG_MAP) as $extensionName => $extensionConfig) {
                 if (!in_array($extensionName, $extensionExclude)) {
-                    /** @var Extension $extension */
-                    $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $extensionName]);
-                    if (is_object($extension)) {
-                        $imageVersionExtension = new ImageVersionExtension();
-                        $imageVersionExtension->setImageVersion($imageVersion);
-                        $imageVersionExtension->setExtension($extension);
-                        $imageVersionExtension->setConfig($extensionConfig);
-                        $manager->persist($imageVersionExtension);
-                    } else {
-                        throw new \Exception("extension doesnt exist");
-                    }
-                }
-            }
-            foreach (self::GENERAL_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
-                if (!in_array($extensionName, $extensionExclude)) {
-                    /** @var Extension $extension */
-                    $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $extensionName]);
-                    if (is_object($extension)) {
-                        $imageVersionExtension = new ImageVersionExtension();
-                        $imageVersionExtension->setImageVersion($imageVersion);
-                        $imageVersionExtension->setExtension($extension);
-                        $imageVersionExtension->setConfig($extensionConfig);
-                        $manager->persist($imageVersionExtension);
-                    } else {
-                        throw new \Exception("extension doesnt exist");
-                    }
+                    $extension = $this->_getExtension($manager, $extensionName);
+                    $this->_createImageVersionExtension($manager, $imageVersion, $extension, $extensionConfig);
                 }
             }
 
-            $manager->persist($imageVersion);
-
-            $imagePort = new ImagePort();
-            $imagePort->setImageVersion($imageVersion);
-            $imagePort->setInward(80);
-            $imagePort->setOutward(80);
-            $manager->persist($imagePort);
+            foreach (self::PORTS as $inwardPort => $outwardPort) {
+                $this->_createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
+            }
 
             foreach (self::VOLUMES as $hostPath => $containerPath) {
-                $imageVolume = new ImageVolume();
-                $imageVolume->setImageVersion($imageVersion);
-                $imageVolume->setHostPath($hostPath);
-                $imageVolume->setContainerPath($containerPath);
-                $manager->persist($imageVolume);
+                $this->_createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
         $manager->flush();

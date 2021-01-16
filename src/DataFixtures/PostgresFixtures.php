@@ -2,47 +2,58 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Image;
 use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVolume;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class MysqlFixtures extends BaseFixtures
+class PostgresFixtures extends BaseFixtures
 {
     const VERSIONS = [
-        '5.6',
-        '5.7',
-        '8.0'
+        'latest',
+        '13',
+        'alpine',
+        '13-alpine',
+        '12',
+        '12-alpine',
+        '11',
+        '11-alpine',
+        '10',
+        '10-alpine',
+        '9',
+        '9-alpine'
     ];
 
     const ENVIRONMENT_MAP = [
-        'MYSQL_ROOT_PASSWORD' => [
+        'POSTGRES_PASSWORD' => [
             'default' => 'test',
             'required' => true,
             'hidden' => false
         ],
-        'MYSQL_DATABASE' => [
-            'default' => 'docker',
-            'required' => false,
-            'hidden' => false
-        ],
-        'MYSQL_USER' => [
+        'POSTGRES_USER' => [
             'default' => null,
             'required' => false,
             'hidden' => false
         ],
-        'MYSQL_PASSWORD' => [
+        'POSTGRES_DB' => [
             'default' => null,
             'required' => false,
             'hidden' => false
         ],
-        'MYSQL_ALLOW_EMPTY_PASSWORD' => [
+        'POSTGRES_INITDB_ARGS' => [
             'default' => null,
             'required' => false,
             'hidden' => false
         ],
-        'MYSQL_ONETIME_PASSWORD' => [
+        'POSTGRES_INITDB_WALDIR' => [
+            'default' => null,
+            'required' => false,
+            'hidden' => false
+        ],
+        'POSTGRES_HOST_AUTH_METHOD' => [
             'default' => null,
             'required' => false,
             'hidden' => false
@@ -50,16 +61,16 @@ class MysqlFixtures extends BaseFixtures
     ];
 
     const PORTS = [
-        3306 => 3306
+        5432 => 5432
     ];
 
     const VOLUMES = [
-        './mysql/data' => '/var/lib/mysql'
+        './postgresql/data' => '/var/lib/postgresql/data'
     ];
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->_getOrCreateImage($manager, 'MySQL', 'mysql');
+        $image = $this->_getOrCreateImage($manager, 'PostgreSQL', 'postgres', './php/');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->_createImageVersion($manager, $image, $version);

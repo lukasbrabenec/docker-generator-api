@@ -7,7 +7,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class DockerfileMySQL extends AbstractDockerfile
+class DockerfileNode extends AbstractDockerfile
 {
     /**
      * @param GenerateImageVersionDTO $requestImageVersion
@@ -26,6 +26,6 @@ class DockerfileMySQL extends AbstractDockerfile
      */
     public function getTemplate(): string
     {
-        return 'Dockerfile/mysql.twig';
+        return 'Dockerfile/node.twig';
     }
 }

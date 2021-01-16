@@ -18,9 +18,9 @@ class GenerateExtensionDTO
     private string $name;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $config;
+    private ?string $config;
 
     /**
      * @var boolean
@@ -68,9 +68,9 @@ class GenerateExtensionDTO
     }
 
     /**
-     * @param string $config
+     * @param string|null $config
      */
-    public function setConfig(string $config): void
+    public function setConfig(?string $config): void
     {
         $this->config = $config;
     }
@@ -94,7 +94,7 @@ class GenerateExtensionDTO
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'name' => $this->name,

@@ -6,7 +6,6 @@ use App\Entity\Image;
 use App\Http\ApiResponse;
 use App\Repository\ImageRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\VarDumper\VarDumper;
 
 class ImageController extends BaseController
 {
@@ -20,10 +19,26 @@ class ImageController extends BaseController
      * @param ImageRepository $imageRepository
      * @return ApiResponse
      */
-    public function list(ImageRepository $imageRepository)
+    public function list(ImageRepository $imageRepository): ApiResponse
     {
-        $data = $this->normalize($imageRepository->findAll());
-        $data = $this->_extractExtensions($data);
+        $data = $this->normalize($imageRepository->findAll(), ['default']);
+        return new ApiResponse($data);
+    }
+    /**
+     * @Rest\Route(
+     *     "/images/{imageID}",
+     *     methods={"GET"},
+     *     requirements={"version"="(v1)"}
+     * )
+     *
+     * @param int $imageID
+     * @param ImageRepository $imageRepository
+     * @return ApiResponse
+     */
+    public function detail(int $imageID, ImageRepository $imageRepository): ApiResponse
+    {
+        $data = $this->normalize($this->getEntityById($imageRepository, $imageID), ['default', 'detail']);
+        $data = $this->_extractExtensions([$data]);
         return new ApiResponse($data);
     }
 
@@ -31,7 +46,7 @@ class ImageController extends BaseController
      * @param Image[] $images
      * @return Image[]
      */
-    private function _extractExtensions(array $images)
+    private function _extractExtensions(array $images): array
     {
         foreach ($images as $imageIndex => $image) {
             foreach ($image['imageVersions'] as $imageVersionIndex => $imageVersion) {

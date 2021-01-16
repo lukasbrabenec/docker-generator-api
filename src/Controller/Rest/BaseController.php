@@ -17,11 +17,13 @@ class BaseController extends AbstractFOSRestController
 
     /**
      * @param mixed $data
+     * @param array $groups
      * @return array
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
-    protected function normalize($data): array
+    protected function normalize($data, array $groups): array
     {
-        return $this->_getSerializer()->normalize($data, 'json', ['groups' => ['default']]);
+        return $this->_getSerializer()->normalize($data, 'json', ['groups' => $groups]);
     }
 
     /**

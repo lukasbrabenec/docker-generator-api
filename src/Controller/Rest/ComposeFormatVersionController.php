@@ -20,7 +20,7 @@ class ComposeFormatVersionController extends BaseController
      */
     public function list(ComposeFormatVersionRepository $composeFormatVersionRepository)
     {
-        $data = $this->normalize($composeFormatVersionRepository->findAllAndOrderBy(['composeVersion' => 'DESC']));
+        $data = $this->normalize($composeFormatVersionRepository->findAllAndOrderBy(['composeVersion' => 'DESC']), ['default']);
         return new ApiResponse($data);
     }
 }

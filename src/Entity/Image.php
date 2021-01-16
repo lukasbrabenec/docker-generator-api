@@ -50,7 +50,7 @@ class Image
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="ImageVersion", mappedBy="image")
-     * @Groups({"default"})
+     * @Groups({"detail"})
      */
     private Collection $imageVersions;
 

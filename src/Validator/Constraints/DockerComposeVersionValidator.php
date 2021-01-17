@@ -3,8 +3,10 @@
 namespace App\Validator\Constraints;
 
 use App\Repository\ComposeFormatVersionRepository;
+use App\Validator\Constraints\DockerComposeVersion as DockerComposeVersionConstraint;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class DockerComposeVersionValidator extends ConstraintValidator
@@ -28,6 +30,9 @@ class DockerComposeVersionValidator extends ConstraintValidator
      */
     public function validate($dockerComposeVersionDTOId, Constraint $constraint)
     {
+        if (!$constraint instanceof DockerComposeVersionConstraint) {
+            throw new UnexpectedTypeException($constraint, DockerComposeVersionConstraint::class);
+        }
         if (null === $dockerComposeVersionDTOId || '' === $dockerComposeVersionDTOId) {
             return;
         }

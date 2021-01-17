@@ -71,6 +71,10 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
         './node' => '/home/node/app'
     ];
 
+    /**
+     * @param ObjectManager $manager
+     * @throws Exception\FixturesException
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'NodeJS', 'node', './node/');

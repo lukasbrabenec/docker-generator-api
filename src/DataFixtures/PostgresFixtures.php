@@ -2,12 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Image;
-use App\Entity\ImageEnvironment;
-use App\Entity\ImagePort;
-use App\Entity\ImageVersion;
-use App\Entity\ImageVolume;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 class PostgresFixtures extends BaseFixtures
@@ -68,6 +62,9 @@ class PostgresFixtures extends BaseFixtures
         './postgresql/data' => '/var/lib/postgresql/data'
     ];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'PostgreSQL', 'postgres', './php/');

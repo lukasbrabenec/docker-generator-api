@@ -2,10 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\ImageEnvironment;
-use App\Entity\ImagePort;
-use App\Entity\ImageVersion;
-use App\Entity\ImageVolume;
 use Doctrine\Persistence\ObjectManager;
 
 class MysqlFixtures extends BaseFixtures
@@ -57,6 +53,9 @@ class MysqlFixtures extends BaseFixtures
         './mysql/data' => '/var/lib/mysql'
     ];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'MySQL', 'mysql');

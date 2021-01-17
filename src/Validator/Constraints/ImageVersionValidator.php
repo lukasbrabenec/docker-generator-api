@@ -2,8 +2,6 @@
 
 namespace App\Validator\Constraints;
 
-use App\Entity\DTO\GenerateEnvironmentDTO;
-use App\Entity\DTO\GenerateExtensionDTO;
 use App\Entity\DTO\GenerateImageVersionDTO;
 use App\Entity\DTO\GeneratePortDTO;
 use App\Entity\ImageEnvironment;
@@ -58,6 +56,7 @@ class ImageVersionValidator extends ConstraintValidator
                 ->setParameter('{{ imageVersionId }}', $imageVersionId)
                 ->atPath('imageVersionId')
                 ->addViolation();
+            return;
         }
 
         // extensions
@@ -75,7 +74,6 @@ class ImageVersionValidator extends ConstraintValidator
      */
     private function _validateExtensions(ImageVersionConstraint $constraint, GenerateImageVersionDTO $generateImageVersionDTO, int $imageVersionId)
     {
-        /** @var GenerateExtensionDTO $installExtensionDTO */
         foreach ($generateImageVersionDTO->getExtensions() as $installExtensionDTO) {
             $imageDockerInstall = $this->entityManager->getRepository(ImageVersionExtension::class)->findOneBy([
                 'extension' => $installExtensionDTO->getId(),
@@ -98,7 +96,6 @@ class ImageVersionValidator extends ConstraintValidator
      */
     private function _validateEnvironments(ImageVersionConstraint $constraint, GenerateImageVersionDTO $generateImageVersionDTO, ImageVersion $imageVersion)
     {
-        /** @var GenerateEnvironmentDTO $environmentDTO */
         foreach ($generateImageVersionDTO->getEnvironments() as $environmentDTO) {
             /** @var ImageEnvironment $environment */
             $environment = $this->entityManager->getRepository(ImageEnvironment::class)->find($environmentDTO->getId());
@@ -152,7 +149,11 @@ class ImageVersionValidator extends ConstraintValidator
                     ->atPath('ports')
                     ->addViolation();
             }
-            if ($portDTO->isExposeToHost() && !$portDTO->getInward()) {
+            if ($portDTO->isExposedToHost() && !$portDTO->getInward() && $portDTO->isExposedToContainers() && !$portDTO->getOutward()) {
+                $this->context->buildViolation($constraint->missingInwardAndOutwardPort)
+                    ->addViolation();
+            }
+            if ($portDTO->isExposedToHost() && !$portDTO->getInward()) {
                 $this->context->buildViolation($constraint->missingInwardPort)
                     ->addViolation();
             }

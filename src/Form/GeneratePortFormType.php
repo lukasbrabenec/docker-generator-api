@@ -17,7 +17,8 @@ class GeneratePortFormType extends AbstractType
             ->add('id', IntegerType::class)
             ->add('inward', IntegerType::class)
             ->add('outward', IntegerType::class)
-            ->add('exposeToHost', CheckboxType::class)
+            ->add('exposedToContainers', CheckboxType::class)
+            ->add('exposedToHost', CheckboxType::class)
             ;
     }
 
@@ -28,7 +29,7 @@ class GeneratePortFormType extends AbstractType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'ports';
     }

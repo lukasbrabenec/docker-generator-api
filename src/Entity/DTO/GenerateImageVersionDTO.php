@@ -42,34 +42,29 @@ class GenerateImageVersionDTO
     private ?string $dockerfileText = null;
 
     /**
-     * @var array
+     * @var GenerateExtensionDTO[]
      */
     private array $extensions;
 
     /**
-     * @var array
+     * @var GenerateEnvironmentDTO[]
      */
     private array $environments;
 
     /**
-     * @var array
+     * @var GenerateVolumeDTO[]
      */
     private array $volumes;
 
     /**
-     * @var array
+     * @var GeneratePortDTO[]
      */
     private array $ports;
 
     /**
-     * @var bool
-     */
-    private bool $exposePort = false;
-
-    /**
      * @return int
      */
-    public function getImageVersionId()
+    public function getImageVersionId(): int
     {
         return $this->imageVersionId;
     }
@@ -85,7 +80,7 @@ class GenerateImageVersionDTO
     /**
      * @return array
      */
-    public function getEnvironments()
+    public function getEnvironments(): array
     {
         return $this->environments;
     }
@@ -189,7 +184,7 @@ class GenerateImageVersionDTO
     /**
      * @return array
      */
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return $this->extensions;
     }
@@ -235,25 +230,9 @@ class GenerateImageVersionDTO
     }
 
     /**
-     * @return bool
-     */
-    public function isExposePort(): bool
-    {
-        return $this->exposePort;
-    }
-
-    /**
-     * @param bool $exposePort
-     */
-    public function setExposePort(bool $exposePort): void
-    {
-        $this->exposePort = $exposePort;
-    }
-
-    /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $array = [
             'id' => $this->imageVersionId,
@@ -266,7 +245,6 @@ class GenerateImageVersionDTO
         foreach ($this->environments as $environment) {
             $array['environments'][] = $environment->toArray();
         }
-        /** @var GenerateExtensionDTO $extension */
         foreach ($this->extensions as $extension) {
             if ($extension->isSpecial()) {
                 $array['extensions']['special'][] = [
@@ -281,15 +259,25 @@ class GenerateImageVersionDTO
             }
         }
         foreach ($this->volumes as $volume) {
-            $array['volumes'][] = $volume;
+            $array['volumes'][] = $volume->toArray();
         }
+
+        // for easier template generation
+        // if there are ports exposed to host - generate ports block
+        // if there are ports exposed to containers - generate expose block
+        $anyPortExposedToHost = false;
+        $anyPortExposedToContainers = false;
         foreach ($this->ports as $port) {
-            if (isset($port['exposeToHost']) && $port['exposeToHost']) {
-                $this->setExposePort(true);
+            $array['ports'][] = $port->toArray();
+            if ($port->isExposedToHost()) {
+                $anyPortExposedToHost = true;
             }
-            $array['ports'][] = $port;
+            if ($port->isExposedToContainers()) {
+                $anyPortExposedToContainers = true;
+            }
         }
-        $array['exposeToHost'] = $this->isExposePort();
+        $array['anyPortExposedToHost'] = $anyPortExposedToHost;
+        $array['anyPortExposedToContainers'] = $anyPortExposedToContainers;
 
         return $array;
     }

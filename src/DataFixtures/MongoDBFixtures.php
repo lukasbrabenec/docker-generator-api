@@ -2,10 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\ImageEnvironment;
-use App\Entity\ImagePort;
-use App\Entity\ImageVersion;
-use App\Entity\ImageVolume;
 use Doctrine\Persistence\ObjectManager;
 
 class MongoDBFixtures extends BaseFixtures
@@ -46,6 +42,9 @@ class MongoDBFixtures extends BaseFixtures
         './mongo/data' => '/data/db'
     ];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'MongoDB', 'mongo');

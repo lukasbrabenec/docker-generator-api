@@ -40,12 +40,4 @@ class DockerfileServiceChain
     {
         return array_key_exists($imageCode, $this->dockerfileServices);
     }
-
-    /**
-     * @return AbstractDockerfile
-     */
-    public function getDefaultDockerfileService() : AbstractDockerfile
-    {
-        return $this->dockerfileServices['default'];
-    }
 }

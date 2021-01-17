@@ -5,6 +5,7 @@ namespace App\Controller\Rest;
 use App\Http\ApiResponse;
 use App\Repository\ComposeFormatVersionRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class ComposeFormatVersionController extends BaseController
 {
@@ -17,8 +18,9 @@ class ComposeFormatVersionController extends BaseController
      *
      * @param ComposeFormatVersionRepository $composeFormatVersionRepository
      * @return ApiResponse
+     * @throws ExceptionInterface
      */
-    public function list(ComposeFormatVersionRepository $composeFormatVersionRepository)
+    public function list(ComposeFormatVersionRepository $composeFormatVersionRepository): ApiResponse
     {
         $data = $this->normalize($composeFormatVersionRepository->findAllAndOrderBy(['composeVersion' => 'DESC']), ['default']);
         return new ApiResponse($data);

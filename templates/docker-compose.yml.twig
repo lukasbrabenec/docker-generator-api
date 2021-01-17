@@ -1,37 +1,45 @@
 version: '{{ dockerVersion }}'
 
 services:
-{% for imageVersion in imageVersions %}
+        {%- for imageVersion in imageVersions ~%}
     {{ imageVersion.imageName|lower }}:
-{% if imageVersion.dockerfileLocation is not empty %}
+            {%- if imageVersion.dockerfileLocation is not empty ~%}
         build:
             context: {{ imageVersion.dockerfileLocation }}
-{% else %}
+            {%- else ~%}
         image: {{ imageVersion.imageCode }}:{{ imageVersion.version }}
-{% endif %}
+            {%- endif ~%}
         container_name: {{ imageVersion.imageName|lower }}
-{% if imageVersion.environments is defined and imageVersion.environments is not empty %}
+            {%- if imageVersion.environments is defined and imageVersion.environments is not empty ~%}
         environment:
-{% for environment in imageVersion.environments %}
+                {%- for environment in imageVersion.environments ~%}
             - {{ environment.name }}={{ environment.value }}
-{% endfor %}
-{% endif %}
-{% if imageVersion.ports is defined and imageVersion.ports is not empty %}
-{% if imageVersion.exposeToHost == true %}
+                {%- endfor ~%}
+                {%- endif ~%}
+                {%- if imageVersion.ports is defined and imageVersion.ports is not empty ~%}
+            {%- if imageVersion.anyPortExposedToHost == true ~%}
         ports:
-{% for port in imageVersion.ports %}
+                {%- for port in imageVersion.ports ~%}
+                {%- if port.exposedToHost == true ~%}
             - {{ port.inward }}:{{ port.outward }}
-{% endfor %}
-{% endif %}
+                    {%- endif ~%}
+                    {%- endfor ~%}
+                {%- endif ~%}
+            {%- if imageVersion.anyPortExposedToContainers == true ~%}
         expose:
-{% for port in imageVersion.ports %}
+                {%- for port in imageVersion.ports ~%}
+                {%- if port.exposedToContainers == true ~%}
             - {{ port.outward }}
-{% endfor %}
-{% endif %}
-{% if imageVersion.volumes is defined and imageVersion.volumes is not empty %}
+                    {%- endif ~%}
+                    {%- endfor ~%}
+                    {%- endif ~%}
+                    {%- endif ~%}
+            {%- if imageVersion.volumes is defined and imageVersion.volumes is not empty ~%}
         volumes:
-{% for volume in imageVersion.volumes %}
+                {%- for volume in imageVersion.volumes ~%}
+                {%- if volume.active == true ~%}
             - {{ volume.hostPath }}:{{ volume.containerPath }}
-{% endfor %}
-{% endif %}
-{% endfor %}
+                    {%- endif ~%}
+                    {%- endfor ~%}
+            {%- endif ~%}
+        {%- endfor ~%}

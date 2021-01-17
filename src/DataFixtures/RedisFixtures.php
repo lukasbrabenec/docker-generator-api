@@ -23,6 +23,9 @@ class RedisFixtures extends BaseFixtures
         './redis/data' => '/data'
     ];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'Redis', 'redis');

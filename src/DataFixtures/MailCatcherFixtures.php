@@ -2,9 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Image;
-use App\Entity\ImagePort;
-use App\Entity\ImageVersion;
 use Doctrine\Persistence\ObjectManager;
 
 class MailCatcherFixtures extends BaseFixtures
@@ -18,6 +15,9 @@ class MailCatcherFixtures extends BaseFixtures
         1080 => 1080,
     ];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'MailCatcher', 'schickling/mailcatcher');

@@ -27,12 +27,17 @@ class GeneratePortDTO
     /**
      * @var bool
      */
-    private bool $exposeToHost = false;
+    private bool $exposedToContainers = true;
+
+    /**
+     * @var bool
+     */
+    private bool $exposedToHost = false;
 
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -48,7 +53,7 @@ class GeneratePortDTO
     /**
      * @return int
      */
-    public function getInward()
+    public function getInward(): int
     {
         return $this->inward;
     }
@@ -80,16 +85,45 @@ class GeneratePortDTO
     /**
      * @return bool
      */
-    public function isExposeToHost(): bool
+    public function isExposedToContainers(): bool
     {
-        return $this->exposeToHost;
+        return $this->exposedToContainers;
     }
 
     /**
-     * @param bool $exposeToHost
+     * @param bool $exposedToContainers
      */
-    public function setExposeToHost(bool $exposeToHost): void
+    public function setExposedToContainers(bool $exposedToContainers): void
     {
-        $this->exposeToHost = $exposeToHost;
+        $this->exposedToContainers = $exposedToContainers;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExposedToHost(): bool
+    {
+        return $this->exposedToHost;
+    }
+
+    /**
+     * @param bool $exposedToHost
+     */
+    public function setExposedToHost(bool $exposedToHost): void
+    {
+        $this->exposedToHost = $exposedToHost;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'inward' => $this->inward,
+            'outward' => $this->outward,
+            'exposedToContainers' => $this->exposedToContainers,
+            'exposedToHost' => $this->exposedToHost,
+        ];
     }
 }

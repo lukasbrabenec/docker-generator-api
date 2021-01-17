@@ -6,6 +6,7 @@ use App\Entity\Image;
 use App\Http\ApiResponse;
 use App\Repository\ImageRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class ImageController extends BaseController
 {
@@ -18,12 +19,14 @@ class ImageController extends BaseController
      *
      * @param ImageRepository $imageRepository
      * @return ApiResponse
+     * @throws ExceptionInterface
      */
     public function list(ImageRepository $imageRepository): ApiResponse
     {
         $data = $this->normalize($imageRepository->findAll(), ['default']);
         return new ApiResponse($data);
     }
+
     /**
      * @Rest\Route(
      *     "/images/{imageID}",
@@ -34,6 +37,7 @@ class ImageController extends BaseController
      * @param int $imageID
      * @param ImageRepository $imageRepository
      * @return ApiResponse
+     * @throws ExceptionInterface
      */
     public function detail(int $imageID, ImageRepository $imageRepository): ApiResponse
     {

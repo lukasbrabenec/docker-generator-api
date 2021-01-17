@@ -46,7 +46,7 @@ class ExceptionListener
      * @param Throwable $throwable
      * @return ApiResponse
      */
-    private function createApiResponse(Throwable $throwable)
+    private function createApiResponse(Throwable $throwable): ApiResponse
     {
         $normalizer = $this->normalizerFactory->getNormalizer($throwable);
         $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;

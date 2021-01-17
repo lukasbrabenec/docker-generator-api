@@ -23,7 +23,7 @@ class ComposeFormatVersionRepository extends ServiceEntityRepository
      * @param array $orderBy
      * @return ComposeFormatVersion[]
      */
-    public function findAllAndOrderBy(array $orderBy)
+    public function findAllAndOrderBy(array $orderBy): array
     {
         return $this->findBy([], $orderBy);
     }

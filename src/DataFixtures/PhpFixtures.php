@@ -2,12 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Extension;
-use App\Entity\Image;
-use App\Entity\ImagePort;
-use App\Entity\ImageVersion;
-use App\Entity\ImageVersionExtension;
-use App\Entity\ImageVolume;
 use Doctrine\Persistence\ObjectManager;
 
 class PhpFixtures extends BaseFixtures
@@ -165,6 +159,10 @@ class PhpFixtures extends BaseFixtures
         './php' => '/var/www/html'
     ];
 
+    /**
+     * @param ObjectManager $manager
+     * @throws Exception\FixturesException
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'PHP', 'php', './php/');

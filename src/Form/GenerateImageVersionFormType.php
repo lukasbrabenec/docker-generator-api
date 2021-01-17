@@ -30,6 +30,11 @@ class GenerateImageVersionFormType extends AbstractType
                 'allow_add' => true,
                 'error_bubbling' => false
             ])
+            ->add('volumes', CollectionType::class, [
+                'entry_type' => GenerateVolumeFormType::class,
+                'allow_add' => true,
+                'error_bubbling' => false
+            ])
             ;
     }
 
@@ -40,7 +45,7 @@ class GenerateImageVersionFormType extends AbstractType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'imageVersions';
     }

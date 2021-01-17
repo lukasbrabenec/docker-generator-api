@@ -24,6 +24,9 @@ class ElasticSearchFixtures extends BaseFixtures implements DependentFixtureInte
         9300 => 9300
     ];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'ElasticSearch', 'elasticsearch');

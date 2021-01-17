@@ -39,7 +39,7 @@ class GeneratorService
      * @throws SyntaxError
      * @throws DockerfileException
      */
-    public function generate(GenerateDTO $requestObject)
+    public function generate(GenerateDTO $requestObject): string
     {
         $this->getDockerComposeGenerator()->generate($requestObject);
         $this->getDockerfileGenerator()->generate($requestObject);
@@ -55,14 +55,6 @@ class GeneratorService
     }
 
     /**
-     * @param DockerComposeGenerator $dockerComposeGenerator
-     */
-    public function setDockerComposeGenerator(DockerComposeGenerator $dockerComposeGenerator): void
-    {
-        $this->dockerComposeGenerator = $dockerComposeGenerator;
-    }
-
-    /**
      * @return DockerfileGenerator
      */
     public function getDockerfileGenerator(): DockerfileGenerator
@@ -71,26 +63,10 @@ class GeneratorService
     }
 
     /**
-     * @param DockerfileGenerator $dockerfileGenerator
-     */
-    public function setDockerfileGenerator(DockerfileGenerator $dockerfileGenerator): void
-    {
-        $this->dockerfileGenerator = $dockerfileGenerator;
-    }
-
-    /**
      * @return ZipGenerator
      */
     public function getZipGenerator(): ZipGenerator
     {
         return $this->zipGenerator;
-    }
-
-    /**
-     * @param ZipGenerator $zipGenerator
-     */
-    public function setZipGenerator(ZipGenerator $zipGenerator): void
-    {
-        $this->zipGenerator = $zipGenerator;
     }
 }

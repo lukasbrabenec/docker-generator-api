@@ -26,7 +26,7 @@ class ApiResponse extends JsonResponse
      * @param int $status
      * @return array
      */
-    private function format($data = null, $errors = [], $status = Response::HTTP_OK)
+    private function format($data = null, $errors = [], $status = Response::HTTP_OK): array
     {
         if ($data === null) {
             $data = new ArrayObject();

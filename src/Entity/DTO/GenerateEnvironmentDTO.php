@@ -28,7 +28,7 @@ class GenerateEnvironmentDTO
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -44,7 +44,7 @@ class GenerateEnvironmentDTO
     /**
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -60,7 +60,7 @@ class GenerateEnvironmentDTO
     /**
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -76,7 +76,7 @@ class GenerateEnvironmentDTO
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'name' => $this->code,

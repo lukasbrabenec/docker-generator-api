@@ -2,11 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Image;
-use App\Entity\ImageEnvironment;
-use App\Entity\ImagePort;
-use App\Entity\ImageVersion;
-use App\Entity\ImageVolume;
 use Doctrine\Persistence\ObjectManager;
 
 class MariaDBFixtures extends BaseFixtures
@@ -63,6 +58,9 @@ class MariaDBFixtures extends BaseFixtures
         './mariadb/data' => '/var/lib/mysql'
     ];
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $image = $this->_getOrCreateImage($manager, 'MariaDB', 'mariadb');

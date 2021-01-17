@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Exception\FixturesException;
 use App\Entity\Extension;
 use App\Entity\Image;
 use App\Entity\ImageEnvironment;
@@ -143,14 +144,14 @@ abstract class BaseFixtures extends Fixture
      * @param ObjectManager $manager
      * @param string $name
      * @return Extension
-     * @throws \Exception
+     * @throws FixturesException
      */
     protected function _getExtension(ObjectManager $manager, string $name): Extension
     {
         /** @var Extension $extension */
         $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $name]);
         if (!is_object($extension)) {
-            throw new \Exception(sprintf("extension %s doesnt exist", $name));
+            throw new FixturesException(sprintf("extension %s doesnt exist", $name));
         }
         return $extension;
     }

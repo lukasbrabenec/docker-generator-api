@@ -14,7 +14,7 @@ class GeneralExceptionNormalizer implements NormalizerInterface
      *
      * @return array
      */
-    public function normalize($exception, string $format = null, array $context = [])
+    public function normalize($exception, string $format = null, array $context = []): array
     {
         return [
             "message" => $exception->getMessage(),
@@ -30,7 +30,7 @@ class GeneralExceptionNormalizer implements NormalizerInterface
      *
      * @return bool
      */
-    public function supportsNormalization($data, ?string $format = null)
+    public function supportsNormalization($data, ?string $format = null): bool
     {
         return $data instanceof \Throwable;
     }

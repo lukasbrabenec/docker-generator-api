@@ -12,7 +12,7 @@ class ZipGenerator
      * @param GenerateDTO $requestObject
      * @return string
      */
-    public function generateArchive(GenerateDTO $requestObject)
+    public function generateArchive(GenerateDTO $requestObject): string
     {
         $zipFilePath = stream_get_meta_data(tmpfile())['uri'];
 

@@ -26,7 +26,7 @@ class GenerateEnvironmentFormType extends AbstractType
         ]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'environments';
     }

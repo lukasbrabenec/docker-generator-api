@@ -31,7 +31,7 @@ class FormException extends HttpException
     /**
      * @return FormInterface
      */
-    public function getForm()
+    public function getForm(): FormInterface
     {
         return $this->form;
     }
@@ -39,7 +39,7 @@ class FormException extends HttpException
     /**
      * @return FormErrorIterator
      */
-    public function getErrors()
+    public function getErrors(): FormErrorIterator
     {
         return $this->form->getErrors(true);
     }

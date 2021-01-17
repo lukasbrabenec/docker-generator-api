@@ -24,7 +24,7 @@ class NormalizerCollection
      * @param $data
      * @return NormalizerInterface|null
      */
-    public function getNormalizer($data)
+    public function getNormalizer($data): ?NormalizerInterface
     {
         foreach ($this->normalizers as $normalizer) {
             if ($normalizer instanceof NormalizerInterface && $normalizer->supportsNormalization($data)) {

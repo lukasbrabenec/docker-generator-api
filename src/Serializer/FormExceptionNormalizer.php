@@ -16,7 +16,7 @@ class FormExceptionNormalizer implements NormalizerInterface
      *
      * @return array|ArrayObject|bool|float|int|string|void|null
      */
-    public function normalize($exception, string $format = null, array $context = [])
+    public function normalize($exception, string $format = null, array $context = []): array
     {
         return $this->getErrorsFromForm($exception->getForm());
     }
@@ -25,9 +25,9 @@ class FormExceptionNormalizer implements NormalizerInterface
      * @param FormInterface $form
      * @return array
      */
-    private function getErrorsFromForm(FormInterface $form)
+    private function getErrorsFromForm(FormInterface $form): array
     {
-        $errors = array();
+        $errors = [];
         foreach ($form->getErrors() as $error) {
             $errors[] = $error->getMessage();
         }
@@ -45,7 +45,7 @@ class FormExceptionNormalizer implements NormalizerInterface
      *
      * @return bool
      */
-    public function supportsNormalization($data, ?string $format = null)
+    public function supportsNormalization($data, ?string $format = null): bool
     {
         return $data instanceof FormException;
     }

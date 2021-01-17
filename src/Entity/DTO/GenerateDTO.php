@@ -62,7 +62,7 @@ class GenerateDTO
     /**
      * @return int
      */
-    public function getDockerVersionId()
+    public function getDockerVersionId(): int
     {
         return $this->dockerVersionId;
     }
@@ -94,7 +94,7 @@ class GenerateDTO
     /**
      * @return array
      */
-    public function getImageVersions()
+    public function getImageVersions(): array
     {
         return $this->imageVersions;
     }
@@ -134,7 +134,7 @@ class GenerateDTO
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $array = [
             'dockerVersion' => $this->dockerComposeVersion,

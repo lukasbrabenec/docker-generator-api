@@ -156,6 +156,7 @@ class GenerateController extends BaseController
             $extensionDTO->setName($imageVersionExtension->getExtension()->getName());
             $extensionDTO->setConfig($imageVersionExtension->getConfig());
             $extensionDTO->setSpecial($imageVersionExtension->getExtension()->isSpecial());
+            $extensionDTO->setCustomCommand($imageVersionExtension->getExtension()->getCustomCommand());
         }
     }
 

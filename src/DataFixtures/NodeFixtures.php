@@ -31,40 +31,118 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
         ],
     ];
 
-    const SPECIAL_EXTENSIONS_CONFIG_MAP = [
-        'npm' => null,
-        'tsc-watch' => null,
-        'ntypescript' => null,
-        'typescript' => null,
-        'gulp-cli' => null,
-        'yarn' => null,
-        'npx' => null,
-        'np' => null,
-        'npm-name-cli' => null,
-        'ndb' => null,
-        'node-inspector' => null,
-        'create-react-app' => null,
-        'create-react-library' => null,
-        'create-react-native-cli' => null,
-        'eslint' => null,
-        'babel-eslint' => null,
-        'eslint-config-standard' => null,
-        'eslint-config-react' => null,
-        'eslint-config-jsx' => null,
-        'eslint-plugin-react' => null,
-        'eslint-config-prettier' => null,
-        'eslint-plugin-prettier' => null,
-        'prettier' => null,
-        'standard' => null,
-        'gulp' => null,
+    const SPECIAL_EXTENSIONS_OPTIONS_MAP = [
+        'npm' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'tsc-watch' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'ntypescript' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'typescript' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'gulp-cli' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'yarn' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'npx' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'np' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'npm-name-cli' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'ndb' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'node-inspector' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'create-react-app' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'create-react-library' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'create-react-native-cli' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'eslint' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'babel-eslint' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'eslint-config-standard' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'eslint-config-react' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'eslint-config-jsx' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'eslint-plugin-react' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'eslint-config-prettier' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'eslint-plugin-prettier' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'prettier' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'standard' => [
+            'customCommand' => null,
+            'config' => null
+        ],
+        'gulp' => [
+            'customCommand' => null,
+            'config' => null
+        ],
     ];
 
     const PORTS = [
         8080 => 8080
     ];
 
-    const GENERAL_EXTENSIONS_CONFIG_MAP = [
-        'git' => null
+    const GENERAL_EXTENSIONS_OPTIONS_MAP = [
+        'git' => [
+            'customCommand' => null,
+            'config' => null
+        ]
     ];
 
     const VOLUMES = [
@@ -79,11 +157,11 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
     {
         $image = $this->_getOrCreateImage($manager, 'NodeJS', 'node', './node/');
 
-        foreach (self::SPECIAL_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
-            $this->_createExtension($manager, $extensionName, true);
+        foreach (self::SPECIAL_EXTENSIONS_OPTIONS_MAP as $extensionName => $extensionOptions) {
+            $this->_createExtension($manager, $extensionName, true, $extensionOptions['customCommand']);
         }
-        foreach (self::GENERAL_EXTENSIONS_CONFIG_MAP as $extensionName => $extensionConfig) {
-            $this->_createExtension($manager, $extensionName, false);
+        foreach (self::GENERAL_EXTENSIONS_OPTIONS_MAP as $extensionName => $extensionOptions) {
+            $this->_createExtension($manager, $extensionName, false, $extensionOptions['customCommand']);
         }
         $manager->flush();
 
@@ -102,9 +180,9 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
                 $this->_createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
 
-            foreach (array_merge(self::SPECIAL_EXTENSIONS_CONFIG_MAP, self::GENERAL_EXTENSIONS_CONFIG_MAP) as $extensionName => $extensionConfig) {
+            foreach (array_merge(self::SPECIAL_EXTENSIONS_OPTIONS_MAP, self::GENERAL_EXTENSIONS_OPTIONS_MAP) as $extensionName => $extensionOptions) {
                 $extension = $this->_getExtension($manager, $extensionName);
-                $this->_createImageVersionExtension($manager, $imageVersion, $extension, $extensionConfig);
+                $this->_createImageVersionExtension($manager, $imageVersion, $extension, $extensionOptions['config']);
             }
         }
 

@@ -247,15 +247,31 @@ class GenerateImageVersionDTO
         }
         foreach ($this->extensions as $extension) {
             if ($extension->isSpecial()) {
-                $array['extensions']['special'][] = [
-                    'name' => $extension->getName(),
-                    'config' => $extension->getConfig()
-                ];
+                if ($extension->getCustomCommand()) {
+                    $array['extensions']['special']['custom'][] = [
+                        'name' => $extension->getName(),
+                        'config' => $extension->getConfig(),
+                        'customCommand' => $extension->getCustomCommand()
+                    ];
+                } else {
+                    $array['extensions']['special']['main'][] = [
+                        'name' => $extension->getName(),
+                        'config' => $extension->getConfig()
+                    ];
+                }
             } else {
-                $array['extensions']['system'][] = [
-                    'name' => $extension->getName(),
-                    'config' => $extension->getConfig()
-                ];
+                if ($extension->getCustomCommand()) {
+                    $array['extensions']['system']['custom'][] = [
+                        'name' => $extension->getName(),
+                        'config' => $extension->getConfig(),
+                        'customCommand' => $extension->getCustomCommand()
+                    ];
+                } else {
+                    $array['extensions']['system']['main'][] = [
+                        'name' => $extension->getName(),
+                        'config' => $extension->getConfig()
+                    ];
+                }
             }
         }
         foreach ($this->volumes as $volume) {

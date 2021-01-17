@@ -92,15 +92,17 @@ abstract class BaseFixtures extends Fixture
      * @param ObjectManager $manager
      * @param string $name
      * @param bool $special
+     * @param string|null $customCommand
      * @return Extension
      */
-    protected function _createExtension(ObjectManager $manager, string $name, bool $special): Extension
+    protected function _createExtension(ObjectManager $manager, string $name, bool $special, string $customCommand = null): Extension
     {
         $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $name, 'special' => $special]);
         if (!is_object($extension)) {
             $extension = new Extension();
             $extension->setName($name);
             $extension->setSpecial($special);
+            $extension->setCustomCommand($customCommand);
             $manager->persist($extension);
         }
         return $extension;

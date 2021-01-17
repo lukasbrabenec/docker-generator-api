@@ -17,7 +17,7 @@ class GenerateVolumeFormType extends AbstractType
         $builder
             ->add('id', IntegerType::class)
             ->add('hostPath', TextType::class)
-            ->add('ContainerPath', TextType::class)
+            ->add('containerPath', TextType::class)
             ->add('active', CheckboxType::class)
             ;
     }

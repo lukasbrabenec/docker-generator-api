@@ -42,11 +42,12 @@ class DockerfileFactory
         try {
             return $this->dockerfileServiceChain->getDockerfileService($requestImageVersion->getImageCode())->generateDockerfile($requestImageVersion);
         } catch (LoaderError $e) {
-            throw new DockerfileException(sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $requestImageVersion->getImageCode()));
+            throw new DockerfileException(sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $requestImageVersion->getImageCode(), $e));
         } catch (RuntimeError $e) {
-            throw new DockerfileException(sprintf(self::RUNTIME_ERROR, $requestImageVersion->getImageCode()));
+            var_dump($e->getMessage());die;
+            throw new DockerfileException(sprintf(self::RUNTIME_ERROR, $requestImageVersion->getImageCode(), $e));
         } catch (SyntaxError $e) {
-            throw new DockerfileException(sprintf(self::SYNTAX_ERROR, $requestImageVersion->getImageCode()));
+            throw new DockerfileException(sprintf(self::SYNTAX_ERROR, $requestImageVersion->getImageCode(), $e));
         }
     }
 }

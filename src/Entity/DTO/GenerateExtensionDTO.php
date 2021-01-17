@@ -23,6 +23,11 @@ class GenerateExtensionDTO
     private ?string $config;
 
     /**
+     * @var string|null
+     */
+    private ?string $customCommand = null;
+
+    /**
      * @var boolean
      */
     private bool $special;
@@ -76,6 +81,22 @@ class GenerateExtensionDTO
     }
 
     /**
+     * @return string|null
+     */
+    public function getCustomCommand(): ?string
+    {
+        return $this->customCommand;
+    }
+
+    /**
+     * @param string|null $customCommand
+     */
+    public function setCustomCommand(?string $customCommand): void
+    {
+        $this->customCommand = $customCommand;
+    }
+
+    /**
      * @return bool
      */
     public function isSpecial(): ?bool
@@ -99,7 +120,8 @@ class GenerateExtensionDTO
         return [
             'name' => $this->name,
             'config' => $this->config,
-            'special' => $this->special
+            'special' => $this->special,
+            'customCommand' => $this->customCommand
         ];
     }
 }

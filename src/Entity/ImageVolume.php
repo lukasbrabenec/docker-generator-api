@@ -34,6 +34,7 @@ class ImageVolume
      * @var string
      *
      * @ORM\Column(name="container_path", type="string", length=255, nullable=false)
+     * @Groups({"default"})
      */
     private string $containerPath;
 

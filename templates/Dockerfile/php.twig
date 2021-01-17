@@ -3,8 +3,11 @@ FROM {{ imageCode }}:{{ version }}
 RUN apt-get update
 
 {% if extensions is defined and extensions is not empty %}
-{% if extensions.system is defined and extensions.system is not empty %}
-RUN apt-get install -y {% for systemExtension in extensions.system %}{{ systemExtension.name }} {% endfor %}
+{% if extensions.system.main is defined and extensions.system.main is not empty %}
+RUN apt-get install -y {% for systemMainExtension in extensions.system.main %}{{ systemMainExtension.name }} {% endfor %}
+{% endif %}
+{% if extensions.system.custom is defined and extensions.system.custom is not empty %}
+RUN {% for systemCustomExtension in extensions.system.custom %}{{ systemCustomExtension.customCommand }} {% endfor %}
 {% endif %}
 {% if extensions.special is defined and extensions.special is not empty %}
 COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/

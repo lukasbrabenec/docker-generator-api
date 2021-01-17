@@ -39,6 +39,13 @@ class Extension
     private bool $special;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="custom_command", type="string", nullable=true, options={"default":null})
+     */
+    private ?string $customCommand;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -81,5 +88,21 @@ class Extension
         $this->special = $special;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomCommand(): string
+    {
+        return $this->customCommand;
+    }
+
+    /**
+     * @param string|null $customCommand
+     */
+    public function setCustomCommand(?string $customCommand): void
+    {
+        $this->customCommand = $customCommand;
     }
 }

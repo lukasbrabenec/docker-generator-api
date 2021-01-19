@@ -2,6 +2,7 @@
 
 namespace App\Entity\DTO;
 
+use App\Entity\RestartType;
 use App\Validator\Constraints\ImageVersion;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -60,6 +61,13 @@ class GenerateImageVersionDTO
      * @var GeneratePortDTO[]
      */
     private array $ports;
+
+    /**
+     * @var RestartType
+     *
+     * @Assert\NotBlank()
+     */
+    private RestartType $restartType;
 
     /**
      * @return int
@@ -230,6 +238,22 @@ class GenerateImageVersionDTO
     }
 
     /**
+     * @return RestartType
+     */
+    public function getRestartType(): RestartType
+    {
+        return $this->restartType;
+    }
+
+    /**
+     * @param RestartType $restartType
+     */
+    public function setRestartType(RestartType $restartType): void
+    {
+        $this->restartType = $restartType;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
@@ -239,7 +263,8 @@ class GenerateImageVersionDTO
             'version' => $this->version,
             'imageName' => $this->imageName,
             'imageCode' => $this->imageCode,
-            'dockerfileLocation' => $this->dockerfileLocation
+            'dockerfileLocation' => $this->dockerfileLocation,
+            'restartType' => $this->restartType->getType()
         ];
 
         foreach ($this->environments as $environment) {

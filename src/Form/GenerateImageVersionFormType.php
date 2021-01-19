@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\DTO\GenerateImageVersionDTO;
+use App\Entity\RestartType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -34,6 +36,10 @@ class GenerateImageVersionFormType extends AbstractType
                 'entry_type' => GenerateVolumeFormType::class,
                 'allow_add' => true,
                 'error_bubbling' => false
+            ])
+            ->add('restartType', EntityType::class, [
+                'class' => RestartType::class,
+                'choice_label' => 'type'
             ])
             ;
     }

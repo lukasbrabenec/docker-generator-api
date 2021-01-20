@@ -20,10 +20,7 @@ class NormalizerCollection
         $this->normalizers = iterator_to_array($normalizers);
     }
 
-    /**
-     * @param mixed $data
-     */
-    public function getNormalizer($data): ?NormalizerInterface
+    public function getNormalizer(mixed $data): ?NormalizerInterface
     {
         foreach ($this->normalizers as $normalizer) {
             if ($normalizer instanceof NormalizerInterface && $normalizer->supportsNormalization($data)) {

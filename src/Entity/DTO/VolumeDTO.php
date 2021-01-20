@@ -2,18 +2,15 @@
 
 namespace App\Entity\DTO;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class VolumeDTO implements DataTransferObjectInterface
 {
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank]
     private int $id;
 
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank]
     private string $hostPath;
 
     private string $containerPath;
@@ -60,6 +57,11 @@ class VolumeDTO implements DataTransferObjectInterface
         $this->active = $active;
     }
 
+    #[ArrayShape([
+        'hostPath' => 'string',
+        'containerPath' => 'string',
+        'active' => 'bool',
+    ])]
     public function toArray(): array
     {
         return [

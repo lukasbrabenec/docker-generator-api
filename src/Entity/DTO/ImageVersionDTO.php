@@ -4,17 +4,16 @@ namespace App\Entity\DTO;
 
 use App\Entity\RestartType;
 use App\Validator\Constraints\ImageVersion;
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ImageVersion
- */
+#[ImageVersion]
 class ImageVersionDTO implements DataTransferObjectInterface
 {
     /**
      * @Assert\NotBlank()
      */
-    private int $imageVersionId;
+    private ?int $imageVersionId = null;
 
     private ?string $version;
 
@@ -51,7 +50,7 @@ class ImageVersionDTO implements DataTransferObjectInterface
      */
     private RestartType $restartType;
 
-    public function getImageVersionId(): int
+    public function getImageVersionId(): ?int
     {
         return $this->imageVersionId;
     }
@@ -184,6 +183,16 @@ class ImageVersionDTO implements DataTransferObjectInterface
         $this->restartType = $restartType;
     }
 
+    #[ArrayShape([
+        'id' => 'int',
+        'version' => 'null|string',
+        'imageName' => 'null|string',
+        'imageCode' => 'null|string',
+        'dockerfileLocation' => 'null|string',
+        'restartType' => 'string',
+        'anyPortExposedToContainers' => 'bool',
+        'anyPortExposedToHost' => 'bool',
+    ])]
     public function toArray(): array
     {
         $array = [

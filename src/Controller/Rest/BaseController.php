@@ -3,23 +3,21 @@
 namespace App\Controller\Rest;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class BaseController extends AbstractFOSRestController
+class BaseController extends AbstractController
 {
     private NormalizerInterface $normalizer;
 
     /**
-     * @param mixed $data
-     *
-     * @return array
      * @throws ExceptionInterface
      */
-    protected function normalize($data, array $groups): array
+    protected function normalize(mixed $data, array $groups): array
     {
         return $this->getNormalizer()->normalize($data, 'json', ['groups' => $groups]);
     }
@@ -32,6 +30,16 @@ class BaseController extends AbstractFOSRestController
         }
 
         return $entity;
+    }
+
+    protected function getJSON(Request $request): array
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new HttpException(400, 'invalid json');
+        }
+        return $data;
     }
 
     protected function getNormalizer(): NormalizerInterface

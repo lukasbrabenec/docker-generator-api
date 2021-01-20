@@ -2,20 +2,17 @@
 
 namespace App\Entity\DTO;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class PortDTO implements DataTransferObjectInterface
 {
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank]
     private int $id;
 
     private int $inward;
 
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank]
     private int $outward;
 
     private bool $exposedToContainers = true;
@@ -72,6 +69,12 @@ class PortDTO implements DataTransferObjectInterface
         $this->exposedToHost = $exposedToHost;
     }
 
+    #[ArrayShape([
+        'inward' => 'int',
+        'outward' => 'int',
+        'exposedToContainers' => 'bool',
+        'exposedToHost' => 'bool',
+    ])]
     public function toArray(): array
     {
         return [

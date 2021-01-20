@@ -12,6 +12,6 @@ RUN {% for systemCustomExtension in extensions.system.custom %}{{ systemCustomEx
 {% if extensions.special is defined and extensions.special is not empty %}
 COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions {% for specialExtension in extensions.special %}{{ specialExtension.name }} {% endfor %}
+RUN install-php-extensions {% for specialExtension in extensions.special.main %}{{ specialExtension.name }} {% endfor %}
 {% endif %}
 {% endif %}

@@ -2,14 +2,15 @@
 
 namespace App\Validator\Constraints;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
-/**
- * @Annotation
- */
+#[Attribute]
 class ImageVersion extends Constraint
 {
     // @codingStandardsIgnoreStart
+    public string $notBlank = 'This value should not be blank.';
+    public string $imageVersionType = 'This value should be of type integer.';
     public string $imageVersionMissing = 'ImageVersion ID {{ imageVersionId }} does not exist';
     public string $badExtension = 'Extension ID {{ extensionId }} does not exist for ImageVersion {{ imageVersionId }}';
     public string $badEnvironment = 'Environment {{ environmentId }} does not exist for ImageVersion {{ imageVersionId }}';
@@ -19,7 +20,7 @@ class ImageVersion extends Constraint
     public string $missingInwardAndOutwardPort = 'Inward and outward port is required when is exposed to other containers';
     // @codingStandardsIgnoreEnd
 
-    public function getTargets()
+    public function getTargets(): string
     {
         return self::CLASS_CONSTRAINT;
     }

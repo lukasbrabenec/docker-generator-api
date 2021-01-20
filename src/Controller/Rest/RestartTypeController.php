@@ -4,20 +4,11 @@ namespace App\Controller\Rest;
 
 use App\Http\ApiResponse;
 use App\Repository\RestartTypeRepository;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class RestartTypeController extends BaseController
 {
-    /**
-     * @Rest\Route(
-     *     "/restart-types",
-     *     methods={"GET"},
-     *     requirements={"version"="(v1)"}
-     * )
-     *
-     * @throws ExceptionInterface
-     */
+    #[Route('/restart-types', requirements: ['version' => 'v1'], methods: ['GET'])]
     public function list(RestartTypeRepository $restartTypeRepository): ApiResponse
     {
         $data = $this->normalize($restartTypeRepository->findAll(), ['default']);

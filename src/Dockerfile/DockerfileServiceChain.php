@@ -3,6 +3,7 @@
 namespace App\Dockerfile;
 
 use App\Service\Dockerfile\AbstractDockerfile;
+use JetBrains\PhpStorm\Pure;
 
 class DockerfileServiceChain
 {
@@ -18,16 +19,16 @@ class DockerfileServiceChain
         $this->dockerfileServices[$imageName] = $dockerfile;
     }
 
-    /**
-     * @return AbstractDockerfile|void
-     */
+    #[Pure]
     public function getDockerfileService(string $imageCode): ?AbstractDockerfile
     {
         if (array_key_exists($imageCode, $this->dockerfileServices)) {
             return $this->dockerfileServices[$imageCode];
         }
+        return null;
     }
 
+    #[Pure]
     public function hasDockerfileService(string $imageCode): bool
     {
         return array_key_exists($imageCode, $this->dockerfileServices);

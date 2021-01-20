@@ -2,13 +2,12 @@
 
 namespace App\Entity\DTO;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ExtensionDTO implements DataTransferObjectInterface
 {
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank]
     private int $id;
 
     private string $name;
@@ -81,6 +80,12 @@ class ExtensionDTO implements DataTransferObjectInterface
         $this->special = $special;
     }
 
+    #[ArrayShape([
+        'name' => 'string',
+        'config' => 'null|string',
+        'special' => 'bool',
+        'customCommand' => 'null|string',
+    ])]
     public function toArray(): array
     {
         return [

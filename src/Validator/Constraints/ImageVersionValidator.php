@@ -34,12 +34,12 @@ class ImageVersionValidator extends ConstraintValidator
         }
         $imageVersionId = $generateImageVersionDTO->getImageVersionId();
 
-        if (null === $imageVersionId || '' === $imageVersionId) {
-            return;
-        }
-
         if (!is_integer($imageVersionId)) {
-            throw new UnexpectedValueException($imageVersionId, 'integer');
+            $this->context->buildViolation($constraint->imageVersionType)
+                ->atPath('imageVersionId')
+                ->addViolation();
+
+            return;
         }
 
         /** @var ImageVersion|null $imageVersion */

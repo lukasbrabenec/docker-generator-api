@@ -27,6 +27,9 @@ class DockerComposeVersionValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, DockerComposeVersionConstraint::class);
         }
         if (null === $dockerComposeVersionDTOId || '' === $dockerComposeVersionDTOId) {
+            $this->context->buildViolation($constraint->notBlank)
+                ->addViolation();
+
             return;
         }
 

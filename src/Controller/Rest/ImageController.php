@@ -5,20 +5,11 @@ namespace App\Controller\Rest;
 use App\Entity\Image;
 use App\Http\ApiResponse;
 use App\Repository\ImageRepository;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ImageController extends BaseController
 {
-    /**
-     * @Rest\Route(
-     *     "/images",
-     *     methods={"GET"},
-     *     requirements={"version"="(v1)"}
-     * )
-     *
-     * @throws ExceptionInterface
-     */
+    #[Route('/images', requirements: ['version' => 'v1'], methods: ['GET'])]
     public function list(ImageRepository $imageRepository): ApiResponse
     {
         $data = $this->normalize($imageRepository->findAll(), ['default']);
@@ -26,15 +17,7 @@ class ImageController extends BaseController
         return new ApiResponse($data);
     }
 
-    /**
-     * @Rest\Route(
-     *     "/images/{imageID}",
-     *     methods={"GET"},
-     *     requirements={"version"="(v1)"}
-     * )
-     *
-     * @throws ExceptionInterface
-     */
+    #[Route('/images/{imageID}', requirements: ['version' => 'v1'], methods: ['GET'])]
     public function detail(int $imageID, ImageRepository $imageRepository): ApiResponse
     {
         $data = $this->normalize($this->getEntityById($imageRepository, $imageID), ['default', 'detail']);

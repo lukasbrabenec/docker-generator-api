@@ -12,13 +12,10 @@ use App\Repository\EnvironmentRepository;
 use App\Repository\ImageVersionExtensionRepository;
 use App\Repository\ImageVersionRepository;
 use App\Service\GeneratorService;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GenerateController extends BaseController
 {
@@ -42,17 +39,7 @@ class GenerateController extends BaseController
         $this->environmentRepository = $environmentRepository;
     }
 
-    /**
-     * @Rest\Route(
-     *     "/generate",
-     *     methods={"POST"},
-     *     requirements={"version"="(v1)"}
-     * )
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
+    #[Route('/generate', requirements: ['version' => 'v1'], methods: ['POST'])]
     public function generate(Request $request, GeneratorService $generatorService): BinaryFileResponse
     {
         $requestObject = $this->processForm($request, GenerateFormType::class);
@@ -73,8 +60,8 @@ class GenerateController extends BaseController
     protected function processForm(Request $request, string $formClass): GenerateDTO
     {
         $form = $this->createForm($formClass);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form->submit($this->getJSON($request)[$form->getName()]);
+        if ($form->isValid()) {
             $data = $this->applyDefaultValues($form->getData());
         } else {
             throw new FormException($form);

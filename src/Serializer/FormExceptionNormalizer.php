@@ -34,10 +34,7 @@ class FormExceptionNormalizer implements NormalizerInterface
         return $errors;
     }
 
-    /**
-     * @param mixed $data
-     */
-    public function supportsNormalization($data, ?string $format = null): bool
+    public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
         return $data instanceof FormException;
     }

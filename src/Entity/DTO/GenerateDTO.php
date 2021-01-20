@@ -3,26 +3,20 @@
 namespace App\Entity\DTO;
 
 use App\Validator\Constraints\DockerComposeVersion;
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class GenerateDTO implements DataTransferObjectInterface
 {
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank]
     private string $projectName;
 
-    /**
-     * @DockerComposeVersion()
-     * @Assert\NotBlank()
-     */
+    #[DockerComposeVersion]
     private int $dockerVersionId;
 
     private float $dockerComposeVersion;
 
-    /**
-     * @Assert\Valid()
-     */
+    #[Assert\Valid]
     private array $imageVersions;
 
     private ?string $dockerComposeText = null;
@@ -90,6 +84,10 @@ class GenerateDTO implements DataTransferObjectInterface
         $this->dockerComposeText = $dockerComposeText;
     }
 
+    #[ArrayShape([
+        'dockerVersion' => 'float',
+        'dockerComposeText' => 'null|string',
+    ])]
     public function toArray(): array
     {
         $array = [

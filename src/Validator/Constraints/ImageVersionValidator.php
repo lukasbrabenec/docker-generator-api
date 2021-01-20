@@ -2,8 +2,8 @@
 
 namespace App\Validator\Constraints;
 
-use App\Entity\DTO\GenerateImageVersionDTO;
-use App\Entity\DTO\GeneratePortDTO;
+use App\Entity\DTO\ImageVersionDTO;
+use App\Entity\DTO\PortDTO;
 use App\Entity\ImageEnvironment;
 use App\Entity\ImagePort;
 use App\Entity\ImageVersion;
@@ -17,14 +17,8 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class ImageVersionValidator extends ConstraintValidator
 {
-    /**
-     * @var EntityManagerInterface
-     */
     private EntityManagerInterface $entityManager;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -32,7 +26,6 @@ class ImageVersionValidator extends ConstraintValidator
 
     /**
      * @param mixed $generateImageVersionDTO
-     * @param Constraint $constraint
      */
     public function validate($generateImageVersionDTO, Constraint $constraint)
     {
@@ -49,35 +42,34 @@ class ImageVersionValidator extends ConstraintValidator
             throw new UnexpectedValueException($imageVersionId, 'integer');
         }
 
-        /** @var null|ImageVersion $imageVersion */
+        /** @var ImageVersion|null $imageVersion */
         $imageVersion = $this->entityManager->getRepository(ImageVersion::class)->find($imageVersionId);
         if (!is_object($imageVersion)) {
             $this->context->buildViolation($constraint->imageVersionMissing)
                 ->setParameter('{{ imageVersionId }}', $imageVersionId)
                 ->atPath('imageVersionId')
                 ->addViolation();
+
             return;
         }
 
         // extensions
-        $this->_validateExtensions($constraint, $generateImageVersionDTO, $imageVersionId);
+        $this->validateExtensions($constraint, $generateImageVersionDTO, $imageVersionId);
         // environments
-        $this->_validateEnvironments($constraint, $generateImageVersionDTO, $imageVersion);
+        $this->validateEnvironments($constraint, $generateImageVersionDTO, $imageVersion);
         // ports
-        $this->_validatePorts($constraint, $generateImageVersionDTO, $imageVersionId);
+        $this->validatePorts($constraint, $generateImageVersionDTO, $imageVersionId);
     }
 
-    /**
-     * @param ImageVersionConstraint $constraint
-     * @param GenerateImageVersionDTO $generateImageVersionDTO
-     * @param int $imageVersionId
-     */
-    private function _validateExtensions(ImageVersionConstraint $constraint, GenerateImageVersionDTO $generateImageVersionDTO, int $imageVersionId)
-    {
+    private function validateExtensions(
+        ImageVersionConstraint $constraint,
+        ImageVersionDTO $generateImageVersionDTO,
+        int $imageVersionId
+    ) {
         foreach ($generateImageVersionDTO->getExtensions() as $installExtensionDTO) {
             $imageDockerInstall = $this->entityManager->getRepository(ImageVersionExtension::class)->findOneBy([
                 'extension' => $installExtensionDTO->getId(),
-                'imageVersion' => $imageVersionId
+                'imageVersion' => $imageVersionId,
             ]);
             if (!is_object($imageDockerInstall)) {
                 $this->context->buildViolation($constraint->badExtension)
@@ -89,13 +81,11 @@ class ImageVersionValidator extends ConstraintValidator
         }
     }
 
-    /**
-     * @param ImageVersionConstraint $constraint
-     * @param GenerateImageVersionDTO $generateImageVersionDTO
-     * @param ImageVersion $imageVersion
-     */
-    private function _validateEnvironments(ImageVersionConstraint $constraint, GenerateImageVersionDTO $generateImageVersionDTO, ImageVersion $imageVersion)
-    {
+    private function validateEnvironments(
+        ImageVersionConstraint $constraint,
+        ImageVersionDTO $generateImageVersionDTO,
+        ImageVersion $imageVersion
+    ) {
         foreach ($generateImageVersionDTO->getEnvironments() as $environmentDTO) {
             /** @var ImageEnvironment $environment */
             $environment = $this->entityManager->getRepository(ImageEnvironment::class)->find($environmentDTO->getId());
@@ -110,7 +100,7 @@ class ImageVersionValidator extends ConstraintValidator
         $requiredEnvironments = $this->entityManager->getRepository(ImageEnvironment::class)->findBy([
             'imageVersion' => $imageVersion,
             'required' => true,
-            'hidden' => false
+            'hidden' => false,
         ]);
         /** @var ImageEnvironment $requiredEnvironment */
         foreach ($requiredEnvironments as $requiredEnvironment) {
@@ -131,14 +121,12 @@ class ImageVersionValidator extends ConstraintValidator
         }
     }
 
-    /**
-     * @param ImageVersionConstraint $constraint
-     * @param GenerateImageVersionDTO $generateImageVersionDTO
-     * @param int $imageVersionId
-     */
-    private function _validatePorts(ImageVersionConstraint $constraint, GenerateImageVersionDTO $generateImageVersionDTO, int $imageVersionId)
-    {
-        /** @var GeneratePortDTO $portDTO */
+    private function validatePorts(
+        ImageVersionConstraint $constraint,
+        ImageVersionDTO $generateImageVersionDTO,
+        int $imageVersionId
+    ) {
+        /** @var PortDTO $portDTO */
         foreach ($generateImageVersionDTO->getPorts() as $portDTO) {
             /** @var ImagePort $port */
             $port = $this->entityManager->getRepository(ImagePort::class)->find($portDTO->getId());
@@ -149,7 +137,11 @@ class ImageVersionValidator extends ConstraintValidator
                     ->atPath('ports')
                     ->addViolation();
             }
-            if ($portDTO->isExposedToHost() && !$portDTO->getInward() && $portDTO->isExposedToContainers() && !$portDTO->getOutward()) {
+            if ($portDTO->isExposedToHost()
+                && !$portDTO->getInward()
+                && $portDTO->isExposedToContainers()
+                && !$portDTO->getOutward()
+            ) {
                 $this->context->buildViolation($constraint->missingInwardAndOutwardPort)
                     ->addViolation();
             }

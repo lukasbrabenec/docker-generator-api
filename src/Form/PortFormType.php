@@ -2,14 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\DTO\GeneratePortDTO;
+use App\Entity\DTO\PortDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GeneratePortFormType extends AbstractType
+class PortFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -25,7 +25,7 @@ class GeneratePortFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => GeneratePortDTO::class
+            'data_class' => PortDTO::class,
         ]);
     }
 

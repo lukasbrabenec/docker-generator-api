@@ -23,7 +23,7 @@ class DockerfileCompilerPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $definition->addMethodCall('addDockerfileService', [
                     new Reference($id),
-                    $attributes['imageName']
+                    $attributes['imageName'],
                 ]);
             }
         }

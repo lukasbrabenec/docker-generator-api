@@ -2,33 +2,32 @@
 
 namespace App\Form;
 
-use App\Entity\DTO\GenerateExtensionDTO;
+use App\Entity\DTO\EnvironmentDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GenerateExtensionFormType extends AbstractType
+class EnvironmentFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('id', IntegerType::class)
-            ->add('name', TextType::class)
-        ;
+            ->add('value', TextType::class)
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => GenerateExtensionDTO::class,
-            'allow_extra_fields' => true
+            'data_class' => EnvironmentDTO::class,
         ]);
     }
 
     public function getBlockPrefix(): string
     {
-        return 'extensions';
+        return 'environments';
     }
 }

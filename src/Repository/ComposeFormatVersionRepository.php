@@ -19,10 +19,6 @@ class ComposeFormatVersionRepository extends ServiceEntityRepository
         parent::__construct($registry, ComposeFormatVersion::class);
     }
 
-    /**
-     * @param array $orderBy
-     * @return ComposeFormatVersion[]
-     */
     public function findAllAndOrderBy(array $orderBy): array
     {
         return $this->findBy([], $orderBy);

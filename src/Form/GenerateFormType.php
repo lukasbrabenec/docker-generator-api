@@ -18,8 +18,8 @@ class GenerateFormType extends AbstractType
             ->add('projectName', TextType::class)
             ->add('dockerVersionId', IntegerType::class)
             ->add('imageVersions', CollectionType::class, [
-                'entry_type' => GenerateImageVersionFormType::class,
-                'allow_add' => true
+                'entry_type' => ImageVersionFormType::class,
+                'allow_add' => true,
             ])
             ;
     }
@@ -28,7 +28,7 @@ class GenerateFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => GenerateDTO::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 

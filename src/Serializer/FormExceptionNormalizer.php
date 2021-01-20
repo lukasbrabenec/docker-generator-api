@@ -3,28 +3,22 @@
 namespace App\Serializer;
 
 use App\Exception\FormException;
-use ArrayObject;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Throwable;
 
 class FormExceptionNormalizer implements NormalizerInterface
 {
     /**
-     * @param mixed $exception
-     * @param string|null $format
-     * @param array $context
+     * @param Throwable $exception
      *
-     * @return array|ArrayObject|bool|float|int|string|void|null
+     * @return array
      */
     public function normalize($exception, string $format = null, array $context = []): array
     {
         return $this->getErrorsFromForm($exception->getForm());
     }
 
-    /**
-     * @param FormInterface $form
-     * @return array
-     */
     private function getErrorsFromForm(FormInterface $form): array
     {
         $errors = [];
@@ -36,14 +30,12 @@ class FormExceptionNormalizer implements NormalizerInterface
                 $errors[$childForm->getName()] = $childErrors;
             }
         }
+
         return $errors;
     }
 
     /**
      * @param mixed $data
-     * @param string|null $format
-     *
-     * @return bool
      */
     public function supportsNormalization($data, ?string $format = null): bool
     {

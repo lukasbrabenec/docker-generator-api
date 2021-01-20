@@ -16,13 +16,14 @@ class ComposeFormatVersionController extends BaseController
      *     requirements={"version"="(v1)"}
      * )
      *
-     * @param ComposeFormatVersionRepository $composeFormatVersionRepository
-     * @return ApiResponse
      * @throws ExceptionInterface
      */
     public function list(ComposeFormatVersionRepository $composeFormatVersionRepository): ApiResponse
     {
-        $data = $this->normalize($composeFormatVersionRepository->findAllAndOrderBy(['composeVersion' => 'DESC']), ['default']);
+        $data = $this->normalize($composeFormatVersionRepository->findAllAndOrderBy(
+            ['composeVersion' => 'DESC']
+        ), ['default']);
+
         return new ApiResponse($data);
     }
 }

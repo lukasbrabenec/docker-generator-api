@@ -11,14 +11,8 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class DockerComposeVersionValidator extends ConstraintValidator
 {
-    /**
-     * @var ComposeFormatVersionRepository
-     */
     private ComposeFormatVersionRepository $composeFormatVersionRepository;
 
-    /**
-     * @param ComposeFormatVersionRepository $composeFormatVersionRepository
-     */
     public function __construct(ComposeFormatVersionRepository $composeFormatVersionRepository)
     {
         $this->composeFormatVersionRepository = $composeFormatVersionRepository;
@@ -26,7 +20,6 @@ class DockerComposeVersionValidator extends ConstraintValidator
 
     /**
      * @param mixed $dockerComposeVersionDTOId
-     * @param Constraint $constraint
      */
     public function validate($dockerComposeVersionDTOId, Constraint $constraint)
     {
@@ -50,9 +43,6 @@ class DockerComposeVersionValidator extends ConstraintValidator
         }
     }
 
-    /**
-     * @return ComposeFormatVersionRepository
-     */
     public function getComposeFormatVersionRepository(): ComposeFormatVersionRepository
     {
         return $this->composeFormatVersionRepository;

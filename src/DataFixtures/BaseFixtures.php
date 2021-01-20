@@ -15,15 +15,12 @@ use Doctrine\Persistence\ObjectManager;
 
 abstract class BaseFixtures extends Fixture
 {
-    /**
-     * @param ObjectManager $manager
-     * @param string $name
-     * @param string $code
-     * @param string|null $dockerfileLocation
-     * @return Image
-     */
-    protected function _getOrCreateImage(ObjectManager $manager, string $name, string $code, string $dockerfileLocation = null): Image
-    {
+    protected function getOrCreateImage(
+        ObjectManager $manager,
+        string $name,
+        string $code,
+        string $dockerfileLocation = null
+    ): Image {
         $image = $manager->getRepository(Image::class)->findOneBy(['name' => $name]);
         if (!is_object($image)) {
             $image = new Image();
@@ -32,35 +29,28 @@ abstract class BaseFixtures extends Fixture
             $image->setDockerfileLocation($dockerfileLocation);
             $manager->persist($image);
         }
+
         return $image;
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param Image $image
-     * @param string $version
-     * @return ImageVersion
-     */
-    protected function _createImageVersion(ObjectManager $manager, Image $image, string $version): ImageVersion
+    protected function createImageVersion(ObjectManager $manager, Image $image, string $version): ImageVersion
     {
         $imageVersion = new ImageVersion();
         $imageVersion->setVersion($version);
         $imageVersion->setImage($image);
         $manager->persist($imageVersion);
+
         return $imageVersion;
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param ImageVersion $imageVersion
-     * @param string $code
-     * @param string|null $defaultValue
-     * @param bool $hidden
-     * @param bool $required
-     * @return ImageEnvironment
-     */
-    protected function _createImageEnvironment(ObjectManager $manager, ImageVersion $imageVersion, string $code, string $defaultValue = null, bool $hidden = false, bool $required = false): ImageEnvironment
-    {
+    protected function createImageEnvironment(
+        ObjectManager $manager,
+        ImageVersion $imageVersion,
+        string $code,
+        string $defaultValue = null,
+        bool $hidden = false,
+        bool $required = false
+    ): ImageEnvironment {
         $imageEnvironment = new ImageEnvironment();
         $imageEnvironment->setCode($code);
         $imageEnvironment->setImageVersion($imageVersion);
@@ -68,35 +58,31 @@ abstract class BaseFixtures extends Fixture
         $imageEnvironment->setHidden($hidden);
         $imageEnvironment->setRequired($required);
         $manager->persist($imageEnvironment);
+
         return $imageEnvironment;
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param ImageVersion $imageVersion
-     * @param int $inward
-     * @param int $outward
-     * @return ImagePort
-     */
-    protected function _createImagePort(ObjectManager $manager, ImageVersion $imageVersion, int $inward, int $outward): ImagePort
-    {
+    protected function createImagePort(
+        ObjectManager $manager,
+        ImageVersion $imageVersion,
+        int $inward,
+        int $outward
+    ): ImagePort {
         $imagePort = new ImagePort();
         $imagePort->setImageVersion($imageVersion);
         $imagePort->setInward($inward);
         $imagePort->setOutward($outward);
         $manager->persist($imagePort);
+
         return $imagePort;
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param string $name
-     * @param bool $special
-     * @param string|null $customCommand
-     * @return Extension
-     */
-    protected function _createExtension(ObjectManager $manager, string $name, bool $special, string $customCommand = null): Extension
-    {
+    protected function createExtension(
+        ObjectManager $manager,
+        string $name,
+        bool $special,
+        string $customCommand = null
+    ): Extension {
         $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $name, 'special' => $special]);
         if (!is_object($extension)) {
             $extension = new Extension();
@@ -105,56 +91,51 @@ abstract class BaseFixtures extends Fixture
             $extension->setCustomCommand($customCommand);
             $manager->persist($extension);
         }
+
         return $extension;
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param ImageVersion $imageVersion
-     * @param Extension $extension
-     * @param string|null $config
-     * @return ImageVersionExtension
-     */
-    protected function _createImageVersionExtension(ObjectManager $manager, ImageVersion $imageVersion, Extension $extension, string $config = null): ImageVersionExtension
-    {
+    protected function createImageVersionExtension(
+        ObjectManager $manager,
+        ImageVersion $imageVersion,
+        Extension $extension,
+        string $config = null
+    ): ImageVersionExtension {
         $imageVersionExtension = new ImageVersionExtension();
         $imageVersionExtension->setImageVersion($imageVersion);
         $imageVersionExtension->setExtension($extension);
         $imageVersionExtension->setConfig($config);
         $manager->persist($imageVersionExtension);
+
         return $imageVersionExtension;
     }
 
-    /**
-     * @param ObjectManager $manager
-     * @param ImageVersion $imageVersion
-     * @param string $hostPath
-     * @param string $containerPath
-     * @return ImageVolume
-     */
-    protected function _createImageVolume(ObjectManager $manager, ImageVersion $imageVersion, string $hostPath, string $containerPath): ImageVolume
-    {
+    protected function createImageVolume(
+        ObjectManager $manager,
+        ImageVersion $imageVersion,
+        string $hostPath,
+        string $containerPath
+    ): ImageVolume {
         $imageVolume = new ImageVolume();
         $imageVolume->setImageVersion($imageVersion);
         $imageVolume->setHostPath($hostPath);
         $imageVolume->setContainerPath($containerPath);
         $manager->persist($imageVolume);
+
         return $imageVolume;
     }
 
     /**
-     * @param ObjectManager $manager
-     * @param string $name
-     * @return Extension
      * @throws FixturesException
      */
-    protected function _getExtension(ObjectManager $manager, string $name): Extension
+    protected function getExtension(ObjectManager $manager, string $name): Extension
     {
         /** @var Extension $extension */
         $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $name]);
         if (!is_object($extension)) {
-            throw new FixturesException(sprintf("extension %s doesnt exist", $name));
+            throw new FixturesException(sprintf('extension %s doesnt exist', $name));
         }
+
         return $extension;
     }
 }

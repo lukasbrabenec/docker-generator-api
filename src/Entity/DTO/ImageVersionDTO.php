@@ -9,102 +9,69 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ImageVersion
  */
-class GenerateImageVersionDTO
+class ImageVersionDTO implements DataTransferObjectInterface
 {
     /**
-     * @var int
      * @Assert\NotBlank()
      */
     private int $imageVersionId;
 
-    /**
-     * @var string|null
-     */
     private ?string $version;
 
-    /**
-     * @var string|null
-     */
     private ?string $imageName;
 
-    /**
-     * @var string|null
-     */
     private ?string $imageCode;
 
-    /**
-     * @var string|null
-     */
     private ?string $dockerfileLocation;
 
-    /**
-     * @var string|null
-     */
     private ?string $dockerfileText = null;
 
     /**
-     * @var GenerateExtensionDTO[]
+     * @var ExtensionDTO[]
      */
     private array $extensions;
 
     /**
-     * @var GenerateEnvironmentDTO[]
+     * @var EnvironmentDTO[]
      */
     private array $environments;
 
     /**
-     * @var GenerateVolumeDTO[]
+     * @var VolumeDTO[]
      */
     private array $volumes;
 
     /**
-     * @var GeneratePortDTO[]
+     * @var PortDTO[]
      */
     private array $ports;
 
     /**
-     * @var RestartType
-     *
      * @Assert\NotBlank()
      */
     private RestartType $restartType;
 
-    /**
-     * @return int
-     */
     public function getImageVersionId(): int
     {
         return $this->imageVersionId;
     }
 
-    /**
-     * @param int $imageVersionId
-     */
     public function setImageVersionId(int $imageVersionId)
     {
         $this->imageVersionId = $imageVersionId;
     }
 
-    /**
-     * @return array
-     */
     public function getEnvironments(): array
     {
         return $this->environments;
     }
 
-    /**
-     * @param array $environments
-     */
     public function setEnvironments(array $environments)
     {
         $this->environments = $environments;
     }
 
-    /**
-     * @param GenerateEnvironmentDTO $environment
-     */
-    public function addEnvironment(GenerateEnvironmentDTO $environment)
+    public function addEnvironment(EnvironmentDTO $environment)
     {
         $this->environments[] = $environment;
     }
@@ -117,9 +84,6 @@ class GenerateImageVersionDTO
         return $this->version;
     }
 
-    /**
-     * @param string|null $version
-     */
     public function setVersion(?string $version): void
     {
         $this->version = $version;
@@ -133,9 +97,6 @@ class GenerateImageVersionDTO
         return $this->imageName;
     }
 
-    /**
-     * @param string|null $imageName
-     */
     public function setImageName(?string $imageName): void
     {
         $this->imageName = $imageName;
@@ -149,9 +110,6 @@ class GenerateImageVersionDTO
         return $this->imageCode;
     }
 
-    /**
-     * @param string|null $imageCode
-     */
     public function setImageCode(?string $imageCode): void
     {
         $this->imageCode = $imageCode;
@@ -165,41 +123,26 @@ class GenerateImageVersionDTO
         return $this->dockerfileLocation;
     }
 
-    /**
-     * @param string|null $dockerfileLocation
-     */
     public function setDockerfileLocation(?string $dockerfileLocation): void
     {
         $this->dockerfileLocation = $dockerfileLocation;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDockerfileText(): ?string
     {
         return $this->dockerfileText;
     }
 
-    /**
-     * @param string|null $dockerfileText
-     */
     public function setDockerfileText(?string $dockerfileText): void
     {
         $this->dockerfileText = $dockerfileText;
     }
 
-    /**
-     * @return array
-     */
     public function getExtensions(): array
     {
         return $this->extensions;
     }
 
-    /**
-     * @param array $extensions
-     */
     public function setExtensions(array $extensions)
     {
         $this->extensions = $extensions;
@@ -213,9 +156,6 @@ class GenerateImageVersionDTO
         return $this->volumes;
     }
 
-    /**
-     * @param array $volumes
-     */
     public function setVolumes(array $volumes): void
     {
         $this->volumes = $volumes;
@@ -229,33 +169,21 @@ class GenerateImageVersionDTO
         return $this->ports;
     }
 
-    /**
-     * @param array $ports
-     */
     public function setPorts(array $ports): void
     {
         $this->ports = $ports;
     }
 
-    /**
-     * @return RestartType
-     */
     public function getRestartType(): RestartType
     {
         return $this->restartType;
     }
 
-    /**
-     * @param RestartType $restartType
-     */
     public function setRestartType(RestartType $restartType): void
     {
         $this->restartType = $restartType;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         $array = [
@@ -264,7 +192,7 @@ class GenerateImageVersionDTO
             'imageName' => $this->imageName,
             'imageCode' => $this->imageCode,
             'dockerfileLocation' => $this->dockerfileLocation,
-            'restartType' => $this->restartType->getType()
+            'restartType' => $this->restartType->getType(),
         ];
 
         foreach ($this->environments as $environment) {
@@ -276,12 +204,12 @@ class GenerateImageVersionDTO
                     $array['extensions']['special']['custom'][] = [
                         'name' => $extension->getName(),
                         'config' => $extension->getConfig(),
-                        'customCommand' => $extension->getCustomCommand()
+                        'customCommand' => $extension->getCustomCommand(),
                     ];
                 } else {
                     $array['extensions']['special']['main'][] = [
                         'name' => $extension->getName(),
-                        'config' => $extension->getConfig()
+                        'config' => $extension->getConfig(),
                     ];
                 }
             } else {
@@ -289,12 +217,12 @@ class GenerateImageVersionDTO
                     $array['extensions']['system']['custom'][] = [
                         'name' => $extension->getName(),
                         'config' => $extension->getConfig(),
-                        'customCommand' => $extension->getCustomCommand()
+                        'customCommand' => $extension->getCustomCommand(),
                     ];
                 } else {
                     $array['extensions']['system']['main'][] = [
                         'name' => $extension->getName(),
-                        'config' => $extension->getConfig()
+                        'config' => $extension->getConfig(),
                     ];
                 }
             }

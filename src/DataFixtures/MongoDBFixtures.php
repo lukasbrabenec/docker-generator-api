@@ -20,48 +20,52 @@ class MongoDBFixtures extends BaseFixtures
         'MONGO_INITDB_ROOT_USERNAME' => [
             'default' => null,
             'required' => true,
-            'hidden' => false
+            'hidden' => false,
         ],
         'MONGO_INITDB_ROOT_PASSWORD' => [
             'default' => null,
             'required' => true,
-            'hidden' => false
+            'hidden' => false,
         ],
         'MONGO_INITDB_DATABASE' => [
             'default' => null,
             'required' => false,
-            'hidden' => false
+            'hidden' => false,
         ],
     ];
 
     const PORTS = [
-        27017 => 27017
+        27017 => 27017,
     ];
 
     const VOLUMES = [
-        './mongo/data' => '/data/db'
+        './mongo/data' => '/data/db',
     ];
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
-        $image = $this->_getOrCreateImage($manager, 'MongoDB', 'mongo');
+        $image = $this->getOrCreateImage($manager, 'MongoDB', 'mongo');
 
         foreach (self::VERSIONS as $version) {
-            $imageVersion = $this->_createImageVersion($manager, $image, $version);
+            $imageVersion = $this->createImageVersion($manager, $image, $version);
 
             foreach (self::ENVIRONMENT_MAP as $environmentCode => $options) {
-                $this->_createImageEnvironment($manager, $imageVersion, $environmentCode, $options['default'], $options['hidden'], $options['required']);
+                $this->createImageEnvironment(
+                    $manager,
+                    $imageVersion,
+                    $environmentCode,
+                    $options['default'],
+                    $options['hidden'],
+                    $options['required']
+                );
             }
 
             foreach (self::PORTS as $inwardPort => $outwardPort) {
-                $this->_createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
+                $this->createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
             }
 
             foreach (self::VOLUMES as $hostPath => $containerPath) {
-                $this->_createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
+                $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
         $manager->flush();

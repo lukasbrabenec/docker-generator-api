@@ -17,13 +17,12 @@ class ImageController extends BaseController
      *     requirements={"version"="(v1)"}
      * )
      *
-     * @param ImageRepository $imageRepository
-     * @return ApiResponse
      * @throws ExceptionInterface
      */
     public function list(ImageRepository $imageRepository): ApiResponse
     {
         $data = $this->normalize($imageRepository->findAll(), ['default']);
+
         return new ApiResponse($data);
     }
 
@@ -34,34 +33,34 @@ class ImageController extends BaseController
      *     requirements={"version"="(v1)"}
      * )
      *
-     * @param int $imageID
-     * @param ImageRepository $imageRepository
-     * @return ApiResponse
      * @throws ExceptionInterface
      */
     public function detail(int $imageID, ImageRepository $imageRepository): ApiResponse
     {
         $data = $this->normalize($this->getEntityById($imageRepository, $imageID), ['default', 'detail']);
-        $data = $this->_extractExtensions([$data]);
+        $data = $this->extractExtensions([$data]);
+
         return new ApiResponse($data);
     }
 
     /**
      * @param Image[] $images
+     *
      * @return Image[]
      */
-    private function _extractExtensions(array $images): array
+    private function extractExtensions(array $images): array
     {
-        foreach ($images as $imageIndex => $image) {
-            foreach ($image['imageVersions'] as $imageVersionIndex => $imageVersion) {
+        foreach ($images as $imageIndex => &$image) {
+            foreach ($image['imageVersions'] as $imageVersionIndex => &$imageVersion) {
                 foreach ($imageVersion['extensions'] as $extensionIndex => $extension) {
-                    $images[$imageIndex]['imageVersions'][$imageVersionIndex]['extensions'][$extensionIndex]['id'] = $extension['extension']['id'];
-                    $images[$imageIndex]['imageVersions'][$imageVersionIndex]['extensions'][$extensionIndex]['name'] = $extension['extension']['name'];
-                    $images[$imageIndex]['imageVersions'][$imageVersionIndex]['extensions'][$extensionIndex]['special'] = $extension['extension']['special'];
-                    unset($images[$imageIndex]['imageVersions'][$imageVersionIndex]['extensions'][$extensionIndex]['extension']);
+                    $imageVersion['extensions'][$extensionIndex]['id'] = $extension['extension']['id'];
+                    $imageVersion['extensions'][$extensionIndex]['name'] = $extension['extension']['name'];
+                    $imageVersion['extensions'][$extensionIndex]['special'] = $extension['extension']['special'];
+                    unset($imageVersion['extensions'][$extensionIndex]['extension']);
                 }
             }
         }
+
         return $images;
     }
 }

@@ -16,14 +16,12 @@ class ImageVersionController extends BaseController
      *     requirements={"version"="(v1)"}
      * )
      *
-     * @param int $imageVersionID
-     * @param ImageVersionRepository $imageVersionRepository
-     * @return ApiResponse
      * @throws ExceptionInterface
      */
     public function getImageVersions(int $imageVersionID, ImageVersionRepository $imageVersionRepository): ApiResponse
     {
         $data = $this->normalize($this->getEntityById($imageVersionRepository, $imageVersionID), ['default']);
+
         return new ApiResponse($data);
     }
 }

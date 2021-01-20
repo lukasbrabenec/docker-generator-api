@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 class MailCatcherFixtures extends BaseFixtures
 {
     const VERSIONS = [
-        'latest'
+        'latest',
     ];
 
     const PORTS = [
@@ -15,18 +15,15 @@ class MailCatcherFixtures extends BaseFixtures
         1080 => 1080,
     ];
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
-        $image = $this->_getOrCreateImage($manager, 'MailCatcher', 'schickling/mailcatcher');
+        $image = $this->getOrCreateImage($manager, 'MailCatcher', 'schickling/mailcatcher');
 
         foreach (self::VERSIONS as $version) {
-            $imageVersion = $this->_createImageVersion($manager, $image, $version);
+            $imageVersion = $this->createImageVersion($manager, $image, $version);
 
             foreach (self::PORTS as $inwardPort => $outwardPort) {
-                $this->_createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
+                $this->createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
             }
         }
         $manager->flush();

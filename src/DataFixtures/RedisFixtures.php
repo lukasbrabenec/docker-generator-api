@@ -16,29 +16,26 @@ class RedisFixtures extends BaseFixtures
     ];
 
     const PORTS = [
-        6379 => 6379
+        6379 => 6379,
     ];
 
     const VOLUMES = [
-        './redis/data' => '/data'
+        './redis/data' => '/data',
     ];
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
-        $image = $this->_getOrCreateImage($manager, 'Redis', 'redis');
+        $image = $this->getOrCreateImage($manager, 'Redis', 'redis');
 
         foreach (self::VERSIONS as $version) {
-            $imageVersion = $this->_createImageVersion($manager, $image, $version);
+            $imageVersion = $this->createImageVersion($manager, $image, $version);
 
             foreach (self::PORTS as $inwardPort => $outwardPort) {
-                $this->_createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
+                $this->createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
             }
 
             foreach (self::VOLUMES as $hostPath => $containerPath) {
-                $this->_createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
+                $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
         $manager->flush();

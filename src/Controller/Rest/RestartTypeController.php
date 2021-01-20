@@ -16,13 +16,12 @@ class RestartTypeController extends BaseController
      *     requirements={"version"="(v1)"}
      * )
      *
-     * @param RestartTypeRepository $restartTypeRepository
-     * @return ApiResponse
      * @throws ExceptionInterface
      */
     public function list(RestartTypeRepository $restartTypeRepository): ApiResponse
     {
         $data = $this->normalize($restartTypeRepository->findAll(), ['default']);
+
         return new ApiResponse($data);
     }
 }

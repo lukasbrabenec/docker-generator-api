@@ -7,53 +7,40 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class BaseController extends AbstractFOSRestController
 {
-    /**
-     * @var SerializerInterface
-     */
-    private SerializerInterface $serializer;
+    private NormalizerInterface $normalizer;
 
     /**
      * @param mixed $data
-     * @param array $groups
+     *
      * @return array
      * @throws ExceptionInterface
      */
     protected function normalize($data, array $groups): array
     {
-        return $this->_getSerializer()->normalize($data, 'json', ['groups' => $groups]);
+        return $this->getNormalizer()->normalize($data, 'json', ['groups' => $groups]);
     }
 
-    /**
-     * @param ServiceEntityRepository $repository
-     * @param int $id
-     * @return object
-     */
     protected function getEntityById(ServiceEntityRepository $repository, int $id): object
     {
         $entity = $repository->find($id);
         if (!is_object($entity)) {
             throw new HttpException(Response::HTTP_NOT_FOUND, sprintf('Entity %d not found.', $id));
         }
+
         return $entity;
     }
 
-    /**
-     * @return SerializerInterface
-     */
-    protected function _getSerializer(): SerializerInterface
+    protected function getNormalizer(): NormalizerInterface
     {
-        return $this->serializer;
+        return $this->normalizer;
     }
 
-    /**
-     * @param SerializerInterface $serializer
-     */
-    public function setSerializer(SerializerInterface $serializer): void
+    public function setNormalizer(NormalizerInterface $normalizer): void
     {
-        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
     }
 }

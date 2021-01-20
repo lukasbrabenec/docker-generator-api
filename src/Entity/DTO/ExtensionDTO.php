@@ -4,32 +4,19 @@ namespace App\Entity\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class GenerateExtensionDTO
+class ExtensionDTO implements DataTransferObjectInterface
 {
     /**
-     * @var int
      * @Assert\NotBlank()
      */
     private int $id;
 
-    /**
-     * @var string
-     */
     private string $name;
 
-    /**
-     * @var string|null
-     */
     private ?string $config;
 
-    /**
-     * @var string|null
-     */
     private ?string $customCommand = null;
 
-    /**
-     * @var boolean
-     */
     private bool $special;
 
     /**
@@ -40,9 +27,6 @@ class GenerateExtensionDTO
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
     public function setId(int $id): void
     {
         $this->id = $id;
@@ -56,9 +40,6 @@ class GenerateExtensionDTO
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
@@ -72,25 +53,16 @@ class GenerateExtensionDTO
         return $this->config;
     }
 
-    /**
-     * @param string|null $config
-     */
     public function setConfig(?string $config): void
     {
         $this->config = $config;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCustomCommand(): ?string
     {
         return $this->customCommand;
     }
 
-    /**
-     * @param string|null $customCommand
-     */
     public function setCustomCommand(?string $customCommand): void
     {
         $this->customCommand = $customCommand;
@@ -104,24 +76,18 @@ class GenerateExtensionDTO
         return $this->special;
     }
 
-    /**
-     * @param bool $special
-     */
     public function setSpecial(bool $special): void
     {
         $this->special = $special;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
             'name' => $this->name,
             'config' => $this->config,
             'special' => $this->special,
-            'customCommand' => $this->customCommand
+            'customCommand' => $this->customCommand,
         ];
     }
 }

@@ -21,8 +21,7 @@ class NormalizerCollection
     }
 
     /**
-     * @param $data
-     * @return NormalizerInterface|null
+     * @param mixed $data
      */
     public function getNormalizer($data): ?NormalizerInterface
     {

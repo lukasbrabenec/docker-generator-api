@@ -10,25 +10,20 @@ class ApiResponse extends JsonResponse
 {
     /**
      * @param null $data
-     * @param array $errors
-     * @param int $status
-     * @param array $headers
-     * @param bool $json
      */
-    public function __construct($data = null, array $errors = [], int $status = Response::HTTP_OK, array $headers = [], bool $json = false)
-    {
+    public function __construct(
+        ?array $data = null,
+        array $errors = [],
+        int $status = Response::HTTP_OK,
+        array $headers = [],
+        bool $json = false
+    ) {
         parent::__construct($this->format($data, $errors, $status), $status, $headers, $json);
     }
 
-    /**
-     * @param null $data
-     * @param array $errors
-     * @param int $status
-     * @return array
-     */
-    private function format($data = null, $errors = [], $status = Response::HTTP_OK): array
+    private function format(?array $data = null, array $errors = [], int $status = Response::HTTP_OK): array
     {
-        if ($data === null) {
+        if (null === $data) {
             $data = new ArrayObject();
         }
         $message = Response::$statusTexts[$status];

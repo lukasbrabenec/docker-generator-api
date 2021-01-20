@@ -2,8 +2,8 @@
 
 namespace App\DataFixtures\Exception;
 
-use Throwable;
+use Exception;
 
-class FixturesException extends \Exception
+class FixturesException extends Exception
 {
 }

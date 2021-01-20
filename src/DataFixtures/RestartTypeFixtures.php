@@ -9,15 +9,12 @@ use Doctrine\Persistence\ObjectManager;
 class RestartTypeFixtures extends Fixture
 {
     const TYPES = [
-        "no",
-        "always",
-        "on-failure",
-        "unless-stopped"
+        'no',
+        'always',
+        'on-failure',
+        'unless-stopped',
     ];
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         foreach (self::TYPES as $type) {

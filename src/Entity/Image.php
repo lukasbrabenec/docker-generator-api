@@ -70,9 +70,6 @@ class Image
         $this->code = $code;
     }
 
-    /**
-     * @return string
-     */
     public function getDockerfileLocation(): ?string
     {
         return $this->dockerfileLocation;

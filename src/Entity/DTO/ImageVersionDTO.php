@@ -17,11 +17,11 @@ class ImageVersionDTO implements DataTransferObjectInterface
 
     private ?string $version;
 
-    private ?string $imageName;
+    private ?string $imageName = null;
 
     private ?string $imageCode;
 
-    private ?string $dockerfileLocation;
+    private ?string $dockerfileLocation = null;
 
     private ?string $dockerfileText = null;
 

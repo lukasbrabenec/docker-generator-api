@@ -89,9 +89,9 @@ class GenerateController extends BaseController
     private function mergeImageVersion(ImageVersion $imageVersion, ImageVersionDTO $imageVersionDTO): void
     {
         $imageVersionDTO->setVersion($imageVersion->getVersion());
-        $imageVersionDTO->setImageName($imageVersion->getImage()->getName());
+        $imageVersionDTO->setImageName($imageVersionDTO->getImageName() ? str_replace(' ', '_', $imageVersionDTO->getImageName()) : $imageVersion->getImage()->getName());
         $imageVersionDTO->setImageCode($imageVersion->getImage()->getCode());
-        $imageVersionDTO->setDockerfileLocation($imageVersion->getImage()->getDockerfileLocation());
+        $imageVersionDTO->getDockerfileLocation($imageVersion->getImage()->getDockerfileLocation());
     }
 
     private function mergeExtensions(ImageVersion $imageVersion, ImageVersionDTO $imageVersionDTO): void

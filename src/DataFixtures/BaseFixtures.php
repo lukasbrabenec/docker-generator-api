@@ -19,7 +19,7 @@ abstract class BaseFixtures extends Fixture
         ObjectManager $manager,
         string $name,
         string $code,
-        string $dockerfileLocation = null
+        ?string $dockerfileLocation = null
     ): Image {
         $image = $manager->getRepository(Image::class)->findOneBy(['name' => $name]);
         if (!is_object($image)) {

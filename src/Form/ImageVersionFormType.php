@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,6 +18,7 @@ class ImageVersionFormType extends AbstractType
     {
         $builder
             ->add('imageVersionId', IntegerType::class)
+            ->add('imageName', TextType::class)
             ->add('environments', CollectionType::class, [
                 'entry_type' => EnvironmentFormType::class,
                 'allow_add' => true,

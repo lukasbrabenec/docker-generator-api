@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -39,18 +40,6 @@ class ImageVersion
      */
     private Collection $extensions;
 
-//    /**
-//     * @var Collection
-//     *
-//     * @ORM\ManyToMany(targetEntity="App\Entity\Extension")
-//     * @ORM\JoinTable(name="image_version_extension",
-//     *     joinColumns={@ORM\JoinColumn(name="image_version_id", referencedColumnName="id")},
-//     *     inverseJoinColumns={@ORM\JoinColumn(name="extension_id", referencedColumnName="id")}
-//     * )
-//     * @Groups({"default"})
-//     */
-//    private Collection $extensions;
-
     /**
      * @ORM\OneToMany(targetEntity="ImageEnvironment", mappedBy="imageVersion", cascade={"all"})
      * @Groups({"default"})
@@ -69,9 +58,7 @@ class ImageVersion
      */
     private Collection $ports;
 
-    /**
-     * ImageVersion constructor.
-     */
+    #[Pure]
     public function __construct()
     {
         $this->extensions = new ArrayCollection();

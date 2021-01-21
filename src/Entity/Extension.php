@@ -58,9 +58,6 @@ class Extension
         return $this->special;
     }
 
-    /**
-     * @return Extension
-     */
     public function setSpecial(bool $special): self
     {
         $this->special = $special;

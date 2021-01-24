@@ -41,7 +41,7 @@ class DockerComposeVersionValidator extends ConstraintValidator
 
         if (!is_object($dockerComposeVersion)) {
             $this->context->buildViolation($constraint->dockerComposeVersionNotExist)
-                ->setParameter('{{ dockerComposeVersionId }}', $dockerComposeVersionDTOId)
+                ->setParameter('{{ dockerComposeVersionID }}', $dockerComposeVersionDTOId)
                 ->addViolation();
         }
     }

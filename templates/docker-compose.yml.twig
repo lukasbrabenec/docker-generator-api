@@ -10,7 +10,7 @@ services:
         image: {{ imageVersion.imageCode }}:{{ imageVersion.version }}
             {%- endif ~%}
         container_name: {{ imageVersion.imageName|lower }}
-        restart : '{{ imageVersion.restartType }}'
+        restart : '{{ imageVersion.restartType.type }}'
         {%- if imageVersion.environments is defined and imageVersion.environments is not empty ~%}
         environment:
                 {%- for environment in imageVersion.environments ~%}
@@ -43,4 +43,10 @@ services:
                     {%- endif ~%}
                     {%- endfor ~%}
             {%- endif ~%}
+        {%- if imageVersion.dependsOn is defined and imageVersion.dependsOn is not empty ~%}
+        depends_on:
+                {%- for dependency in imageVersion.dependsOn ~%}
+            - {{ dependency|lower }}
+                {%- endfor ~%}
+        {%- endif ~%}
         {%- endfor ~%}

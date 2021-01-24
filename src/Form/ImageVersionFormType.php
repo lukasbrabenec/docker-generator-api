@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\DTO\ImageVersionDTO;
-use App\Entity\RestartType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -17,7 +15,7 @@ class ImageVersionFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('imageVersionId', IntegerType::class)
+            ->add('id', IntegerType::class)
             ->add('imageName', TextType::class)
             ->add('environments', CollectionType::class, [
                 'entry_type' => EnvironmentFormType::class,
@@ -39,9 +37,11 @@ class ImageVersionFormType extends AbstractType
                 'allow_add' => true,
                 'error_bubbling' => false,
             ])
-            ->add('restartType', EntityType::class, [
-                'class' => RestartType::class,
-                'choice_label' => 'type',
+            ->add('restartType', RestartTypeFormType::class)
+            ->add('dependsOn', CollectionType::class, [
+                'entry_type' => TextType::class,
+                'allow_add' => true,
+                'error_bubbling' => false,
             ])
             ;
     }
@@ -50,6 +50,7 @@ class ImageVersionFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ImageVersionDTO::class,
+            'allow_extra_fields' => true,
         ]);
     }
 

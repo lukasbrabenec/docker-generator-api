@@ -2,7 +2,6 @@
 
 namespace App\Entity\DTO;
 
-use App\Entity\RestartType;
 use App\Validator\Constraints\ImageVersion;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,17 +12,22 @@ class ImageVersionDTO implements DataTransferObjectInterface
     /**
      * @Assert\NotBlank()
      */
-    private ?int $imageVersionId = null;
+    private ?int $id = null;
 
-    private ?string $version;
+    private string $version;
 
     private ?string $imageName = null;
 
-    private ?string $imageCode;
+    private string $imageCode;
 
-    private ?string $dockerfileLocation = null;
+    private ?string $dockerfileLocation;
 
     private ?string $dockerfileText = null;
+
+    /**
+     * @var int[]
+     */
+    private array $otherImageIDsForGeneration = [];
 
     /**
      * @var ExtensionDTO[]
@@ -45,26 +49,34 @@ class ImageVersionDTO implements DataTransferObjectInterface
      */
     private array $ports;
 
+    private array $dependsOn = [];
+
     /**
      * @Assert\NotBlank()
      */
-    private RestartType $restartType;
+    private RestartTypeDTO $restartType;
 
-    public function getImageVersionId(): ?int
+    public function getId(): ?int
     {
-        return $this->imageVersionId;
+        return $this->id;
     }
 
-    public function setImageVersionId(int $imageVersionId)
+    public function setId(int $id)
     {
-        $this->imageVersionId = $imageVersionId;
+        $this->id = $id;
     }
 
+    /**
+     * @return EnvironmentDTO[]
+     */
     public function getEnvironments(): array
     {
         return $this->environments;
     }
 
+    /**
+     * @param EnvironmentDTO $environments
+     */
     public function setEnvironments(array $environments)
     {
         $this->environments = $environments;
@@ -75,15 +87,12 @@ class ImageVersionDTO implements DataTransferObjectInterface
         $this->environments[] = $environment;
     }
 
-    /**
-     * @return string
-     */
-    public function getVersion(): ?string
+    public function getVersion(): string
     {
         return $this->version;
     }
 
-    public function setVersion(?string $version): void
+    public function setVersion(string $version): void
     {
         $this->version = $version;
     }
@@ -101,15 +110,12 @@ class ImageVersionDTO implements DataTransferObjectInterface
         $this->imageName = $imageName;
     }
 
-    /**
-     * @return string
-     */
-    public function getImageCode(): ?string
+    public function getImageCode(): string
     {
         return $this->imageCode;
     }
 
-    public function setImageCode(?string $imageCode): void
+    public function setImageCode(string $imageCode): void
     {
         $this->imageCode = $imageCode;
     }
@@ -137,50 +143,88 @@ class ImageVersionDTO implements DataTransferObjectInterface
         $this->dockerfileText = $dockerfileText;
     }
 
+    /**
+     * @return ExtensionDTO[]
+     */
     public function getExtensions(): array
     {
         return $this->extensions;
     }
 
+    /**
+     * @param ExtensionDTO[] $extensions
+     */
     public function setExtensions(array $extensions)
     {
         $this->extensions = $extensions;
     }
 
     /**
-     * @return array
+     * @return VolumeDTO[]
      */
     public function getVolumes(): ?array
     {
         return $this->volumes;
     }
 
+    /**
+     * @param VolumeDTO $volumes
+     */
     public function setVolumes(array $volumes): void
     {
         $this->volumes = $volumes;
     }
 
     /**
-     * @return array
+     * @return PortDTO[]
      */
     public function getPorts(): ?array
     {
         return $this->ports;
     }
 
+    /**
+     * @param PortDTO[] $ports
+     */
     public function setPorts(array $ports): void
     {
         $this->ports = $ports;
     }
 
-    public function getRestartType(): RestartType
+    public function getRestartType(): RestartTypeDTO
     {
         return $this->restartType;
     }
 
-    public function setRestartType(RestartType $restartType): void
+    public function setRestartType(RestartTypeDTO $restartType): void
     {
         $this->restartType = $restartType;
+    }
+
+    public function getDependsOn(): array
+    {
+        return $this->dependsOn;
+    }
+
+    public function setDependsOn(array $dependsOn): void
+    {
+        $this->dependsOn = $dependsOn;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getOtherImageIDsForGeneration(): array
+    {
+        return $this->otherImageIDsForGeneration;
+    }
+
+    /**
+     * @param int[] $otherImageIDsForGeneration
+     */
+    public function setOtherImageIDsForGeneration(array $otherImageIDsForGeneration): void
+    {
+        $this->otherImageIDsForGeneration = $otherImageIDsForGeneration;
     }
 
     #[ArrayShape([
@@ -192,16 +236,17 @@ class ImageVersionDTO implements DataTransferObjectInterface
         'restartType' => 'string',
         'anyPortExposedToContainers' => 'bool',
         'anyPortExposedToHost' => 'bool',
+        'dependsOn' => 'string[]',
     ])]
     public function toArray(): array
     {
         $array = [
-            'id' => $this->imageVersionId,
+            'id' => $this->id,
             'version' => $this->version,
             'imageName' => $this->imageName,
             'imageCode' => $this->imageCode,
             'dockerfileLocation' => $this->dockerfileLocation,
-            'restartType' => $this->restartType->getType(),
+            'restartType' => $this->restartType->toArray(),
         ];
 
         foreach ($this->environments as $environment) {
@@ -256,6 +301,10 @@ class ImageVersionDTO implements DataTransferObjectInterface
         }
         $array['anyPortExposedToHost'] = $anyPortExposedToHost;
         $array['anyPortExposedToContainers'] = $anyPortExposedToContainers;
+
+        foreach ($this->dependsOn as $dependency) {
+            $array['dependsOn'][] = $dependency;
+        }
 
         return $array;
     }

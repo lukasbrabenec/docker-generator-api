@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
 class DockerComposeVersion extends Constraint
 {
     public string $notBlank = 'This value should not be blank.';
-    public string $dockerComposeVersionNotExist = 'DockerComposeVersion ID {{ dockerComposeVersionId }} does not exist';
+    public string $dockerComposeVersionNotExist = 'DockerComposeVersion ID {{ dockerComposeVersionID }} does not exist';
 }

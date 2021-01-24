@@ -32,6 +32,16 @@ class ImagePort
     private int $outward;
 
     /**
+     * @Groups({"default"})
+     */
+    private bool $exposedToHost = false;
+
+    /**
+     * @Groups({"default"})
+     */
+    private bool $exposedToContainers = true;
+
+    /**
      * @ORM\ManyToOne(targetEntity="ImageVersion", cascade={"all"})
      * @ORM\JoinColumn(name="image_version_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
@@ -72,6 +82,30 @@ class ImagePort
     public function setImageVersion(ImageVersion $imageVersion): self
     {
         $this->imageVersion = $imageVersion;
+
+        return $this;
+    }
+
+    public function getExposedToHost(): ?bool
+    {
+        return $this->exposedToHost;
+    }
+
+    public function setExposedToHost(bool $exposedToHost): self
+    {
+        $this->exposedToHost = $exposedToHost;
+
+        return $this;
+    }
+
+    public function getExposedToContainers(): bool
+    {
+        return $this->exposedToContainers;
+    }
+
+    public function setExposedToContainers(bool $exposedToContainers): self
+    {
+        $this->exposedToContainers = $exposedToContainers;
 
         return $this;
     }

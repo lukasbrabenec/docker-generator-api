@@ -58,6 +58,12 @@ class ImageVersion
      */
     private Collection $ports;
 
+    /**
+     * @var int[]
+     * @Groups({"default"})
+     */
+    private array $dependsOn = [];
+
     #[Pure]
     public function __construct()
     {
@@ -164,5 +170,21 @@ class ImageVersion
     public function addPort(ImagePort $port): void
     {
         $this->ports->add($port);
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getDependsOn(): array
+    {
+        return $this->dependsOn;
+    }
+
+    /**
+     * @param int[] $dependsOn
+     */
+    public function setDependsOn(array $dependsOn): void
+    {
+        $this->dependsOn = $dependsOn;
     }
 }

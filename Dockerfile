@@ -2,9 +2,8 @@ FROM php:8-fpm-alpine
 
 COPY wait-for-it.sh /usr/bin/wait-for-it
 
-RUN chmod +x /usr/bin/wait-for-it
-
-RUN apk --update --no-cache add git zip
+RUN chmod +x /usr/bin/wait-for-it &&\
+    apk --update --no-cache add git zip
 
 COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
 COPY --from=composer /usr/bin/composer /usr/bin/composer

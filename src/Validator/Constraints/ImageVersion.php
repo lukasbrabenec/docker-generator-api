@@ -11,13 +11,17 @@ class ImageVersion extends Constraint
     // @codingStandardsIgnoreStart
     public string $notBlank = 'This value should not be blank.';
     public string $imageVersionType = 'This value should be of type integer.';
-    public string $imageVersionMissing = 'ImageVersion ID {{ imageVersionId }} does not exist';
-    public string $badExtension = 'Extension ID {{ extensionId }} does not exist for ImageVersion {{ imageVersionId }}';
-    public string $badEnvironment = 'Environment {{ environmentId }} does not exist for ImageVersion {{ imageVersionId }}';
-    public string $missingRequiredEnvironment = 'Required environment `{{ environmentCode }}`, ID {{ environmentId }} missing for ImageVersion {{ imageVersionId }}';
-    public string $badPort = 'Port ID {{ portId }} does not exist for ImageVersion {{ imageVersionId }}';
+    public string $imageVersionMissing = 'ImageVersion ID {{ imageVersionID }} does not exist.';
+    public string $badExtension = 'Extension ID {{ extensionID }} does not exist for ImageVersion {{ imageVersionID }}.';
+    public string $badEnvironment = 'Environment {{ environmentID }} does not exist for ImageVersion {{ imageVersionID }}.';
+    public string $missingRequiredEnvironment = 'Required environment `{{ environmentCode }}`, ID {{ environmentID }} missing for ImageVersion {{ imageVersionID }}.';
+    public string $badPort = 'Port ID {{ portID }} does not exist for ImageVersion {{ imageVersionID }}';
     public string $missingInwardPort = 'Inward port is required when is exposed to host';
     public string $missingInwardAndOutwardPort = 'Inward and outward port is required when is exposed to other containers';
+    public string $badRestartType = 'Restart Type ID {{ restartTypeID }}, type {{ restartTypeType }} does not exist.';
+    public string $badDependency = 'Image ID {{ dependencyID }}, that {{ imageName }} is set to depend on, doesn\'t exist.';
+    public string $selfDependency = 'Image {{ imageName }} cannot be dependent on self.';
+    public string $dependencyMissing = 'Dependent image {{ dependencyName }} is missing.';
     // @codingStandardsIgnoreEnd
 
     public function getTargets(): string

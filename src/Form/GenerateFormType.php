@@ -6,7 +6,7 @@ use App\Entity\ComposeFormatVersion;
 use App\Entity\DTO\GenerateDTO;
 use App\Entity\DTO\ImageVersionDTO;
 use App\Entity\Image;
-use App\Entity\ImageEnvironment;
+use App\Entity\Environment;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVersionExtension;
 use Doctrine\ORM\EntityManagerInterface;
@@ -100,7 +100,7 @@ class GenerateFormType extends AbstractType
         $imageVersionDTO->setDockerfileLocation($imageVersion->getImage()->getDockerfileLocation());
     }
 
-    private function applyExtensionDefaults(imageVersionDTO $imageVersionDTO, ImageVersion $imageVersion): void
+    private function applyExtensionDefaults(ImageVersionDTO $imageVersionDTO, ImageVersion $imageVersion): void
     {
         foreach ($imageVersionDTO->getExtensions() as $extensionDTO) {
             $imageVersionExtension = $this->getEntityManager()
@@ -120,7 +120,7 @@ class GenerateFormType extends AbstractType
     private function applyEnvironmentDefaults(ImageVersionDTO $imageVersionDTO): void
     {
         foreach ($imageVersionDTO->getEnvironments() as $environmentDTO) {
-            $environment = $this->getEntityManager()->getRepository(ImageEnvironment::class)
+            $environment = $this->getEntityManager()->getRepository(Environment::class)
                 ->find($environmentDTO->getId());
             $environmentDTO->setCode($environment->getCode());
         }

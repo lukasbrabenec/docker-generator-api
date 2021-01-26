@@ -7,9 +7,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="image_environment")
+ * @ORM\Table(name="environment")
  */
-class ImageEnvironment
+class Environment
 {
     /**
      * @ORM\Id()

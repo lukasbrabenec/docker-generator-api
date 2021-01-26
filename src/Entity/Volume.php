@@ -7,9 +7,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="image_volume")
+ * @ORM\Table(name="volume")
  */
-class ImageVolume
+class Volume
 {
     /**
      * @ORM\Id()

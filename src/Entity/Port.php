@@ -7,9 +7,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="image_port")
+ * @ORM\Table(name="port")
  */
-class ImagePort
+class Port
 {
     /**
      * @ORM\Id()

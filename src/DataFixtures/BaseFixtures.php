@@ -5,11 +5,11 @@ namespace App\DataFixtures;
 use App\DataFixtures\Exception\FixturesException;
 use App\Entity\Extension;
 use App\Entity\Image;
-use App\Entity\ImageEnvironment;
-use App\Entity\ImagePort;
+use App\Entity\Environment;
+use App\Entity\Port;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVersionExtension;
-use App\Entity\ImageVolume;
+use App\Entity\Volume;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -50,8 +50,8 @@ abstract class BaseFixtures extends Fixture
         string $defaultValue = null,
         bool $hidden = false,
         bool $required = false
-    ): ImageEnvironment {
-        $imageEnvironment = new ImageEnvironment();
+    ): Environment {
+        $imageEnvironment = new Environment();
         $imageEnvironment->setCode($code);
         $imageEnvironment->setImageVersion($imageVersion);
         $imageEnvironment->setDefaultValue($defaultValue);
@@ -67,8 +67,8 @@ abstract class BaseFixtures extends Fixture
         ImageVersion $imageVersion,
         int $inward,
         int $outward
-    ): ImagePort {
-        $imagePort = new ImagePort();
+    ): Port {
+        $imagePort = new Port();
         $imagePort->setImageVersion($imageVersion);
         $imagePort->setInward($inward);
         $imagePort->setOutward($outward);
@@ -115,8 +115,8 @@ abstract class BaseFixtures extends Fixture
         ImageVersion $imageVersion,
         string $hostPath,
         string $containerPath
-    ): ImageVolume {
-        $imageVolume = new ImageVolume();
+    ): Volume {
+        $imageVolume = new Volume();
         $imageVolume->setImageVersion($imageVersion);
         $imageVolume->setHostPath($hostPath);
         $imageVolume->setContainerPath($containerPath);

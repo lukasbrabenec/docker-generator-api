@@ -5,8 +5,8 @@ namespace App\Validator\Constraints;
 use App\Entity\DTO\ImageVersionDTO;
 use App\Entity\DTO\PortDTO;
 use App\Entity\Image;
-use App\Entity\ImageEnvironment;
-use App\Entity\ImagePort;
+use App\Entity\Environment;
+use App\Entity\Port;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVersionExtension;
 use App\Entity\RestartType;
@@ -92,8 +92,8 @@ class ImageVersionValidator extends ConstraintValidator
         ImageVersion $imageVersion,
     ) {
         foreach ($generateImageVersionDTO->getEnvironments() as $environmentDTO) {
-            /** @var ImageEnvironment $environment */
-            $environment = $this->entityManager->getRepository(ImageEnvironment::class)->find($environmentDTO->getId());
+            /** @var Environment $environment */
+            $environment = $this->entityManager->getRepository(Environment::class)->find($environmentDTO->getId());
             if (!is_object($environment) || $environment->getImageVersion()->getId() !== $imageVersion->getId()) {
                 $this->context->buildViolation($constraint->badEnvironment)
                     ->setParameter('{{ environmentID }}', $environmentDTO->getId())
@@ -102,12 +102,12 @@ class ImageVersionValidator extends ConstraintValidator
                     ->addViolation();
             }
         }
-        $requiredEnvironments = $this->entityManager->getRepository(ImageEnvironment::class)->findBy([
+        $requiredEnvironments = $this->entityManager->getRepository(Environment::class)->findBy([
             'imageVersion' => $imageVersion,
             'required' => true,
             'hidden' => false,
         ]);
-        /** @var ImageEnvironment $requiredEnvironment */
+        /** @var Environment $requiredEnvironment */
         foreach ($requiredEnvironments as $requiredEnvironment) {
             $exist = false;
             foreach ($generateImageVersionDTO->getEnvironments() as $environmentDTO) {
@@ -133,8 +133,8 @@ class ImageVersionValidator extends ConstraintValidator
     ) {
         /** @var PortDTO $portDTO */
         foreach ($imageVersionDTO->getPorts() as $portDTO) {
-            /** @var ImagePort $port */
-            $port = $this->entityManager->getRepository(ImagePort::class)->find($portDTO->getId());
+            /** @var Port $port */
+            $port = $this->entityManager->getRepository(Port::class)->find($portDTO->getId());
             if (!is_object($port) || $port->getImageVersion()->getId() !== $imageVersionID) {
                 $this->context->buildViolation($constraint->badPort)
                     ->setParameter('{{ portID }}', $portDTO->getId())

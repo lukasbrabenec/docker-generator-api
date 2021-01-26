@@ -41,19 +41,19 @@ class ImageVersion
     private Collection $extensions;
 
     /**
-     * @ORM\OneToMany(targetEntity="ImageEnvironment", mappedBy="imageVersion", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="Environment", mappedBy="imageVersion", cascade={"all"})
      * @Groups({"default"})
      */
     private Collection $environments;
 
     /**
-     * @ORM\OneToMany(targetEntity="ImageVolume", mappedBy="imageVersion", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="Volume", mappedBy="imageVersion", cascade={"all"})
      * @Groups({"default"})
      */
     private Collection $volumes;
 
     /**
-     * @ORM\OneToMany(targetEntity="ImagePort", mappedBy="imageVersion", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="Port", mappedBy="imageVersion", cascade={"all"})
      * @Groups({"default"})
      */
     private Collection $ports;
@@ -137,7 +137,7 @@ class ImageVersion
         return $this;
     }
 
-    public function addEnvironment(ImageEnvironment $environment): void
+    public function addEnvironment(Environment $environment): void
     {
         $this->environments->add($environment);
     }
@@ -152,7 +152,7 @@ class ImageVersion
         $this->volumes = $volumes;
     }
 
-    public function addVolume(ImageVolume $volume): void
+    public function addVolume(Volume $volume): void
     {
         $this->volumes->add($volume);
     }
@@ -167,7 +167,7 @@ class ImageVersion
         $this->ports = $ports;
     }
 
-    public function addPort(ImagePort $port): void
+    public function addPort(Port $port): void
     {
         $this->ports->add($port);
     }

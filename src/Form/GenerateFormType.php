@@ -120,9 +120,11 @@ class GenerateFormType extends AbstractType
     private function applyEnvironmentDefaults(ImageVersionDTO $imageVersionDTO): void
     {
         foreach ($imageVersionDTO->getEnvironments() as $environmentDTO) {
-            $environment = $this->getEntityManager()->getRepository(Environment::class)
-                ->find($environmentDTO->getId());
-            $environmentDTO->setCode($environment->getCode());
+            if ($environmentDTO->getId() !== null) {
+                $environment = $this->getEntityManager()->getRepository(Environment::class)
+                    ->find($environmentDTO->getId());
+                $environmentDTO->setCode($environment->getCode());
+            }
         }
     }
 

@@ -18,4 +18,9 @@ class ImageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Image::class);
     }
+
+    public function findAllAndOrderBy(array $orderBy): array
+    {
+        return $this->findBy([], $orderBy);
+    }
 }

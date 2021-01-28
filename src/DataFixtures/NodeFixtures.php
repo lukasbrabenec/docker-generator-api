@@ -23,6 +23,24 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
         '10-slim',
     ];
 
+    const PHP_VERSIONS_EXTENSION_EXCLUDE_MAP = [
+        'latest' => [
+            'bash',
+        ],
+        '15' => [
+            'bash',
+        ],
+        '14' => [
+            'bash',
+        ],
+        '12' => [
+            'bash',
+        ],
+        '10' => [
+            'bash',
+        ],
+    ];
+
     const ENVIRONMENT_MAP = [
         'NODE_ENV' => [
             'default' => 'production',
@@ -32,10 +50,6 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
     ];
 
     const SPECIAL_EXTENSIONS_OPTIONS_MAP = [
-        'npm' => [
-            'customCommand' => null,
-            'config' => null,
-        ],
         'tsc-watch' => [
             'customCommand' => null,
             'config' => null,
@@ -139,6 +153,10 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
     ];
 
     const GENERAL_EXTENSIONS_OPTIONS_MAP = [
+        'bash' => [
+            'customCommand' => 'apk add --no-cache bash',
+            'config' => null,
+        ],
         'git' => [
             'customCommand' => null,
             'config' => null,
@@ -154,7 +172,7 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $image = $this->getOrCreateImage($manager, 'NodeJS', 'node', './node/');
+        $image = $this->getOrCreateImage($manager, 'NodeJS', 'node', 'Development Environment', './node/');
 
         foreach (self::SPECIAL_EXTENSIONS_OPTIONS_MAP as $extensionName => $extensionOptions) {
             $this->createExtension($manager, $extensionName, true, $extensionOptions['customCommand']);
@@ -191,8 +209,17 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
                 self::GENERAL_EXTENSIONS_OPTIONS_MAP
             ) as $extensionName => $extensionOptions
             ) {
-                $extension = $this->getExtension($manager, $extensionName);
-                $this->createImageVersionExtension($manager, $imageVersion, $extension, $extensionOptions['config']);
+                if (isset(self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP[$version])
+                    && !in_array($extensionName, self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP[$version])
+                ) {
+                    $extension = $this->getExtension($manager, $extensionName);
+                    $this->createImageVersionExtension(
+                        $manager,
+                        $imageVersion,
+                        $extension,
+                        $extensionOptions['config']
+                    );
+                }
             }
         }
 

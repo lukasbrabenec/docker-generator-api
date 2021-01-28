@@ -4,9 +4,9 @@ namespace App\Validator\Constraints;
 
 use App\Entity\DTO\ImageVersionDTO;
 use App\Entity\DTO\PortDTO;
-use App\Entity\Image;
+use App\Entity\DTO\VolumeDTO;
 use App\Entity\Environment;
-use App\Entity\Port;
+use App\Entity\Image;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVersionExtension;
 use App\Entity\RestartType;
@@ -59,7 +59,9 @@ class ImageVersionValidator extends ConstraintValidator
         // environments
         $this->validateEnvironments($constraint, $imageVersionDTO, $imageVersion);
         // ports
-        $this->validatePorts($constraint, $imageVersionDTO, $imageVersionId);
+        $this->validatePorts($constraint, $imageVersionDTO);
+        // volumes
+        $this->validateVolumes($constraint, $imageVersionDTO);
         // restart type
         $this->validateRestartType($constraint, $imageVersionDTO);
         // dependencies
@@ -92,6 +94,22 @@ class ImageVersionValidator extends ConstraintValidator
         ImageVersion $imageVersion,
     ) {
         foreach ($generateImageVersionDTO->getEnvironments() as $environmentDTO) {
+            if (null === $environmentDTO->getId()) {
+                $this->context->buildViolation($constraint->emptyProperty)
+                    ->setParameter('{{ propertyName }}', 'Environment ID')
+                    ->atPath('environments')
+                    ->addViolation();
+
+                return;
+            }
+
+            if (null === $environmentDTO->getValue()) {
+                $this->context->buildViolation($constraint->emptyProperty)
+                    ->setParameter('{{ propertyName }}', sprintf('%s value', $environmentDTO->getCode()))
+                    ->atPath('environments')
+                    ->addViolation();
+            }
+
             /** @var Environment $environment */
             $environment = $this->entityManager->getRepository(Environment::class)->find($environmentDTO->getId());
             if (!is_object($environment) || $environment->getImageVersion()->getId() !== $imageVersion->getId()) {
@@ -129,29 +147,38 @@ class ImageVersionValidator extends ConstraintValidator
     private function validatePorts(
         ImageVersionConstraint $constraint,
         ImageVersionDTO $imageVersionDTO,
-        int $imageVersionID,
     ) {
         /** @var PortDTO $portDTO */
         foreach ($imageVersionDTO->getPorts() as $portDTO) {
-            /** @var Port $port */
-            $port = $this->entityManager->getRepository(Port::class)->find($portDTO->getId());
-            if (!is_object($port) || $port->getImageVersion()->getId() !== $imageVersionID) {
-                $this->context->buildViolation($constraint->badPort)
-                    ->setParameter('{{ portID }}', $portDTO->getId())
-                    ->setParameter('{{ imageVersionID }}', $imageVersionID)
+            if ($portDTO->isExposedToHost() && (!$portDTO->getInward() || !$portDTO->getOutward())) {
+                $this->context->buildViolation($constraint->missingInwardAndOutwardPort)
                     ->atPath('ports')
                     ->addViolation();
             }
-            if ($portDTO->isExposedToHost()
-                && !$portDTO->getInward()
-                && $portDTO->isExposedToContainers()
-                && !$portDTO->getOutward()
-            ) {
-                $this->context->buildViolation($constraint->missingInwardAndOutwardPort)
+            if ($portDTO->isExposedToContainers() && !$portDTO->getOutward()) {
+                $this->context->buildViolation($constraint->missingInwardPort)
+                    ->atPath('ports')
                     ->addViolation();
             }
-            if ($portDTO->isExposedToHost() && !$portDTO->getInward()) {
-                $this->context->buildViolation($constraint->missingInwardPort)
+        }
+    }
+
+    private function validateVolumes(
+        ImageVersionConstraint $constraint,
+        ImageVersionDTO $imageVersionDTO,
+    ) {
+        /** @var VolumeDTO $volumeDTO */
+        foreach ($imageVersionDTO->getVolumes() as $volumeDTO) {
+            if (null === $volumeDTO->getContainerPath()) {
+                $this->context->buildViolation($constraint->emptyProperty)
+                    ->setParameter('{{ propertyName }}', 'Container path')
+                    ->atPath('volumes')
+                    ->addViolation();
+            }
+            if (null === $volumeDTO->getHostPath()) {
+                $this->context->buildViolation($constraint->emptyProperty)
+                    ->setParameter('{{ propertyName }}', 'Host path')
+                    ->atPath('volumes')
                     ->addViolation();
             }
         }

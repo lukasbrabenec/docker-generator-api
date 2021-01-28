@@ -64,7 +64,7 @@ class PostgresFixtures extends BaseFixtures
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->getOrCreateImage($manager, 'PostgreSQL', 'postgres');
+        $image = $this->getOrCreateImage($manager, 'PostgreSQL', 'postgres', 'Database');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->createImageVersion($manager, $image, $version);

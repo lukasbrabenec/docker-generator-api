@@ -12,7 +12,7 @@ class ImageController extends BaseController
     #[Route('/images', requirements: ['version' => 'v1'], methods: ['GET'])]
     public function list(ImageRepository $imageRepository): ApiResponse
     {
-        $data = $this->normalize($imageRepository->findAll(), ['default']);
+        $data = $this->normalize($imageRepository->findAllAndOrderBy(['group' => 'ASC']), ['default']);
 
         return new ApiResponse($data);
     }

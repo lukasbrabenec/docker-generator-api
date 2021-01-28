@@ -44,7 +44,7 @@ class MongoDBFixtures extends BaseFixtures
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->getOrCreateImage($manager, 'MongoDB', 'mongo');
+        $image = $this->getOrCreateImage($manager, 'MongoDB', 'mongo', 'Database');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->createImageVersion($manager, $image, $version);

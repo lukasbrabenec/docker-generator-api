@@ -17,7 +17,7 @@ class MailCatcherFixtures extends BaseFixtures
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->getOrCreateImage($manager, 'MailCatcher', 'schickling/mailcatcher');
+        $image = $this->getOrCreateImage($manager, 'MailCatcher', 'schickling/mailcatcher', 'Utilities');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->createImageVersion($manager, $image, $version);

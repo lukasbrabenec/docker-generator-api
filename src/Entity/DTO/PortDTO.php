@@ -10,10 +10,10 @@ class PortDTO implements DataTransferObjectInterface
     #[Assert\NotBlank]
     private int $id;
 
-    private int $inward;
+    private ?int $inward = 0;
 
     #[Assert\NotBlank]
-    private int $outward;
+    private ?int $outward = 0;
 
     private bool $exposedToContainers = true;
 
@@ -29,22 +29,22 @@ class PortDTO implements DataTransferObjectInterface
         $this->id = $id;
     }
 
-    public function getInward(): int
+    public function getInward(): ?int
     {
         return $this->inward;
     }
 
-    public function setInward(int $inward)
+    public function setInward(?int $inward)
     {
         $this->inward = $inward;
     }
 
-    public function getOutward(): int
+    public function getOutward(): ?int
     {
         return $this->outward;
     }
 
-    public function setOutward(int $outward): void
+    public function setOutward(?int $outward): void
     {
         $this->outward = $outward;
     }

@@ -2,23 +2,17 @@
 
 namespace App\Entity\DTO;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use JetBrains\PhpStorm\ArrayShape;
 
 class EnvironmentDTO implements DataTransferObjectInterface
 {
-    /**
-     * @Assert\NotBlank()
-     */
-    private int $id;
+    private ?int $id = null;
 
     private string $code;
 
-    /**
-     * @Assert\NotBlank()
-     */
-    private string $value;
+    private ?string $value = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -38,16 +32,20 @@ class EnvironmentDTO implements DataTransferObjectInterface
         $this->code = $code;
     }
 
-    public function getValue(): string
+    public function getValue(): ?string
     {
         return $this->value;
     }
 
-    public function setValue(string $value)
+    public function setValue(?string $value)
     {
         $this->value = $value;
     }
 
+    #[ArrayShape([
+        'name' => 'string',
+        'value' => 'string',
+    ])]
     public function toArray(): array
     {
         return [

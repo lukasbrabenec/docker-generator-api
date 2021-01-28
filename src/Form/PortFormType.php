@@ -14,7 +14,6 @@ class PortFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', IntegerType::class)
             ->add('inward', IntegerType::class)
             ->add('outward', IntegerType::class)
             ->add('exposedToContainers', CheckboxType::class)
@@ -26,6 +25,7 @@ class PortFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => PortDTO::class,
+            'allow_extra_fields' => true,
         ]);
     }
 

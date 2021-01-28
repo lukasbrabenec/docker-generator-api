@@ -34,6 +34,7 @@ class RestartTypeDTO implements DataTransferObjectInterface
 
     #[ArrayShape([
         'id' => 'int',
+        'type' => 'string'
     ])]
     public function toArray(): array
     {

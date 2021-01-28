@@ -6,7 +6,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class PhpFixtures extends BaseFixtures
 {
-    const PHP_VERSIONS_EXTENSION_EXCLUDE_MAP = [
+    const VERSIONS_EXTENSION_EXCLUDE_MAP = [
         '5.6-alpine' => [
             'apcu_bc',
             'cmark',
@@ -18,6 +18,8 @@ class PhpFixtures extends BaseFixtures
             'snuffleupagus',
             'sqlsrv',
             'tdlib',
+
+            'symfony',
         ],
         '5.6-apache' => [
             'apcu_bc',
@@ -30,6 +32,9 @@ class PhpFixtures extends BaseFixtures
             'snuffleupagus',
             'sqlsrv',
             'tdlib',
+
+            'bash',
+            'symfony + bash',
         ],
         '5.6-fpm' => [
             'apcu_bc',
@@ -42,6 +47,9 @@ class PhpFixtures extends BaseFixtures
             'snuffleupagus',
             'sqlsrv',
             'tdlib',
+
+            'bash',
+            'symfony + bash',
         ],
         '5.6-fpm-alpine' => [
             'apcu_bc',
@@ -54,6 +62,8 @@ class PhpFixtures extends BaseFixtures
             'snuffleupagus',
             'sqlsrv',
             'tdlib',
+
+            'symfony',
         ],
         '7-alpine' => [
             'ffi',
@@ -61,6 +71,8 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'symfony',
         ],
         '7-apache' => [
             'ffi',
@@ -68,6 +80,9 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'bash',
+            'symfony + bash',
         ],
         '7-fpm' => [
             'ffi',
@@ -75,6 +90,9 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'bash',
+            'symfony + bash',
         ],
         '7-fpm-alpine' => [
             'ffi',
@@ -82,6 +100,8 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'symfony',
         ],
         '7.1-alpine' => [
             'ffi',
@@ -89,6 +109,8 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'symfony',
         ],
         '7.1-apache' => [
             'ffi',
@@ -96,6 +118,9 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'bash',
+            'symfony + bash',
         ],
         '7.1-fpm' => [
             'ffi',
@@ -103,6 +128,9 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'bash',
+            'symfony + bash',
         ],
         '7.1-fpm-alpine' => [
             'ffi',
@@ -110,6 +138,8 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'symfony'
         ],
         '7.2-alpine' => [
             'enchant',
@@ -118,6 +148,8 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'symfony'
         ],
         '7.2-apache' => [
             'ffi',
@@ -125,6 +157,9 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'bash',
+            'symfony + bash',
         ],
         '7.2-fpm' => [
             'ffi',
@@ -132,6 +167,9 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'bash',
+            'symfony + bash',
         ],
         '7.2-fpm-alpine' => [
             'ffi',
@@ -139,6 +177,8 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'symfony'
         ],
         '7.3-alpine' => [
             'enchant',
@@ -147,6 +187,8 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'symfony'
         ],
         '7.3-apache' => [
             'ffi',
@@ -154,6 +196,9 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'bash',
+            'symfony + bash',
         ],
         '7.3-fpm' => [
             'ffi',
@@ -161,6 +206,9 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'bash',
+            'symfony + bash',
         ],
         '7.3-fpm-alpine' => [
             'ffi',
@@ -168,6 +216,8 @@ class PhpFixtures extends BaseFixtures
             'mssql',
             'mysql',
             'sybase_ct',
+
+            'symfony',
         ],
         '7.4-alpine' => [
             'enchant',
@@ -178,6 +228,8 @@ class PhpFixtures extends BaseFixtures
             'recode',
             'sybase_ct',
             'wddx',
+
+            'symfony',
         ],
         '7.4-apache' => [
             'interbase',
@@ -187,6 +239,9 @@ class PhpFixtures extends BaseFixtures
             'recode',
             'sybase_ct',
             'wddx',
+
+            'bash',
+            'symfony + bash',
         ],
         '7.4-fpm' => [
             'interbase',
@@ -196,6 +251,9 @@ class PhpFixtures extends BaseFixtures
             'recode',
             'sybase_ct',
             'wddx',
+
+            'bash',
+            'symfony + bash',
         ],
         '7.4-fpm-alpine' => [
             'interbase',
@@ -205,6 +263,8 @@ class PhpFixtures extends BaseFixtures
             'recode',
             'sybase_ct',
             'wddx',
+
+            'symfony'
         ],
         '8.0-alpine' => [
             'apcu_bc',
@@ -231,6 +291,8 @@ class PhpFixtures extends BaseFixtures
             'wddx',
             'xmlrpc',
             'zookeeper',
+
+            'symfony'
         ],
         '8.0-apache' => [
             'apcu_bc',
@@ -257,6 +319,9 @@ class PhpFixtures extends BaseFixtures
             'wddx',
             'xmlrpc',
             'zookeeper',
+
+            'bash',
+            'symfony + bash',
         ],
         '8.0-fpm' => [
             'apcu_bc',
@@ -283,6 +348,9 @@ class PhpFixtures extends BaseFixtures
             'wddx',
             'xmlrpc',
             'zookeeper',
+
+            'bash',
+            'symfony + bash',
         ],
         '8.0-fpm-alpine' => [
             'apcu_bc',
@@ -309,6 +377,8 @@ class PhpFixtures extends BaseFixtures
             'wddx',
             'xmlrpc',
             'zookeeper',
+
+            'symfony'
         ],
     ];
 
@@ -628,12 +698,24 @@ class PhpFixtures extends BaseFixtures
     ];
 
     const GENERAL_EXTENSIONS_OPTIONS_MAP = [
+        'bash' => [
+            'customCommand' => 'apk add --no-cache bash',
+            'config' => null
+        ],
         'git' => [
             'customCommand' => null,
             'config' => null,
         ],
         'composer' => [
             'customCommand' => 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer',
+            'config' => null,
+        ],
+        'symfony' => [
+            'customCommand' => 'wget https://get.symfony.com/cli/installer -O - | bash',
+            'config' => null,
+        ],
+        'symfony + bash' => [
+            'customCommand' => 'apk add --no-cache bash && wget https://get.symfony.com/cli/installer -O - | bash',
             'config' => null,
         ],
     ];
@@ -651,7 +733,7 @@ class PhpFixtures extends BaseFixtures
      */
     public function load(ObjectManager $manager)
     {
-        $image = $this->getOrCreateImage($manager, 'PHP', 'php', './php/');
+        $image = $this->getOrCreateImage($manager, 'PHP', 'php', 'Development Environment', './php/');
 
         foreach (self::SPECIAL_EXTENSIONS_OPTIONS_MAP as $extensionName => $extensionOptions) {
             $this->createExtension($manager, $extensionName, true, $extensionOptions['customCommand']);
@@ -661,7 +743,7 @@ class PhpFixtures extends BaseFixtures
         }
         $manager->flush();
 
-        foreach (self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP as $version => $extensionExclude) {
+        foreach (self::VERSIONS_EXTENSION_EXCLUDE_MAP as $version => $extensionExclude) {
             $imageVersion = $this->createImageVersion($manager, $image, $version);
 
             foreach (array_merge(

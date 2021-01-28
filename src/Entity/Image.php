@@ -38,6 +38,14 @@ class Image
     private ?string $dockerfileLocation;
 
     /**
+     * @ORM\ManyToOne (targetEntity="ImageGroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @Groups({"default"})
+     */
+    private ImageGroup $group;
+
+    /**
      * @ORM\OneToMany(targetEntity="ImageVersion", mappedBy="image")
      * @Groups({"detail"})
      */
@@ -78,6 +86,16 @@ class Image
     public function setDockerfileLocation(?string $dockerfileLocation): void
     {
         $this->dockerfileLocation = $dockerfileLocation;
+    }
+
+    public function getGroup(): ImageGroup
+    {
+        return $this->group;
+    }
+
+    public function setGroup(ImageGroup $group): void
+    {
+        $this->group = $group;
     }
 
     public function getImageVersions(): Collection

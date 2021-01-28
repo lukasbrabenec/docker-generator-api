@@ -6,6 +6,7 @@ use App\DataFixtures\Exception\FixturesException;
 use App\Entity\Extension;
 use App\Entity\Image;
 use App\Entity\Environment;
+use App\Entity\ImageGroup;
 use App\Entity\Port;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVersionExtension;
@@ -19,6 +20,7 @@ abstract class BaseFixtures extends Fixture
         ObjectManager $manager,
         string $name,
         string $code,
+        string $groupName,
         ?string $dockerfileLocation = null
     ): Image {
         $image = $manager->getRepository(Image::class)->findOneBy(['name' => $name]);
@@ -27,8 +29,15 @@ abstract class BaseFixtures extends Fixture
             $image->setName($name);
             $image->setCode($code);
             $image->setDockerfileLocation($dockerfileLocation);
-            $manager->persist($image);
         }
+        $group = $manager->getRepository(ImageGroup::class)->findOneBy(['name' => $groupName]);
+        if (!is_object($group)) {
+            $group = new ImageGroup();
+            $group->setName($groupName);
+            $manager->persist($group);
+        }
+        $image->setGroup($group);
+        $manager->persist($image);
 
         return $image;
     }

@@ -38,10 +38,8 @@ services:
             {%- if imageVersion.volumes is defined and imageVersion.volumes is not empty ~%}
         volumes:
                 {%- for volume in imageVersion.volumes ~%}
-                {%- if volume.active == true ~%}
             - {{ volume.hostPath }}:{{ volume.containerPath }}
-                    {%- endif ~%}
-                    {%- endfor ~%}
+                {%- endfor ~%}
             {%- endif ~%}
         {%- if imageVersion.dependsOn is defined and imageVersion.dependsOn is not empty ~%}
         depends_on:

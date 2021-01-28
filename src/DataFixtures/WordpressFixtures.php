@@ -61,7 +61,7 @@ class WordpressFixtures extends BaseFixtures
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->getOrCreateImage($manager, 'WordPress', 'wordpress');
+        $image = $this->getOrCreateImage($manager, 'WordPress', 'wordpress', 'Utilities');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->createImageVersion($manager, $image, $version);

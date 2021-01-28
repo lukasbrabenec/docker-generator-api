@@ -15,10 +15,8 @@ class VolumeFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', IntegerType::class)
             ->add('hostPath', TextType::class)
             ->add('containerPath', TextType::class)
-            ->add('active', CheckboxType::class)
             ;
     }
 
@@ -26,6 +24,7 @@ class VolumeFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => VolumeDTO::class,
+            'allow_extra_fields' => true,
         ]);
     }
 

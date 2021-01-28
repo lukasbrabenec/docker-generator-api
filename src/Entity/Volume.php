@@ -32,11 +32,6 @@ class Volume
     private string $containerPath;
 
     /**
-     * @Groups({"default"})
-     */
-    private bool $active = true;
-
-    /**
      * @ORM\ManyToOne(targetEntity="ImageVersion", cascade={"all"})
      * @ORM\JoinColumn(name="image_version_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
@@ -67,18 +62,6 @@ class Volume
     public function setContainerPath(string $containerPath): self
     {
         $this->containerPath = $containerPath;
-
-        return $this;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): self
-    {
-        $this->active = $active;
 
         return $this;
     }

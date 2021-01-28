@@ -55,7 +55,7 @@ class MysqlFixtures extends BaseFixtures
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->getOrCreateImage($manager, 'MySQL', 'mysql');
+        $image = $this->getOrCreateImage($manager, 'MySQL', 'mysql', 'Database');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->createImageVersion($manager, $image, $version);

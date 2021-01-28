@@ -26,7 +26,7 @@ class ElasticSearchFixtures extends BaseFixtures implements DependentFixtureInte
 
     public function load(ObjectManager $manager)
     {
-        $image = $this->getOrCreateImage($manager, 'ElasticSearch', 'elasticsearch');
+        $image = $this->getOrCreateImage($manager, 'ElasticSearch', 'elasticsearch', 'Utilities');
 
         foreach (self::VERSIONS as $version) {
             $imageVersion = $this->createImageVersion($manager, $image, $version);

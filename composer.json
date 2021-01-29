@@ -6,7 +6,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-zip": "*",
-        "composer/package-versions-deprecated": "^1.11",
         "doctrine/common": "^3",
         "doctrine/doctrine-bundle": "^2",
         "doctrine/doctrine-fixtures-bundle": "^3.4",

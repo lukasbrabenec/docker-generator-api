@@ -37,7 +37,7 @@ class ImageVersionValidator extends ConstraintValidator
 
         if (!is_integer($imageVersionId)) {
             $this->context->buildViolation($constraint->imageVersionType)
-                ->atPath('imageVersionID')
+                ->atPath('id')
                 ->addViolation();
 
             return;
@@ -48,7 +48,7 @@ class ImageVersionValidator extends ConstraintValidator
         if (!is_object($imageVersion)) {
             $this->context->buildViolation($constraint->imageVersionMissing)
                 ->setParameter('{{ imageVersionID }}', $imageVersionId)
-                ->atPath('imageVersionID')
+                ->atPath('id')
                 ->addViolation();
 
             return;

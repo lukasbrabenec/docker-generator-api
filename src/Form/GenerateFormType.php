@@ -5,8 +5,8 @@ namespace App\Form;
 use App\Entity\ComposeFormatVersion;
 use App\Entity\DTO\GenerateDTO;
 use App\Entity\DTO\ImageVersionDTO;
-use App\Entity\Image;
 use App\Entity\Environment;
+use App\Entity\Image;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVersionExtension;
 use Doctrine\ORM\EntityManagerInterface;
@@ -82,9 +82,11 @@ class GenerateFormType extends AbstractType
         foreach ($generateDTO->getImageVersions() as $imageVersionDTO) {
             $imageVersion = $this->getEntityManager()->getRepository(ImageVersion::class)
                 ->find($imageVersionDTO->getId());
-            $imageVersionDTO->setOtherImageIDsForGeneration(
-                array_diff($allImageIDs, [$imageVersion->getId()])
-            );
+            if (is_object($imageVersion)) {
+                $imageVersionDTO->setOtherImageIDsForGeneration(
+                    array_diff($allImageIDs, [$imageVersion->getId()])
+                );
+            }
         }
     }
 
@@ -120,7 +122,7 @@ class GenerateFormType extends AbstractType
     private function applyEnvironmentDefaults(ImageVersionDTO $imageVersionDTO): void
     {
         foreach ($imageVersionDTO->getEnvironments() as $environmentDTO) {
-            if ($environmentDTO->getId() !== null) {
+            if (null !== $environmentDTO->getId()) {
                 $environment = $this->getEntityManager()->getRepository(Environment::class)
                     ->find($environmentDTO->getId());
                 $environmentDTO->setCode($environment->getCode());
@@ -144,7 +146,9 @@ class GenerateFormType extends AbstractType
             $dependencies = [];
             foreach ($imageVersionDTO->getDependsOn() as $dependency) {
                 $image = $this->getEntityManager()->getRepository(Image::class)->find($dependency);
-                $dependencies[] = $dependencyMap[$image->getName()] ?? $image->getName();
+                if (is_object($image)) {
+                    $dependencies[] = $dependencyMap[$image->getName()] ?? $image->getName();
+                }
             }
             $imageVersionDTO->setDependsOn($dependencies);
         }

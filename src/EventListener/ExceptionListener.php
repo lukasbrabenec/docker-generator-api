@@ -3,7 +3,7 @@
 namespace App\EventListener;
 
 use App\Http\ApiResponse;
-use App\Serializer\NormalizerCollection;
+use App\Serializer\Normalizer\NormalizerCollection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;

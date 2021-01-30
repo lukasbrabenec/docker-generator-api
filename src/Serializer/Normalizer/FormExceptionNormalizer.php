@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Serializer;
+namespace App\Serializer\Normalizer;
 
 use App\Exception\FormException;
 use Symfony\Component\Form\FormInterface;

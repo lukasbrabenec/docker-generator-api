@@ -6,9 +6,8 @@
         <language minSize="65" name="PHP" />
       </Languages>
     </inspection_tool>
-    <inspection_tool class="PhpCSFixerValidationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
-      <option name="CODING_STANDARD" value="Custom" />
-      <option name="CUSTOM_RULESET_PATH" value="$PROJECT_DIR$/.php_cs.dist" />
+    <inspection_tool class="PhpCSFixerValidationInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false">
+      <option name="CUSTOM_RULESET_PATH" value="$PROJECT_DIR$/phpcs.xml" />
     </inspection_tool>
     <inspection_tool class="PhpCSValidationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="EXTENSIONS" value="php,js,css,inc" />

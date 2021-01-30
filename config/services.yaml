@@ -39,26 +39,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
-    App\Serializer\FormExceptionNormalizer:
+    App\Serializer\Normalizer\FormExceptionNormalizer:
         tags: ['serializer.normalizer']
 
-    App\Serializer\GeneralExceptionNormalizer:
+    App\Serializer\Normalizer\GeneralExceptionNormalizer:
         tags: ['serializer.normalizer']
 
-    App\Serializer\NormalizerCollection:
+    App\Serializer\Normalizer\NormalizerCollection:
         arguments: [!tagged serializer.normalizer]
         public: true
-
-    App\Dockerfile\DockerfileServiceChain: ~
-
-    App\Service\Dockerfile\DockerfilePHP:
-        arguments:
-            - '@twig'
-        tags:
-            - { name: 'app.dockerfile', imageName: 'php' }
-
-    App\Service\Dockerfile\DockerfileNode:
-        arguments:
-            - '@twig'
-        tags:
-            - { name: 'app.dockerfile', imageName: 'node' }

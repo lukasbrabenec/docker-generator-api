@@ -49,6 +49,9 @@ class ImageVersionDTO implements DataTransferObjectInterface
      */
     private array $ports;
 
+    /**
+     * @var int[]
+     */
     private array $dependsOn = [];
 
     /**

@@ -60,10 +60,12 @@ class GenerateFormType extends AbstractType
 
     private function applyDefaultValues(GenerateDTO $generateDTO): void
     {
-        $composeFormatVersion = $this->getEntityManager()->getRepository(ComposeFormatVersion::class)
-            ->find($generateDTO->getDockerVersionID());
-        if (is_object($composeFormatVersion)) {
-            $generateDTO->setDockerComposeVersion($composeFormatVersion->getComposeVersion());
+        if ($generateDTO->getDockerVersionID() !== null) {
+            $composeFormatVersion = $this->getEntityManager()->getRepository(ComposeFormatVersion::class)
+                ->find($generateDTO->getDockerVersionID());
+            if (is_object($composeFormatVersion)) {
+                $generateDTO->setDockerComposeVersion($composeFormatVersion->getComposeVersion());
+            }
         }
         $allImageIDs = [];
         /** @var ImageVersionDTO $imageVersionDTO */
@@ -152,11 +154,6 @@ class GenerateFormType extends AbstractType
             }
             $imageVersionDTO->setDependsOn($dependencies);
         }
-    }
-
-    public function getBlockPrefix(): string
-    {
-        return 'generate';
     }
 
     public function getEntityManager(): EntityManagerInterface

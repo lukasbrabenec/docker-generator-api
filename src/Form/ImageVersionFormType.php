@@ -39,9 +39,12 @@ class ImageVersionFormType extends AbstractType
             ])
             ->add('restartType', RestartTypeFormType::class)
             ->add('dependsOn', CollectionType::class, [
-                'entry_type' => TextType::class,
+                'entry_type' => IntegerType::class,
                 'allow_add' => true,
                 'error_bubbling' => false,
+                'documentation' => [
+                    'description' => 'Identifications of images this image is dependent on.'
+                ]
             ])
             ;
     }

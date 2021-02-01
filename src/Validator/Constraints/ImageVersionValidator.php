@@ -150,7 +150,9 @@ class ImageVersionValidator extends ConstraintValidator
     ) {
         /** @var PortDTO $portDTO */
         foreach ($imageVersionDTO->getPorts() as $portDTO) {
-            if ($portDTO->isExposedToHost() && (!$portDTO->getInward() || !$portDTO->getOutward())) {
+            if ($portDTO->isExposedToHost()
+                && (!$portDTO->getInward() || !$portDTO->getOutward())
+            ) {
                 $this->context->buildViolation($constraint->missingInwardAndOutwardPort)
                     ->atPath('ports')
                     ->addViolation();

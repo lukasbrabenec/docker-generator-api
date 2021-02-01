@@ -1,0 +1,71 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Docker Generator API
+            description: App for docker-compose and Dockerfile generation
+            version: 1.0.0
+        definitions:
+            ResponseModel:
+                type: object
+                required:
+                    - message
+                properties:
+                    message:
+                        schema:
+                            type: string
+                        example: "OK"
+            SuccessResponseModel:
+                allOf:
+                    - $ref: '#/definitions/ResponseModel'
+                    - type: object
+                      required:
+                          - data
+                      properties:
+                          data:
+                              schema:
+                                  type: array
+            BadRequestErrorModel:
+                allOf:
+                    - $ref: '#/definitions/ResponseModel'
+                    - type: object
+                      required:
+                          - errors
+                      properties:
+                          message:
+                              example: "Bad Request"
+                          errors:
+                              schema:
+                                  type: array
+                              example: [ ]
+            NotFoundErrorModel:
+                allOf:
+                    - $ref: '#/definitions/ResponseModel'
+                    - type: object
+                      required:
+                          - errors
+                      properties:
+                          message:
+                              example: "Not Found"
+                          errors:
+                              schema:
+                                  type: array
+                              example: [ "Entity X not found" ]
+            ServerErrorModel:
+                allOf:
+                    - $ref: '#/definitions/ResponseModel'
+                    - type: object
+                      required:
+                      - errors
+                      properties:
+                          message:
+                              example: "Internal Server Error"
+                          errors:
+                              schema:
+                                  type: array
+                              example: []
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+    models:
+        names:
+            - { alias: ImageDetail, type: App\Entity\Image, groups: [default, detail] }

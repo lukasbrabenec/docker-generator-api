@@ -12,10 +12,13 @@ class GenerateDTO implements DataTransferObjectInterface
     private string $projectName;
 
     #[DockerComposeVersion]
-    private int $dockerVersionID;
+    private ?int $dockerVersionID = null;
 
     private float $dockerComposeVersion;
 
+    /**
+     * @var ImageVersionDTO[]
+     */
     #[Assert\Valid]
     private array $imageVersions;
 
@@ -36,7 +39,7 @@ class GenerateDTO implements DataTransferObjectInterface
         $this->projectName = $projectName;
     }
 
-    public function getDockerVersionID(): int
+    public function getDockerVersionID(): ?int
     {
         return $this->dockerVersionID;
     }

@@ -1,0 +1,29 @@
+FROM php:8-fpm-alpine AS build
+
+COPY wait-for-it.sh /usr/bin/wait-for-it
+
+RUN chmod +x /usr/bin/wait-for-it &&\
+    apk --update --no-cache add zip
+
+COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+RUN install-php-extensions zip pdo_mysql intl
+
+COPY . /var/www/api
+
+WORKDIR /var/www/api
+RUN export APP_ENV=prod && composer install --no-dev --optimize-autoloader && composer dump-env prod
+
+
+FROM php:8-fpm-alpine
+
+RUN apk --update --no-cache add zip
+
+COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN install-php-extensions zip pdo_mysql intl
+
+COPY --from=build /var/www/api /var/www/api
+
+RUN chmod -R 777 /var/www/api/var/log

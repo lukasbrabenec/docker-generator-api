@@ -43,7 +43,7 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
 
     const ENVIRONMENT_MAP = [
         'NODE_ENV' => [
-            'default' => 'production',
+            'default' => 'development',
             'required' => true,
             'hidden' => false,
         ],
@@ -63,14 +63,6 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
             'config' => null,
         ],
         'gulp-cli' => [
-            'customCommand' => null,
-            'config' => null,
-        ],
-        'yarn' => [
-            'customCommand' => null,
-            'config' => null,
-        ],
-        'npx' => [
             'customCommand' => null,
             'config' => null,
         ],
@@ -154,7 +146,7 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
 
     const GENERAL_EXTENSIONS_OPTIONS_MAP = [
         'bash' => [
-            'customCommand' => 'apk add --no-cache bash',
+            'customCommand' => null,
             'config' => null,
         ],
         'git' => [

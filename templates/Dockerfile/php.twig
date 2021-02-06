@@ -8,9 +8,9 @@ RUN {% if 'alpine' in version %}apk --update --no-cache add {% else %}apt-get up
 {% if extensions.system.custom is defined and extensions.system.custom is not empty %}
 {# if there already are system main extensions -- connect with their RUN command #}
 {% if extensions.system.main is defined and extensions.system.main is not empty %}
-{{ ' &&\\\n    '|raw }}{% for systemCustomExtension in extensions.system.custom %}{{ systemCustomExtension.customCommand }} {% if loop.first == false %}{{ '&&\\\n'|raw }}{% endif %} {% endfor %}
+{{ ' &&\\\n    '|raw }}{% for systemCustomExtension in extensions.system.custom %}{{ systemCustomExtension.customCommand }} {% if loop.first == true %}{{ '&&\\\n'|raw }}{% endif %} {% endfor %}
 {% else %}
-RUN {% for systemCustomExtension in extensions.system.custom %}{{ systemCustomExtension.customCommand }} {% if loop.first == false %}{{ '&&\\\n'|raw }}{% endif %} {% endfor %}
+RUN {% for systemCustomExtension in extensions.system.custom %}{{ systemCustomExtension.customCommand }} {% if loop.first == true %}{{ '&&\\\n'|raw }}{% endif %} {% endfor %}
 {% endif %}
 {% endif %}
 

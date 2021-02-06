@@ -10,4 +10,4 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 RUN install-php-extensions zip pdo_mysql intl
 
-CMD composer install ;  wait-for-it database:3306 -- bin/console doctrine:migrations:migrate && bin/console doctrine:fixtures:load --quiet ; php-fpm
+CMD composer install ;  wait-for-it database:3306 -- bin/console doctrine:migrations:migrate ; php-fpm

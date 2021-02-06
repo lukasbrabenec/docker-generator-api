@@ -4,7 +4,7 @@ USER node
 
 {% if extensions is defined and extensions is not empty %}
 {% if extensions.system is defined and extensions.system is not empty %}
-RUN apt-get install -y {% for systemExtension in extensions.system %}{{ systemExtension.name }} {% endfor %}
+RUN {% if 'alpine' in version %}apk --update --no-cache add {% else %}apt-get update && apt-get install -y {% endif %}{% for systemMainExtension in extensions.system.main %}{{ systemMainExtension.name }} {% endfor %}
 {% endif %}
 {% if extensions.special is defined and extensions.special is not empty %}
 # create directory for global packages
@@ -18,7 +18,5 @@ RUN npm install --global {% for specialExtension in extensions.special %}{{ spec
 
 
 WORKDIR /home/node/app
-
-RUN npm install
 
 CMD ["npm", "start"]

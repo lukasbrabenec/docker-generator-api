@@ -7,20 +7,6 @@ use Doctrine\Persistence\ObjectManager;
 class PhpFixtures extends BaseFixtures
 {
     const VERSIONS_EXTENSION_EXCLUDE_MAP = [
-        '5.6-alpine' => [
-            'apcu_bc',
-            'cmark',
-            'decimal',
-            'ffi',
-            'opencensus',
-            'pcov',
-            'pdo_sqlsrv',
-            'snuffleupagus',
-            'sqlsrv',
-            'tdlib',
-
-            'symfony',
-        ],
         '5.6-apache' => [
             'apcu_bc',
             'cmark',
@@ -65,15 +51,6 @@ class PhpFixtures extends BaseFixtures
 
             'symfony',
         ],
-        '7-alpine' => [
-            'ffi',
-            'mongo',
-            'mssql',
-            'mysql',
-            'sybase_ct',
-
-            'symfony',
-        ],
         '7-apache' => [
             'ffi',
             'mongo',
@@ -95,15 +72,6 @@ class PhpFixtures extends BaseFixtures
             'symfony + bash',
         ],
         '7-fpm-alpine' => [
-            'ffi',
-            'mongo',
-            'mssql',
-            'mysql',
-            'sybase_ct',
-
-            'symfony',
-        ],
-        '7.1-alpine' => [
             'ffi',
             'mongo',
             'mssql',
@@ -141,16 +109,6 @@ class PhpFixtures extends BaseFixtures
 
             'symfony'
         ],
-        '7.2-alpine' => [
-            'enchant',
-            'ffi',
-            'mongo',
-            'mssql',
-            'mysql',
-            'sybase_ct',
-
-            'symfony'
-        ],
         '7.2-apache' => [
             'ffi',
             'mongo',
@@ -172,16 +130,6 @@ class PhpFixtures extends BaseFixtures
             'symfony + bash',
         ],
         '7.2-fpm-alpine' => [
-            'ffi',
-            'mongo',
-            'mssql',
-            'mysql',
-            'sybase_ct',
-
-            'symfony'
-        ],
-        '7.3-alpine' => [
-            'enchant',
             'ffi',
             'mongo',
             'mssql',
@@ -219,18 +167,6 @@ class PhpFixtures extends BaseFixtures
 
             'symfony',
         ],
-        '7.4-alpine' => [
-            'enchant',
-            'interbase',
-            'mongo',
-            'mssql',
-            'mysql',
-            'recode',
-            'sybase_ct',
-            'wddx',
-
-            'symfony',
-        ],
         '7.4-apache' => [
             'interbase',
             'mongo',
@@ -263,34 +199,6 @@ class PhpFixtures extends BaseFixtures
             'recode',
             'sybase_ct',
             'wddx',
-
-            'symfony'
-        ],
-        '8.0-alpine' => [
-            'apcu_bc',
-            'cmark',
-            'decimal',
-            'ev',
-            'gmagick',
-            'gnupg',
-            'http',
-            'interbase',
-            'ioncube_loader',
-            'memcache',
-            'mongo',
-            'mssql',
-            'mysql',
-            'opencensus',
-            'propro',
-            'rdkafka',
-            'recode',
-            'ssh2',
-            'sybase_ct',
-            'tdlib',
-            'uopz',
-            'wddx',
-            'xmlrpc',
-            'zookeeper',
 
             'symfony'
         ],
@@ -699,23 +607,27 @@ class PhpFixtures extends BaseFixtures
 
     const GENERAL_EXTENSIONS_OPTIONS_MAP = [
         'bash' => [
-            'customCommand' => 'apk add --no-cache bash',
+            'customCommand' => null,
             'config' => null
         ],
         'git' => [
             'customCommand' => null,
             'config' => null,
         ],
-        'composer' => [
-            'customCommand' => 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer',
+        'composer-v1' => [
+            'customCommand' => 'curl -sS https://getcomposer.org/installer | php -- --1 --install-dir=/usr/local/bin --filename=composer',
+            'config' => null,
+        ],
+        'composer-v2' => [
+            'customCommand' => 'curl -sS https://getcomposer.org/installer | php -- --2 --install-dir=/usr/local/bin --filename=composer',
             'config' => null,
         ],
         'symfony' => [
-            'customCommand' => 'wget https://get.symfony.com/cli/installer -O - | bash',
+            'customCommand' => 'curl -sS https://get.symfony.com/cli/installer | bash',
             'config' => null,
         ],
         'symfony + bash' => [
-            'customCommand' => 'apk add --no-cache bash && wget https://get.symfony.com/cli/installer -O - | bash',
+            'customCommand' => 'apk add --no-cache bash && curl -sS https://get.symfony.com/cli/installer | bash',
             'config' => null,
         ],
     ];

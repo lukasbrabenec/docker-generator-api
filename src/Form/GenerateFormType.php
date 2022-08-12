@@ -128,6 +128,7 @@ class GenerateFormType extends AbstractType
                 $environment = $this->getEntityManager()->getRepository(Environment::class)
                     ->find($environmentDTO->getId());
                 $environmentDTO->setCode($environment->getCode());
+                $environmentDTO->setValue($environment->getDefaultValue());
             }
         }
     }

@@ -1,71 +1,269 @@
 nelmio_api_doc:
-    documentation:
-        info:
-            title: Docker Generator API
-            description: App for docker-compose and Dockerfile generation
-            version: 1.0.0
-        definitions:
-            ResponseModel:
-                type: object
-                required:
-                    - message
-                properties:
-                    message:
-                        schema:
-                            type: string
-                        example: "OK"
-            SuccessResponseModel:
-                allOf:
-                    - $ref: '#/definitions/ResponseModel'
-                    - type: object
-                      required:
-                          - data
-                      properties:
+  documentation:
+    info:
+      title: Docker Generator API
+      description: App for docker-compose and Dockerfile generation
+      version: 1.0.0
+    paths:
+      /api/{version}/compose-versions:
+        get:
+          operationId: list-compose-versions
+          tags:
+            - Compose Version
+          parameters:
+            version:
+              ref: '#/components/parameters/version'
+          responses:
+            "200":
+              description: Returns all available Compose format versions.
+              content:
+                application/json:
+                  schema:
+                    allOf:
+                      - $ref: '#/components/responses/SuccessResponseModel'
+                      - type: object
+                        properties:
                           data:
-                              schema:
-                                  type: array
-            BadRequestErrorModel:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/ComposeFormatVersion'
+            "500":
+              description: Internal Server Error.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/responses/ServerErrorModel'
+
+      /api/{version}/generate:
+        post:
+          operationId: generate
+          tags:
+            - Generate
+          parameters:
+            version:
+              ref: '#/components/parameters/version'
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    generate:
+                      ref: '#/components/schemas/GenerateFormType'
+          responses:
+            "200":
+              description: Returns ZIP archive with docker-compose.
+              content:
+                application/zip:
+            "500":
+              description: Internal Server Error.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/responses/ServerErrorModel'
+
+      /api/{version}/images:
+        get:
+          operationId: list-images
+          tags:
+            - Images
+          parameters:
+            version:
+              ref: '#/components/parameters/version'
+          responses:
+            "200":
+              description: Returns all available images.
+              content:
+                application/json:
+                  schema:
+                    allOf:
+                      - $ref: '#/components/responses/SuccessResponseModel'
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Image'
+            "500":
+              description: Internal Server Error.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/responses/ServerErrorModel'
+
+      /api/{version}/images/{imageID}:
+        get:
+          operationId: image-detail
+          tags:
+            - Images
+          parameters:
+            version:
+              ref: '#/components/parameters/version'
+            imageID:
+              name: imageID
+              in: path
+              description: Identificator of image.
+              required: true
+              schema:
+                type: integer
+                example: 1
+          responses:
+            "200":
+              description: Returns image detail.
+              content:
+                application/json:
+                  schema:
+                    allOf:
+                      - $ref: '#/components/responses/SuccessResponseModel'
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Image'
+            "400":
+              description: Bad Request.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/responses/BadRequestErrorModel'
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/responses/NotFoundErrorModel'
+            "500":
+              description: Internal Server Error.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/responses/ServerErrorModel'
+
+      /api/{version}/restart-types:
+        get:
+          operationId: list-restart-types
+          tags:
+            - Restart Types
+          parameters:
+            version:
+              ref: '#/components/parameters/version'
+          responses:
+            "200":
+              description: Returns all available restart types.
+              content:
+                application/json:
+                  schema:
+                    allOf:
+                      - $ref: '#/components/responses/SuccessResponseModel'
+                      - type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/RestartType'
+            "500":
+              description: Internal Server Error.
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/responses/ServerErrorModel'
+    components:
+      parameters:
+        version:
+          name: version
+          in: path
+          description: Version of API endpoint.
+          required: true
+          schema:
+            type: string
+            enum:
+              - v1
+            example: v1
+      schemas:
+        ResponseModel:
+          type: object
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              example: "OK"
+
+      responses:
+        SuccessResponseModel:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
                 allOf:
-                    - $ref: '#/definitions/ResponseModel'
-                    - type: object
-                      required:
-                          - errors
-                      properties:
-                          message:
-                              example: "Bad Request"
-                          errors:
-                              schema:
-                                  type: array
-                              example: [ ]
-            NotFoundErrorModel:
+                  - $ref: '#/components/schemas/ResponseModel'
+                  - type: object
+                    required:
+                      - data
+                    properties:
+                      data:
+                        type: array
+                        items: []
+        BadRequestErrorModel:
+          description: Bad Request Response
+          content:
+            application/json:
+              schema:
                 allOf:
-                    - $ref: '#/definitions/ResponseModel'
-                    - type: object
-                      required:
-                          - errors
-                      properties:
-                          message:
-                              example: "Not Found"
-                          errors:
-                              schema:
-                                  type: array
-                              example: [ "Entity X not found" ]
-            ServerErrorModel:
-                allOf:
-                    - $ref: '#/definitions/ResponseModel'
-                    - type: object
-                      required:
+                  - $ref: '#/components/schemas/ResponseModel'
+                  - type: object
+                    required:
                       - errors
-                      properties:
-                          message:
-                              example: "Internal Server Error"
-                          errors:
-                              schema:
-                                  type: array
-                              example: []
-    areas: # to filter documented areas
-        path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
-    models:
-        names:
-            - { alias: ImageDetail, type: App\Entity\Image, groups: [default, detail] }
+                    properties:
+                      message:
+                        example: "Bad Request"
+                      errors:
+                        type: array
+                        items: []
+                        example: [ ]
+        NotFoundErrorModel:
+          description: Not Found Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ResponseModel'
+                  - type: object
+                    required:
+                      - errors
+                    properties:
+                      message:
+                        example: "Not Found"
+                      errors:
+                        type: array
+                        items: []
+                        example: [ "Entity X not found" ]
+        ServerErrorModel:
+          description: Internal Server Error Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ResponseModel'
+                  - type: object
+                    required:
+                      - errors
+                    properties:
+                      message:
+                        example: "Internal Server Error"
+                      errors:
+                        type: array
+                        items: []
+  areas:
+    path_patterns:
+      - ^/api(?!/doc$)
+    host_patterns:
+      - ^api\.
+  models:
+    names:
+      - { alias: ComposeFormatVersion, type: App\Entity\ComposeFormatVersion, groups: [ default ] }
+      - { alias: Image, type: App\Entity\Image, groups: [ default ] }
+      - { alias: ImageDetail, type: App\Entity\Image, groups: [ default, detail ] }
+      - { alias: RestartType, type: App\Entity\RestartType, groups: [ default ] }
+      - { alias: GenerateFormType, type: App\Form\GenerateFormType }

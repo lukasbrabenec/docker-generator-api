@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine
+FROM php:8.1-fpm-alpine
 
 COPY wait-for-it.sh /usr/bin/wait-for-it
 

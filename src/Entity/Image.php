@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -40,7 +40,7 @@ class Image
     private ?string $dockerfileLocation;
 
     /**
-     * @SWG\Property(ref=@Model(type=ImageGroup::class))
+     * @OA\Property(ref=@Model(type=ImageGroup::class))
      * @ORM\ManyToOne (targetEntity="ImageGroup")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @ORM\OrderBy({"name" = "ASC"})

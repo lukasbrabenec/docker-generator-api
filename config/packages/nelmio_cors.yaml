@@ -1,9 +1,9 @@
 nelmio_cors:
     defaults:
         origin_regex: true
-        allow_origin: ['*']
+        allow_origin: ['^http://localhost:[0-9]+', 'https://docker.lukasbrabenec.cz']
         allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
-        allow_headers: ['Content-Type', 'Authorization', 'Accept']
+        allow_headers: ['Content-Type', 'Authorization', 'Accept', 'Sentry-Trace']
         expose_headers: ['Link']
         max_age: 3600
     paths:

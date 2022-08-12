@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine AS build
+FROM php:8.1-fpm-alpine AS build
 
 RUN apk --update --no-cache add zip
 
@@ -12,7 +12,7 @@ COPY . /var/www/api
 WORKDIR /var/www/api
 RUN export APP_ENV=prod && composer install --no-dev --optimize-autoloader && composer dump-env prod
 
-FROM php:8-fpm-alpine
+FROM php:8.1-fpm-alpine
 
 RUN apk --update --no-cache add zip
 

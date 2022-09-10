@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 
 declare(strict_types=1);
 
@@ -13,11 +14,6 @@ use Doctrine\Migrations\Exception\AbortMigration;
  */
 final class Version20210206130028 extends AbstractMigration
 {
-    public function getDescription() : string
-    {
-        return '';
-    }
-
     public function up(Schema $schema) : void
     {
         $this->addSql('SET FOREIGN_KEY_CHECKS=0');
@@ -32,6 +28,11 @@ final class Version20210206130028 extends AbstractMigration
         $this->addRestartTypeData();
         $this->addVolumeData();
         $this->addSql('SET FOREIGN_KEY_CHECKS=1');
+    }
+
+    public function down(Schema $schema): void
+    {
+        throw new AbortMigration('Down migration not allowed');
     }
 
     private function addComposeFormatData(): void
@@ -2318,10 +2319,5 @@ final class Version20210206130028 extends AbstractMigration
 	 (74,'./node','/home/node/app'),
 	 (75,'./node','/home/node/app'),
 	 (76,'./node','/home/node/app')");
-    }
-
-    public function down(Schema $schema) : void
-    {
-        throw new AbortMigration("Down migration not allowed");
     }
 }

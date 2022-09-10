@@ -6,16 +6,16 @@ use Doctrine\Persistence\ObjectManager;
 
 class MailCatcherFixtures extends BaseFixtures
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         'latest',
     ];
 
-    const PORTS = [
+    private const PORTS = [
         1025 => 1025,
         1080 => 1080,
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'MailCatcher', 'schickling/mailcatcher', 'Utilities');
 
@@ -26,6 +26,7 @@ class MailCatcherFixtures extends BaseFixtures
                 $this->createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
             }
         }
+
         $manager->flush();
     }
 }

@@ -6,7 +6,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class PhpFixtures extends BaseFixtures
 {
-    const VERSIONS_EXTENSION_EXCLUDE_MAP = [
+    private const VERSIONS_EXTENSION_EXCLUDE_MAP = [
         '5.6-apache' => [
             'apcu_bc',
             'cmark',
@@ -107,7 +107,7 @@ class PhpFixtures extends BaseFixtures
             'mysql',
             'sybase_ct',
 
-            'symfony'
+            'symfony',
         ],
         '7.2-apache' => [
             'ffi',
@@ -136,7 +136,7 @@ class PhpFixtures extends BaseFixtures
             'mysql',
             'sybase_ct',
 
-            'symfony'
+            'symfony',
         ],
         '7.3-apache' => [
             'ffi',
@@ -200,7 +200,7 @@ class PhpFixtures extends BaseFixtures
             'sybase_ct',
             'wddx',
 
-            'symfony'
+            'symfony',
         ],
         '8.0-apache' => [
             'apcu_bc',
@@ -286,11 +286,11 @@ class PhpFixtures extends BaseFixtures
             'xmlrpc',
             'zookeeper',
 
-            'symfony'
+            'symfony',
         ],
     ];
 
-    const SPECIAL_EXTENSIONS_OPTIONS_MAP = [
+    private const SPECIAL_EXTENSIONS_OPTIONS_MAP = [
         'amqp' => [
             'customCommand' => null,
             'config' => null,
@@ -605,21 +605,23 @@ class PhpFixtures extends BaseFixtures
         ],
     ];
 
-    const GENERAL_EXTENSIONS_OPTIONS_MAP = [
+    private const GENERAL_EXTENSIONS_OPTIONS_MAP = [
         'bash' => [
             'customCommand' => null,
-            'config' => null
+            'config' => null,
         ],
         'git' => [
             'customCommand' => null,
             'config' => null,
         ],
         'composer-v1' => [
-            'customCommand' => 'curl -sS https://getcomposer.org/installer | php -- --1 --install-dir=/usr/local/bin --filename=composer',
+            'customCommand' => 'curl -sS https://getcomposer.org/installer '
+                . '| php -- --1 --install-dir=/usr/local/bin --filename=composer',
             'config' => null,
         ],
         'composer-v2' => [
-            'customCommand' => 'curl -sS https://getcomposer.org/installer | php -- --2 --install-dir=/usr/local/bin --filename=composer',
+            'customCommand' => 'curl -sS https://getcomposer.org/installer '
+                . '| php -- --2 --install-dir=/usr/local/bin --filename=composer',
             'config' => null,
         ],
         'symfony' => [
@@ -632,46 +634,51 @@ class PhpFixtures extends BaseFixtures
         ],
     ];
 
-    const PORTS = [
+    private const PORTS = [
         80 => 80,
     ];
 
-    const VOLUMES = [
+    private const VOLUMES = [
         './php' => '/var/www/html',
     ];
 
     /**
      * @throws Exception\FixturesException
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'PHP', 'php', 'Development Environment', './php/');
 
         foreach (self::SPECIAL_EXTENSIONS_OPTIONS_MAP as $extensionName => $extensionOptions) {
             $this->createExtension($manager, $extensionName, true, $extensionOptions['customCommand']);
         }
+
         foreach (self::GENERAL_EXTENSIONS_OPTIONS_MAP as $extensionName => $extensionOptions) {
             $this->createExtension($manager, $extensionName, false, $extensionOptions['customCommand']);
         }
+
         $manager->flush();
 
         foreach (self::VERSIONS_EXTENSION_EXCLUDE_MAP as $version => $extensionExclude) {
             $imageVersion = $this->createImageVersion($manager, $image, $version);
 
-            foreach (array_merge(
+            $extensionConfig = \array_merge(
                 self::SPECIAL_EXTENSIONS_OPTIONS_MAP,
                 self::GENERAL_EXTENSIONS_OPTIONS_MAP
-            ) as $extensionName => $extensionOptions
-            ) {
-                if (!in_array($extensionName, $extensionExclude)) {
-                    $extension = $this->getExtension($manager, $extensionName);
-                    $this->createImageVersionExtension(
-                        $manager,
-                        $imageVersion,
-                        $extension,
-                        $extensionOptions['config']
-                    );
+            );
+
+            foreach ($extensionConfig as $extensionName => $extensionOptions) {
+                if (\in_array($extensionName, $extensionExclude, true)) {
+                    continue;
                 }
+
+                $extension = $this->getExtension($manager, $extensionName);
+                $this->createImageVersionExtension(
+                    $manager,
+                    $imageVersion,
+                    $extension,
+                    $extensionOptions['config']
+                );
             }
 
             foreach (self::PORTS as $inwardPort => $outwardPort) {
@@ -682,6 +689,7 @@ class PhpFixtures extends BaseFixtures
                 $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
+
         $manager->flush();
     }
 }

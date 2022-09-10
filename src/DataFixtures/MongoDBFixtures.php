@@ -6,7 +6,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class MongoDBFixtures extends BaseFixtures
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         'latest',
         '4',
         '4.4',
@@ -16,7 +16,7 @@ class MongoDBFixtures extends BaseFixtures
         '3.6',
     ];
 
-    const ENVIRONMENT_MAP = [
+    private const ENVIRONMENT_MAP = [
         'MONGO_INITDB_ROOT_USERNAME' => [
             'default' => null,
             'required' => true,
@@ -34,15 +34,15 @@ class MongoDBFixtures extends BaseFixtures
         ],
     ];
 
-    const PORTS = [
+    private const PORTS = [
         27017 => 27017,
     ];
 
-    const VOLUMES = [
+    private const VOLUMES = [
         './mongo/data' => '/data/db',
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'MongoDB', 'mongo', 'Database');
 
@@ -68,6 +68,7 @@ class MongoDBFixtures extends BaseFixtures
                 $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
+
         $manager->flush();
     }
 }

@@ -20,7 +20,7 @@ class VolumeDTO implements DataTransferObjectInterface
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -30,7 +30,7 @@ class VolumeDTO implements DataTransferObjectInterface
         return $this->hostPath;
     }
 
-    public function setHostPath(?string $hostPath)
+    public function setHostPath(?string $hostPath): void
     {
         $this->hostPath = $hostPath;
     }

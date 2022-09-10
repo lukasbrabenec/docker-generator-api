@@ -23,10 +23,10 @@ class GenerateController extends BaseController
 
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
-            sprintf('%s.zip', $generateDTO->getProjectName())
+            \sprintf('%s.zip', $generateDTO->getProjectName())
         );
         $response->headers->set('Content-Disposition', $disposition);
-        $response->deleteFileAfterSend(true);
+        $response->deleteFileAfterSend();
 
         return $response;
     }
@@ -35,6 +35,7 @@ class GenerateController extends BaseController
     {
         $form = $this->createForm($formClass);
         $form->submit($this->getJSON($request));
+
         if (!$form->isValid()) {
             throw new FormException($form);
         }

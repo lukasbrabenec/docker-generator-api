@@ -7,7 +7,10 @@ use Throwable;
 
 class GeneralExceptionNormalizer implements NormalizerInterface
 {
-    public function normalize(mixed $exception, string $format = null, array $context = []): array
+    /**
+     * @param Throwable $exception
+     */
+    public function normalize(mixed $exception, ?string $format = null, array $context = []): array
     {
         return [
             'message' => $exception->getMessage(),

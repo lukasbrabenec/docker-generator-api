@@ -17,7 +17,7 @@ class EnvironmentDTO implements DataTransferObjectInterface
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -27,7 +27,7 @@ class EnvironmentDTO implements DataTransferObjectInterface
         return $this->code;
     }
 
-    public function setCode(string $code)
+    public function setCode(string $code): void
     {
         $this->code = $code;
     }
@@ -37,7 +37,7 @@ class EnvironmentDTO implements DataTransferObjectInterface
         return $this->value;
     }
 
-    public function setValue(?string $value)
+    public function setValue(?string $value): void
     {
         $this->value = $value;
     }

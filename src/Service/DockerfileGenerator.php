@@ -13,15 +13,12 @@ use Twig\Error\SyntaxError;
 
 class DockerfileGenerator
 {
-    const MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE = 'Missing twig template for type: %s';
-    const RUNTIME_ERROR = 'Runtime error for type: %s';
-    const SYNTAX_ERROR = 'Syntax error for type: %s';
+    private const MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE = 'Missing twig template for type: %s';
+    private const RUNTIME_ERROR = 'Runtime error for type: %s';
+    private const SYNTAX_ERROR = 'Syntax error for type: %s';
 
-    private Environment $twig;
-
-    public function __construct(Environment $twig)
+    public function __construct(private readonly Environment $twig)
     {
-        $this->twig = $twig;
     }
 
     /**
@@ -32,10 +29,15 @@ class DockerfileGenerator
         /** @var ImageVersionDTO $imageVersionDTO */
         foreach ($request->getImageVersions() as $imageVersionDTO) {
             // image doesn't have dockerfile if location isn't set
-            if ($imageVersionDTO->getDockerfileLocation()) {
-                $dockerfileText = $this->renderDockerfile($imageVersionDTO);
-                $imageVersionDTO->setDockerfileText($dockerfileText);
+            if (
+                $imageVersionDTO->getDockerfileLocation() === null
+                || $imageVersionDTO->getDockerfileLocation() === ''
+            ) {
+                continue;
             }
+
+            $dockerfileText = $this->renderDockerfile($imageVersionDTO);
+            $imageVersionDTO->setDockerfileText($dockerfileText);
         }
     }
 
@@ -45,29 +47,30 @@ class DockerfileGenerator
     private function renderDockerfile(ImageVersionDTO $imageVersionDTO): string
     {
         $imageVersionCode = $imageVersionDTO->getImageCode();
+
         try {
-            $dockerfileText = $this->getTwig()->render(
+            $dockerfileText = $this->twig->render(
                 $this->getTemplate($imageVersionCode),
                 $imageVersionDTO->toArray()
             );
         } catch (LoaderError $e) {
-            throw new DockerfileException(sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $imageVersionCode, $e));
+            throw new DockerfileException(
+                \sprintf(self::MISSING_DOCKERFILE_TEMPLATE_FOR_IMAGE, $imageVersionCode),
+                500,
+                $e
+            );
         } catch (RuntimeError $e) {
-            throw new DockerfileException(sprintf(self::RUNTIME_ERROR, $imageVersionCode, $e));
+            throw new DockerfileException(\sprintf(self::RUNTIME_ERROR, $imageVersionCode), 500, $e);
         } catch (SyntaxError $e) {
-            throw new DockerfileException(sprintf(self::SYNTAX_ERROR, $imageVersionCode, $e));
+            throw new DockerfileException(\sprintf(self::SYNTAX_ERROR, $imageVersionCode), 500, $e);
         }
+
         return $dockerfileText;
     }
 
     #[Pure]
-    public function getTemplate(string $imageCode): string
+    private function getTemplate(string $imageCode): string
     {
-        return sprintf('Dockerfile/%s.twig', $imageCode);
-    }
-
-    public function getTwig(): Environment
-    {
-        return $this->twig;
+        return \sprintf('Dockerfile/%s.twig', $imageCode);
     }
 }

@@ -17,7 +17,7 @@ class RestartTypeDTO implements DataTransferObjectInterface
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -34,7 +34,7 @@ class RestartTypeDTO implements DataTransferObjectInterface
 
     #[ArrayShape([
         'id' => 'int',
-        'type' => 'string'
+        'type' => 'string',
     ])]
     public function toArray(): array
     {

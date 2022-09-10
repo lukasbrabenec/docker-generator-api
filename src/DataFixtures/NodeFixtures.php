@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         'latest',
         '15',
         '15-alpine',
@@ -23,7 +23,7 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
         '10-slim',
     ];
 
-    const PHP_VERSIONS_EXTENSION_EXCLUDE_MAP = [
+    private const PHP_VERSIONS_EXTENSION_EXCLUDE_MAP = [
         'latest' => [
             'bash',
         ],
@@ -41,7 +41,7 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
         ],
     ];
 
-    const ENVIRONMENT_MAP = [
+    private const ENVIRONMENT_MAP = [
         'NODE_ENV' => [
             'default' => 'development',
             'required' => true,
@@ -49,7 +49,7 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
         ],
     ];
 
-    const SPECIAL_EXTENSIONS_OPTIONS_MAP = [
+    private const SPECIAL_EXTENSIONS_OPTIONS_MAP = [
         'tsc-watch' => [
             'customCommand' => null,
             'config' => null,
@@ -140,11 +140,11 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
         ],
     ];
 
-    const PORTS = [
+    private const PORTS = [
         8080 => 8080,
     ];
 
-    const GENERAL_EXTENSIONS_OPTIONS_MAP = [
+    private const GENERAL_EXTENSIONS_OPTIONS_MAP = [
         'bash' => [
             'customCommand' => null,
             'config' => null,
@@ -155,23 +155,25 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
         ],
     ];
 
-    const VOLUMES = [
+    private const VOLUMES = [
         './node' => '/home/node/app',
     ];
 
     /**
      * @throws Exception\FixturesException
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'NodeJS', 'node', 'Development Environment', './node/');
 
         foreach (self::SPECIAL_EXTENSIONS_OPTIONS_MAP as $extensionName => $extensionOptions) {
             $this->createExtension($manager, $extensionName, true, $extensionOptions['customCommand']);
         }
+
         foreach (self::GENERAL_EXTENSIONS_OPTIONS_MAP as $extensionName => $extensionOptions) {
             $this->createExtension($manager, $extensionName, false, $extensionOptions['customCommand']);
         }
+
         $manager->flush();
 
         foreach (self::VERSIONS as $version) {
@@ -196,22 +198,27 @@ class NodeFixtures extends BaseFixtures implements DependentFixtureInterface
                 $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
 
-            foreach (array_merge(
+            $extensionConfig = \array_merge(
                 self::SPECIAL_EXTENSIONS_OPTIONS_MAP,
                 self::GENERAL_EXTENSIONS_OPTIONS_MAP
-            ) as $extensionName => $extensionOptions
-            ) {
-                if (isset(self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP[$version])
-                    && !in_array($extensionName, self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP[$version])
+            );
+
+            foreach ($extensionConfig as $extensionName => $extensionOptions) {
+                if (
+                    !isset(self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP[$version])
+                    || (isset(self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP[$version])
+                        && \in_array($extensionName, self::PHP_VERSIONS_EXTENSION_EXCLUDE_MAP[$version], true))
                 ) {
-                    $extension = $this->getExtension($manager, $extensionName);
-                    $this->createImageVersionExtension(
-                        $manager,
-                        $imageVersion,
-                        $extension,
-                        $extensionOptions['config']
-                    );
+                    continue;
                 }
+
+                $extension = $this->getExtension($manager, $extensionName);
+                $this->createImageVersionExtension(
+                    $manager,
+                    $imageVersion,
+                    $extension,
+                    $extensionOptions['config']
+                );
             }
         }
 

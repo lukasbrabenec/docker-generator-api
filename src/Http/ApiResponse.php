@@ -2,15 +2,11 @@
 
 namespace App\Http;
 
-use ArrayObject;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiResponse extends JsonResponse
 {
-    /**
-     * @param null $data
-     */
     public function __construct(
         ?array $data = null,
         array $errors = [],
@@ -23,9 +19,10 @@ class ApiResponse extends JsonResponse
 
     private function format(?array $data = null, array $errors = [], int $status = Response::HTTP_OK): array
     {
-        if (null === $data) {
-            $data = new ArrayObject();
+        if ($data === null) {
+            $data = [];
         }
+
         $message = Response::$statusTexts[$status];
 
         $response = [

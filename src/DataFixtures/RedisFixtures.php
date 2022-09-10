@@ -6,7 +6,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class RedisFixtures extends BaseFixtures
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         'latest',
         'alpine',
         '6',
@@ -15,15 +15,15 @@ class RedisFixtures extends BaseFixtures
         '5-alpine',
     ];
 
-    const PORTS = [
+    private const PORTS = [
         6379 => 6379,
     ];
 
-    const VOLUMES = [
+    private const VOLUMES = [
         './redis/data' => '/data',
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'Redis', 'redis', 'Utilities');
 
@@ -38,6 +38,7 @@ class RedisFixtures extends BaseFixtures
                 $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
+
         $manager->flush();
     }
 }

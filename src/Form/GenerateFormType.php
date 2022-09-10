@@ -21,14 +21,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GenerateFormType extends AbstractType
 {
-    private EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
-        $this->em = $em;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('projectName', TextType::class)
@@ -50,7 +47,7 @@ class GenerateFormType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => GenerateDTO::class,
@@ -61,32 +58,40 @@ class GenerateFormType extends AbstractType
     private function applyDefaultValues(GenerateDTO $generateDTO): void
     {
         if ($generateDTO->getDockerVersionID() !== null) {
-            $composeFormatVersion = $this->getEntityManager()->getRepository(ComposeFormatVersion::class)
+            $composeFormatVersion = $this->em->getRepository(ComposeFormatVersion::class)
                 ->find($generateDTO->getDockerVersionID());
-            if (is_object($composeFormatVersion)) {
+
+            if ($composeFormatVersion !== null) {
                 $generateDTO->setDockerComposeVersion($composeFormatVersion->getComposeVersion());
             }
         }
+
         $allImageIDs = [];
+
         /** @var ImageVersionDTO $imageVersionDTO */
         foreach ($generateDTO->getImageVersions() as $imageVersionDTO) {
-            $imageVersion = $this->getEntityManager()->getRepository(ImageVersion::class)
+            $imageVersion = $this->em->getRepository(ImageVersion::class)
                 ->find($imageVersionDTO->getId());
-            if (is_object($imageVersion)) {
-                $allImageIDs[] = $imageVersion->getImage()->getId();
-                $this->applyImageVersionDefaults($imageVersionDTO, $imageVersion);
-                $this->applyExtensionDefaults($imageVersionDTO, $imageVersion);
-                $this->applyEnvironmentDefaults($imageVersionDTO);
+
+            if ($imageVersion === null) {
+                continue;
             }
+
+            $allImageIDs[] = $imageVersion->getImage()->getId();
+            $this->applyImageVersionDefaults($imageVersionDTO, $imageVersion);
+            $this->applyExtensionDefaults($imageVersionDTO, $imageVersion);
+            $this->applyEnvironmentDefaults($imageVersionDTO);
         }
-        // set otherImageNamesForGeneration to all imageVersions for easier validation
+
         /** @var ImageVersionDTO $imageVersionDTO */
         foreach ($generateDTO->getImageVersions() as $imageVersionDTO) {
-            $imageVersion = $this->getEntityManager()->getRepository(ImageVersion::class)
+            // set otherImageNamesForGeneration to all imageVersions for easier validation
+            $imageVersion = $this->em->getRepository(ImageVersion::class)
                 ->find($imageVersionDTO->getId());
-            if (is_object($imageVersion)) {
+
+            if ($imageVersion !== null) {
                 $imageVersionDTO->setOtherImageIDsForGeneration(
-                    array_diff($allImageIDs, [$imageVersion->getId()])
+                    \array_diff($allImageIDs, [$imageVersion->getId()])
                 );
             }
         }
@@ -94,11 +99,12 @@ class GenerateFormType extends AbstractType
 
     private function applyImageVersionDefaults(ImageVersionDTO $imageVersionDTO, ImageVersion $imageVersion): void
     {
-        if (null === $imageVersionDTO->getImageName()) {
+        if ($imageVersionDTO->getImageName() === null) {
             $imageVersionDTO->setImageName($imageVersion->getImage()->getName());
         } else {
-            $imageVersionDTO->setImageName(str_replace(' ', '_', $imageVersionDTO->getImageName()));
+            $imageVersionDTO->setImageName(\str_replace(' ', '_', $imageVersionDTO->getImageName()));
         }
+
         $imageVersionDTO->setVersion($imageVersion->getVersion());
         $imageVersionDTO->setImageCode($imageVersion->getImage()->getCode());
         $imageVersionDTO->setDockerfileLocation($imageVersion->getImage()->getDockerfileLocation());
@@ -107,7 +113,7 @@ class GenerateFormType extends AbstractType
     private function applyExtensionDefaults(ImageVersionDTO $imageVersionDTO, ImageVersion $imageVersion): void
     {
         foreach ($imageVersionDTO->getExtensions() as $extensionDTO) {
-            $imageVersionExtension = $this->getEntityManager()
+            $imageVersionExtension = $this->em
                 ->getRepository(ImageVersionExtension::class)->findOneBy(
                     [
                     'extension' => $extensionDTO->getId(),
@@ -124,41 +130,43 @@ class GenerateFormType extends AbstractType
     private function applyEnvironmentDefaults(ImageVersionDTO $imageVersionDTO): void
     {
         foreach ($imageVersionDTO->getEnvironments() as $environmentDTO) {
-            if (null !== $environmentDTO->getId()) {
-                $environment = $this->getEntityManager()->getRepository(Environment::class)
-                    ->find($environmentDTO->getId());
-                $environmentDTO->setCode($environment->getCode());
-                $environmentDTO->setValue($environment->getDefaultValue());
+            if ($environmentDTO->getId() === null) {
+                continue;
             }
+
+            $environment = $this->em->getRepository(Environment::class)
+                ->find($environmentDTO->getId());
+            $environmentDTO->setCode($environment->getCode());
+            $environmentDTO->setValue($environment->getDefaultValue());
         }
     }
 
     private function resolveDependencies(GenerateDTO $generateDTO): void
     {
         $dependencyMap = [];
+
         /** @var ImageVersionDTO $imageVersionDTO */
         foreach ($generateDTO->getImageVersions() as $imageVersionDTO) {
-            $imageVersion = $this->getEntityManager()->getRepository(ImageVersion::class)
+            $imageVersion = $this->em->getRepository(ImageVersion::class)
                 ->find($imageVersionDTO->getId());
-            if (is_object($imageVersion)) {
+
+            if ($imageVersion !== null) {
                 $dependencyMap[$imageVersion->getImage()->getName()] = $imageVersionDTO->getImageName();
             }
         }
 
         foreach ($generateDTO->getImageVersions() as $imageVersionDTO) {
             $dependencies = [];
+
             foreach ($imageVersionDTO->getDependsOn() as $dependency) {
-                $image = $this->getEntityManager()->getRepository(Image::class)->find($dependency);
-                if (is_object($image)) {
+                $image = $this->em->getRepository(Image::class)->find($dependency);
+
+                if ($image !== null) {
                     $dependencies[] = $dependencyMap[$image->getName()] ?? $image->getName();
                 }
             }
+
             $imageVersionDTO->setDependsOn($dependencies);
         }
-    }
-
-    public function getEntityManager(): EntityManagerInterface
-    {
-        return $this->em;
     }
 }

@@ -6,13 +6,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class MysqlFixtures extends BaseFixtures
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         '5.6',
         '5.7',
         '8.0',
     ];
 
-    const ENVIRONMENT_MAP = [
+    private const ENVIRONMENT_MAP = [
         'MYSQL_ROOT_PASSWORD' => [
             'default' => 'test',
             'required' => true,
@@ -45,15 +45,15 @@ class MysqlFixtures extends BaseFixtures
         ],
     ];
 
-    const PORTS = [
+    private const PORTS = [
         3306 => 3306,
     ];
 
-    const VOLUMES = [
+    private const VOLUMES = [
         './mysql/data' => '/var/lib/mysql',
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'MySQL', 'mysql', 'Database');
 
@@ -79,6 +79,7 @@ class MysqlFixtures extends BaseFixtures
                 $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
+
         $manager->flush();
     }
 }

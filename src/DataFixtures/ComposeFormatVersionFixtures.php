@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ComposeFormatVersionFixtures extends Fixture
 {
-    const COMPOSE_VERSION_DOCKER_ENGINE_RELEASE_MAP = [
+    private const COMPOSE_VERSION_DOCKER_ENGINE_RELEASE_MAP = [
         '2.0' => '1.10.0+',
         '2.1' => '1.12.0+',
         '2.2' => '1.13.0+',
@@ -25,7 +25,7 @@ class ComposeFormatVersionFixtures extends Fixture
         '3.8' => '19.03.0+',
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         foreach (self::COMPOSE_VERSION_DOCKER_ENGINE_RELEASE_MAP as $composeVersion => $dockerEngineRelease) {
             $composeFormatVersion = new ComposeFormatVersion();
@@ -33,6 +33,7 @@ class ComposeFormatVersionFixtures extends Fixture
             $composeFormatVersion->setDockerEngineRelease($dockerEngineRelease);
             $manager->persist($composeFormatVersion);
         }
+
         $manager->flush();
     }
 }

@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageVersionFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('id', IntegerType::class)
@@ -43,13 +43,13 @@ class ImageVersionFormType extends AbstractType
                 'allow_add' => true,
                 'error_bubbling' => false,
                 'documentation' => [
-                    'description' => 'Identifications of images this image is dependent on.'
-                ]
+                    'description' => 'Identifications of images this image is dependent on.',
+                ],
             ])
             ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => ImageVersionDTO::class,

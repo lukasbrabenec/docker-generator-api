@@ -24,7 +24,7 @@ class PortDTO implements DataTransferObjectInterface
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -34,7 +34,7 @@ class PortDTO implements DataTransferObjectInterface
         return $this->inward;
     }
 
-    public function setInward(?int $inward)
+    public function setInward(?int $inward): void
     {
         $this->inward = $inward;
     }

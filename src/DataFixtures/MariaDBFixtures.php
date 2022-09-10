@@ -6,7 +6,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class MariaDBFixtures extends BaseFixtures
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         'latest',
         '10',
         '10.5',
@@ -17,7 +17,7 @@ class MariaDBFixtures extends BaseFixtures
         '5.5',
     ];
 
-    const ENVIRONMENT_MAP = [
+    private const ENVIRONMENT_MAP = [
         'MYSQL_ROOT_PASSWORD' => [
             'default' => 'test',
             'required' => true,
@@ -50,15 +50,15 @@ class MariaDBFixtures extends BaseFixtures
         ],
     ];
 
-    const PORTS = [
+    private const PORTS = [
         3306 => 3306,
     ];
 
-    const VOLUMES = [
+    private const VOLUMES = [
         './mariadb/data' => '/var/lib/mysql',
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'MariaDB', 'mariadb', 'Database');
 
@@ -84,6 +84,7 @@ class MariaDBFixtures extends BaseFixtures
                 $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
+
         $manager->flush();
     }
 }

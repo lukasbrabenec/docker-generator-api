@@ -7,11 +7,11 @@ use Doctrine\Persistence\ObjectManager;
 
 class ElasticSearchFixtures extends BaseFixtures implements DependentFixtureInterface
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         '7.9.0',
     ];
 
-    const ENVIRONMENT_MAP = [
+    private const ENVIRONMENT_MAP = [
         'discovery.type' => [
             'default' => 'single-node',
             'required' => true,
@@ -19,12 +19,12 @@ class ElasticSearchFixtures extends BaseFixtures implements DependentFixtureInte
         ],
     ];
 
-    const PORTS = [
+    private const PORTS = [
         9200 => 9200,
         9300 => 9300,
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'ElasticSearch', 'elasticsearch', 'Utilities');
 
@@ -46,6 +46,7 @@ class ElasticSearchFixtures extends BaseFixtures implements DependentFixtureInte
                 $this->createImagePort($manager, $imageVersion, $inwardPort, $outwardPort);
             }
         }
+
         $manager->flush();
     }
 

@@ -33,8 +33,8 @@ class ImageController extends BaseController
      */
     private function extractExtensions(array $images): array
     {
-        foreach ($images as $imageIndex => &$image) {
-            foreach ($image['imageVersions'] as $imageVersionIndex => &$imageVersion) {
+        foreach ($images as &$image) {
+            foreach ($image['imageVersions'] as &$imageVersion) {
                 foreach ($imageVersion['extensions'] as $extensionIndex => $extension) {
                     $imageVersion['extensions'][$extensionIndex]['id'] = $extension['extension']['id'];
                     $imageVersion['extensions'][$extensionIndex]['name'] = $extension['extension']['name'];

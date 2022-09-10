@@ -10,7 +10,7 @@ class ZipGenerator
 {
     public function generateArchive(GenerateDTO $generateDTO): string
     {
-        $zipFilePath = stream_get_meta_data(tmpfile())['uri'];
+        $zipFilePath = \stream_get_meta_data(\tmpfile())['uri'];
 
         $zip = new ZipArchive();
         $zip->open($zipFilePath, ZipArchive::CREATE);
@@ -20,11 +20,12 @@ class ZipGenerator
         foreach ($generateDTO->getImageVersions() as $imageVersionDTO) {
             if ($imageVersionDTO->getDockerfileLocation()) {
                 $zip->addFromString(
-                    $imageVersionDTO->getDockerfileLocation().'Dockerfile',
+                    $imageVersionDTO->getDockerfileLocation() . 'Dockerfile',
                     $imageVersionDTO->getDockerfileText()
                 );
             }
         }
+
         $zip->close();
 
         return $zipFilePath;

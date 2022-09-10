@@ -64,7 +64,7 @@ class ImageVersionDTO implements DataTransferObjectInterface
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -80,12 +80,12 @@ class ImageVersionDTO implements DataTransferObjectInterface
     /**
      * @param EnvironmentDTO $environments
      */
-    public function setEnvironments(array $environments)
+    public function setEnvironments(array $environments): void
     {
         $this->environments = $environments;
     }
 
-    public function addEnvironment(EnvironmentDTO $environment)
+    public function addEnvironment(EnvironmentDTO $environment): void
     {
         $this->environments[] = $environment;
     }
@@ -100,9 +100,6 @@ class ImageVersionDTO implements DataTransferObjectInterface
         $this->version = $version;
     }
 
-    /**
-     * @return string
-     */
     public function getImageName(): ?string
     {
         return $this->imageName;
@@ -123,9 +120,6 @@ class ImageVersionDTO implements DataTransferObjectInterface
         $this->imageCode = $imageCode;
     }
 
-    /**
-     * @return string
-     */
     public function getDockerfileLocation(): ?string
     {
         return $this->dockerfileLocation;
@@ -157,7 +151,7 @@ class ImageVersionDTO implements DataTransferObjectInterface
     /**
      * @param ExtensionDTO[] $extensions
      */
-    public function setExtensions(array $extensions)
+    public function setExtensions(array $extensions): void
     {
         $this->extensions = $extensions;
     }
@@ -255,6 +249,7 @@ class ImageVersionDTO implements DataTransferObjectInterface
         foreach ($this->environments as $environment) {
             $array['environments'][] = $environment->toArray();
         }
+
         foreach ($this->extensions as $extension) {
             if ($extension->isSpecial()) {
                 if ($extension->getCustomCommand()) {
@@ -269,21 +264,20 @@ class ImageVersionDTO implements DataTransferObjectInterface
                         'config' => $extension->getConfig(),
                     ];
                 }
+            } elseif ($extension->getCustomCommand()) {
+                $array['extensions']['system']['custom'][] = [
+                    'name' => $extension->getName(),
+                    'config' => $extension->getConfig(),
+                    'customCommand' => $extension->getCustomCommand(),
+                ];
             } else {
-                if ($extension->getCustomCommand()) {
-                    $array['extensions']['system']['custom'][] = [
-                        'name' => $extension->getName(),
-                        'config' => $extension->getConfig(),
-                        'customCommand' => $extension->getCustomCommand(),
-                    ];
-                } else {
-                    $array['extensions']['system']['main'][] = [
-                        'name' => $extension->getName(),
-                        'config' => $extension->getConfig(),
-                    ];
-                }
+                $array['extensions']['system']['main'][] = [
+                    'name' => $extension->getName(),
+                    'config' => $extension->getConfig(),
+                ];
             }
         }
+
         foreach ($this->volumes as $volume) {
             $array['volumes'][] = $volume->toArray();
         }
@@ -293,15 +287,19 @@ class ImageVersionDTO implements DataTransferObjectInterface
         // if there are ports exposed to containers - generate expose block
         $anyPortExposedToHost = false;
         $anyPortExposedToContainers = false;
+
         foreach ($this->ports as $port) {
             $array['ports'][] = $port->toArray();
+
             if ($port->isExposedToHost()) {
                 $anyPortExposedToHost = true;
             }
+
             if ($port->isExposedToContainers()) {
                 $anyPortExposedToContainers = true;
             }
         }
+
         $array['anyPortExposedToHost'] = $anyPortExposedToHost;
         $array['anyPortExposedToContainers'] = $anyPortExposedToContainers;
 

@@ -2,7 +2,6 @@
 
 namespace App\Exception;
 
-use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class DockerfileException extends HttpException
@@ -10,7 +9,7 @@ class DockerfileException extends HttpException
     public function __construct(
         string $message = 'Dockerfile generate Failed',
         int $statusCode = 500,
-        Exception $previous = null,
+        ?\Throwable $previous = null,
         array $headers = [],
         ?int $code = 0
     ) {

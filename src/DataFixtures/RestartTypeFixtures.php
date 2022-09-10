@@ -8,20 +8,21 @@ use Doctrine\Persistence\ObjectManager;
 
 class RestartTypeFixtures extends Fixture
 {
-    const TYPES = [
+    private const TYPES = [
         'no',
         'always',
         'on-failure',
         'unless-stopped',
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         foreach (self::TYPES as $type) {
             $restartType = new RestartType();
             $restartType->setType($type);
             $manager->persist($restartType);
         }
+
         $manager->flush();
     }
 }

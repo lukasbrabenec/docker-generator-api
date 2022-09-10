@@ -3,13 +3,13 @@
 namespace App\DataFixtures;
 
 use App\DataFixtures\Exception\FixturesException;
+use App\Entity\Environment;
 use App\Entity\Extension;
 use App\Entity\Image;
-use App\Entity\Environment;
 use App\Entity\ImageGroup;
-use App\Entity\Port;
 use App\Entity\ImageVersion;
 use App\Entity\ImageVersionExtension;
+use App\Entity\Port;
 use App\Entity\Volume;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -24,18 +24,22 @@ abstract class BaseFixtures extends Fixture
         ?string $dockerfileLocation = null
     ): Image {
         $image = $manager->getRepository(Image::class)->findOneBy(['name' => $name]);
-        if (!is_object($image)) {
+
+        if ($image === null) {
             $image = new Image();
             $image->setName($name);
             $image->setCode($code);
             $image->setDockerfileLocation($dockerfileLocation);
         }
+
         $group = $manager->getRepository(ImageGroup::class)->findOneBy(['name' => $groupName]);
-        if (!is_object($group)) {
+
+        if ($group === null) {
             $group = new ImageGroup();
             $group->setName($groupName);
             $manager->persist($group);
         }
+
         $image->setGroup($group);
         $manager->persist($image);
 
@@ -56,7 +60,7 @@ abstract class BaseFixtures extends Fixture
         ObjectManager $manager,
         ImageVersion $imageVersion,
         string $code,
-        string $defaultValue = null,
+        ?string $defaultValue = null,
         bool $hidden = false,
         bool $required = false
     ): Environment {
@@ -90,10 +94,11 @@ abstract class BaseFixtures extends Fixture
         ObjectManager $manager,
         string $name,
         bool $special,
-        string $customCommand = null
+        ?string $customCommand = null
     ): Extension {
         $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $name, 'special' => $special]);
-        if (!is_object($extension)) {
+
+        if ($extension === null) {
             $extension = new Extension();
             $extension->setName($name);
             $extension->setSpecial($special);
@@ -108,7 +113,7 @@ abstract class BaseFixtures extends Fixture
         ObjectManager $manager,
         ImageVersion $imageVersion,
         Extension $extension,
-        string $config = null
+        ?string $config = null
     ): ImageVersionExtension {
         $imageVersionExtension = new ImageVersionExtension();
         $imageVersionExtension->setImageVersion($imageVersion);
@@ -141,8 +146,9 @@ abstract class BaseFixtures extends Fixture
     {
         /** @var Extension $extension */
         $extension = $manager->getRepository(Extension::class)->findOneBy(['name' => $name]);
-        if (!is_object($extension)) {
-            throw new FixturesException(sprintf('extension %s doesnt exist', $name));
+
+        if ($extension === null) {
+            throw new FixturesException(\sprintf('extension %s doesnt exist', $name));
         }
 
         return $extension;

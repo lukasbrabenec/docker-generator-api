@@ -10,11 +10,8 @@ use Twig\Error\SyntaxError;
 
 class DockerComposeGenerator
 {
-    private Environment $twig;
-
-    public function __construct(Environment $twig)
+    public function __construct(private readonly Environment $twig)
     {
-        $this->twig = $twig;
     }
 
     /**

@@ -18,9 +18,6 @@ class ExtensionDTO implements DataTransferObjectInterface
 
     private bool $special;
 
-    /**
-     * @return int
-     */
     public function getId(): ?int
     {
         return $this->id;
@@ -31,9 +28,6 @@ class ExtensionDTO implements DataTransferObjectInterface
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
@@ -44,9 +38,6 @@ class ExtensionDTO implements DataTransferObjectInterface
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getConfig(): ?string
     {
         return $this->config;
@@ -67,9 +58,6 @@ class ExtensionDTO implements DataTransferObjectInterface
         $this->customCommand = $customCommand;
     }
 
-    /**
-     * @return bool
-     */
     public function isSpecial(): ?bool
     {
         return $this->special;

@@ -6,7 +6,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class PostgresFixtures extends BaseFixtures
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         'latest',
         '13',
         'alpine',
@@ -21,7 +21,7 @@ class PostgresFixtures extends BaseFixtures
         '9-alpine',
     ];
 
-    const ENVIRONMENT_MAP = [
+    private const ENVIRONMENT_MAP = [
         'POSTGRES_PASSWORD' => [
             'default' => 'test',
             'required' => true,
@@ -54,15 +54,15 @@ class PostgresFixtures extends BaseFixtures
         ],
     ];
 
-    const PORTS = [
+    private const PORTS = [
         5432 => 5432,
     ];
 
-    const VOLUMES = [
+    private const VOLUMES = [
         './postgresql/data' => '/var/lib/postgresql/data',
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'PostgreSQL', 'postgres', 'Database');
 
@@ -88,6 +88,7 @@ class PostgresFixtures extends BaseFixtures
                 $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
+
         $manager->flush();
     }
 }

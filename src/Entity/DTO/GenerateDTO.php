@@ -44,7 +44,7 @@ class GenerateDTO implements DataTransferObjectInterface
         return $this->dockerVersionID;
     }
 
-    public function setDockerVersionID(int $dockerVersionID)
+    public function setDockerVersionID(int $dockerVersionID): void
     {
         $this->dockerVersionID = $dockerVersionID;
     }
@@ -64,19 +64,16 @@ class GenerateDTO implements DataTransferObjectInterface
         return $this->imageVersions;
     }
 
-    public function setImageVersions(array $imageVersions)
+    public function setImageVersions(array $imageVersions): void
     {
         $this->imageVersions = $imageVersions;
     }
 
-    public function addImage(ImageVersionDTO $image)
+    public function addImage(ImageVersionDTO $image): void
     {
         $this->imageVersions[] = $image;
     }
 
-    /**
-     * @return string
-     */
     public function getDockerComposeText(): ?string
     {
         return $this->dockerComposeText;

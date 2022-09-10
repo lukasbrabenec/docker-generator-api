@@ -10,20 +10,11 @@ use Twig\Error\SyntaxError;
 
 class GeneratorService
 {
-    private DockerComposeGenerator $dockerComposeGenerator;
-
-    private DockerfileGenerator $dockerfileGenerator;
-
-    private ZipGenerator $zipGenerator;
-
     public function __construct(
-        DockerComposeGenerator $dockerComposeGenerator,
-        DockerfileGenerator $dockerfileGenerator,
-        ZipGenerator $zipGenerator
+        private readonly DockerComposeGenerator $dockerComposeGenerator,
+        private readonly DockerfileGenerator $dockerfileGenerator,
+        private readonly ZipGenerator $zipGenerator
     ) {
-        $this->dockerComposeGenerator = $dockerComposeGenerator;
-        $this->dockerfileGenerator = $dockerfileGenerator;
-        $this->zipGenerator = $zipGenerator;
     }
 
     /**

@@ -17,7 +17,7 @@ class NormalizerCollection
      */
     public function __construct(iterable $normalizers)
     {
-        $this->normalizers = iterator_to_array($normalizers);
+        $this->normalizers = \iterator_to_array($normalizers);
     }
 
     public function getNormalizer(mixed $data): ?NormalizerInterface

@@ -6,14 +6,14 @@ use Doctrine\Persistence\ObjectManager;
 
 class WordpressFixtures extends BaseFixtures
 {
-    const VERSIONS = [
+    private const VERSIONS = [
         'latest',
         '5.6-php7.4-apache',
         '5.6-php7.4-fpm',
         '5.6-php7.4-fpm-alpine',
     ];
 
-    const ENVIRONMENT_MAP = [
+    private const ENVIRONMENT_MAP = [
         'WORDPRESS_DB_HOST' => [
             'default' => null,
             'required' => true,
@@ -51,15 +51,15 @@ class WordpressFixtures extends BaseFixtures
         ],
     ];
 
-    const PORTS = [
+    private const PORTS = [
         8080 => 80,
     ];
 
-    const VOLUMES = [
+    private const VOLUMES = [
         './worpdress' => '/var/www/html',
     ];
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $image = $this->getOrCreateImage($manager, 'WordPress', 'wordpress', 'Utilities');
 
@@ -85,6 +85,7 @@ class WordpressFixtures extends BaseFixtures
                 $this->createImageVolume($manager, $imageVersion, $hostPath, $containerPath);
             }
         }
+
         $manager->flush();
     }
 }

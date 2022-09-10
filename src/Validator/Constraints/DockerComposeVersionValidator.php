@@ -11,35 +11,29 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class DockerComposeVersionValidator extends ConstraintValidator
 {
-    private ComposeFormatVersionRepository $composeFormatVersionRepository;
-
-    public function __construct(ComposeFormatVersionRepository $composeFormatVersionRepository)
+    public function __construct(private readonly ComposeFormatVersionRepository $composeFormatVersionRepository)
     {
-        $this->composeFormatVersionRepository = $composeFormatVersionRepository;
     }
 
-    /**
-     * @param mixed $dockerComposeVersionDTOId
-     */
-    public function validate($dockerComposeVersionDTOId, Constraint $constraint)
+    public function validate(mixed $dockerComposeVersionDTOId, Constraint $constraint): void
     {
         if (!$constraint instanceof DockerComposeVersionConstraint) {
             throw new UnexpectedTypeException($constraint, DockerComposeVersionConstraint::class);
         }
-        if (null === $dockerComposeVersionDTOId || '' === $dockerComposeVersionDTOId) {
-            $this->context->buildViolation($constraint->notBlank)
-                ->addViolation();
+
+        if ($dockerComposeVersionDTOId === null || $dockerComposeVersionDTOId === '') {
+            $this->context->buildViolation($constraint->notBlank)->addViolation();
 
             return;
         }
 
-        if (!is_integer($dockerComposeVersionDTOId)) {
+        if (!\is_int($dockerComposeVersionDTOId)) {
             throw new UnexpectedValueException($dockerComposeVersionDTOId, 'integer');
         }
 
         $dockerComposeVersion = $this->getComposeFormatVersionRepository()->find($dockerComposeVersionDTOId);
 
-        if (!is_object($dockerComposeVersion)) {
+        if ($dockerComposeVersion === null) {
             $this->context->buildViolation($constraint->dockerComposeVersionNotExist)
                 ->setParameter('{{ dockerComposeVersionID }}', $dockerComposeVersionDTOId)
                 ->addViolation();
